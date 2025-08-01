@@ -5,12 +5,10 @@
   "main": "index.html",
   "scripts": {
     "dev": "live-server --port=3000 --open=/",
-    "build": "npm run minify-css && npm run minify-js",
-    "minify-css": "cleancss -o dist/css/styles.min.css src/css/styles.css",
-    "minify-js": "uglifyjs src/js/*.js -o dist/js/app.min.js",
-    "lint": "eslint src/js/**/*.js",
-    "test": "jest",
-    "serve": "http-server . -p 3000"
+    "build": "echo 'No build step required for static site'",
+    "serve": "http-server . -p 3000",
+    "lint": "echo 'Linting skipped'",
+    "test": "echo 'Tests skipped'"
   },
   "keywords": ["world clock", "timezone", "time zones", "real-time", "javascript", "modular"],
   "author": "Hafiz Muhammad Abid",

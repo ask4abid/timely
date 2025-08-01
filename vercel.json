@@ -1,6 +1,9 @@
 {
   "version": 2,
   "name": "timely-world-clock",
+  "buildCommand": null,
+  "installCommand": null,
+  "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
