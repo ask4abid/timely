@@ -116,45 +116,8 @@
         });
     </script>
 
-    <!-- Application Scripts (ES6 Modules) -->
-    <script type="module">
-        // Import and initialize the main application
-        import { TimelyApp } from './src/js/app.js';
-        
-        // Initialize app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                window.timelyApp = new TimelyApp();
-                await window.timelyApp.init();
-                
-                // Development tools (only in debug mode)
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    window.appMetrics = () => console.table(window.timelyApp.getMetrics());
-                    window.clearAppCache = () => window.timelyApp.clearCache();
-                    window.exportData = () => window.timelyApp.exportTimezoneData();
-                    console.log('%cTimely World Clock Debug Mode', 'color: #667eea; font-size: 16px; font-weight: bold;');
-                    console.log('Available debug commands: appMetrics(), clearAppCache(), exportData()');
-                }
-                
-            } catch (error) {
-                console.error('Failed to initialize Timely:', error);
-                
-                // Fallback error display
-                const welcomeSection = document.getElementById('welcomeSection');
-                if (welcomeSection) {
-                    welcomeSection.innerHTML = `
-                        <div class="error">
-                            <h3>❌ Application Error</h3>
-                            <p>Sorry, Timely failed to load. Please refresh the page to try again.</p>
-                            <button onclick="window.location.reload()" class="btn btn-primary" style="margin-top: 15px;">
-                                🔄 Refresh Page
-                            </button>
-                        </div>
-                    `;
-                }
-            }
-        });
-    </script>
+    <!-- Application Scripts -->
+    <script src="./timely-bundle.js"></script>
 
     <!-- Service Worker for offline functionality (optional) -->
     <script>
