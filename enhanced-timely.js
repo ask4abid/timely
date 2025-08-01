@@ -1,4 +1,27 @@
-// Timely - Simple Time            'Montreal': { timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+// Timely - Enhanced World Clock with Smart Search and Multiple Clock Styles
+// Clean version with proper Unicode support and featured clocks editing
+
+class SimpleTimelyApp {
+    constructor() {
+        this.cache = new Map();
+        this.updateInterval = null;
+        this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.addedCities = new Set();
+        
+        // Comprehensive country and timezone database with flags (120+ locations)
+        this.countryTimezones = {
+            // North America
+            'New York': { timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            'Los Angeles': { timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            'Chicago': { timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            'Toronto': { timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            'Vancouver': { timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            'Mexico City': { timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            'Miami': { timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            'Denver': { timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
+            'Phoenix': { timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
+            'Seattle': { timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            'Montreal': { timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
             'Havana': { timezone: 'America/Havana', flag: '🇨🇺', country: 'Cuba' },
             'Jamaica': { timezone: 'America/Jamaica', flag: '🇯🇲', country: 'Jamaica' },
             'Kingston': { timezone: 'America/Jamaica', flag: '🇯🇲', country: 'Jamaica' },
@@ -12,87 +35,63 @@
             'Managua': { timezone: 'America/Managua', flag: '🇳🇮', country: 'Nicaragua' },
             'San José': { timezone: 'America/Costa_Rica', flag: '🇨🇷', country: 'Costa Rica' },
             'Panama City': { timezone: 'America/Panama', flag: '🇵🇦', country: 'Panama' },
-            'Belize City': { timezone: 'America/Belize', flag: '🇧🇿', country: 'Belize' },s Inspired World Clock
-// Simplified version for clean interface
-
-class SimpleTimelyApp {
-    constructor() {
-        this.cache = new Map();
-        this.updateInterval = null;
-        this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.addedCities = new Set();
-        
-        // Comprehensive country and timezone database with flags (100+ locations)
-        this.countryTimezones = {
-            // North America
-            'New York': { timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            'Los Angeles': { timezone: 'America/Los_Angeles', flag: '��', country: 'United States' },
-            'Chicago': { timezone: 'America/Chicago', flag: '��', country: 'United States' },
-            'Toronto': { timezone: 'America/Toronto', flag: '��', country: 'Canada' },
-            'Vancouver': { timezone: 'America/Vancouver', flag: '��', country: 'Canada' },
-            'Mexico City': { timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            'Miami': { timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            'Denver': { timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
-            'Phoenix': { timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
-            'Seattle': { timezone: 'America/Los_Angeles', flag: '��', country: 'United States' },
-            'Montreal': { timezone: 'America/Toronto', flag: '��', country: 'Canada' },
-            'Havana': { timezone: 'America/Havana', flag: '��', country: 'Cuba' },
+            'Belize City': { timezone: 'America/Belize', flag: '🇧🇿', country: 'Belize' },
             
             // South America
-            'São Paulo': { timezone: 'America/Sao_Paulo', flag: '��', country: 'Brazil' },
-            'Rio de Janeiro': { timezone: 'America/Sao_Paulo', flag: '��', country: 'Brazil' },
-            'Buenos Aires': { timezone: 'America/Argentina/Buenos_Aires', flag: '��', country: 'Argentina' },
-            'Lima': { timezone: 'America/Lima', flag: '��', country: 'Peru' },
-            'Bogotá': { timezone: 'America/Bogota', flag: '��', country: 'Colombia' },
-            'Santiago': { timezone: 'America/Santiago', flag: '🇨�', country: 'Chile' },
-            'Caracas': { timezone: 'America/Caracas', flag: '��', country: 'Venezuela' },
+            'São Paulo': { timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            'Rio de Janeiro': { timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            'Buenos Aires': { timezone: 'America/Argentina/Buenos_Aires', flag: '🇦🇷', country: 'Argentina' },
+            'Lima': { timezone: 'America/Lima', flag: '🇵🇪', country: 'Peru' },
+            'Bogotá': { timezone: 'America/Bogota', flag: '🇨🇴', country: 'Colombia' },
+            'Santiago': { timezone: 'America/Santiago', flag: '🇨🇱', country: 'Chile' },
+            'Caracas': { timezone: 'America/Caracas', flag: '🇻🇪', country: 'Venezuela' },
             
             // Europe
-            'London': { timezone: 'Europe/London', flag: '��', country: 'United Kingdom' },
-            'Paris': { timezone: 'Europe/Paris', flag: '�🇷', country: 'France' },
-            'Berlin': { timezone: 'Europe/Berlin', flag: '��', country: 'Germany' },
-            'Rome': { timezone: 'Europe/Rome', flag: '��', country: 'Italy' },
-            'Madrid': { timezone: 'Europe/Madrid', flag: '��', country: 'Spain' },
-            'Amsterdam': { timezone: 'Europe/Amsterdam', flag: '��', country: 'Netherlands' },
-            'Brussels': { timezone: 'Europe/Brussels', flag: '��', country: 'Belgium' },
-            'Vienna': { timezone: 'Europe/Vienna', flag: '��', country: 'Austria' },
+            'London': { timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            'Paris': { timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            'Berlin': { timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            'Rome': { timezone: 'Europe/Rome', flag: '🇮🇹', country: 'Italy' },
+            'Madrid': { timezone: 'Europe/Madrid', flag: '🇪🇸', country: 'Spain' },
+            'Amsterdam': { timezone: 'Europe/Amsterdam', flag: '🇳🇱', country: 'Netherlands' },
+            'Brussels': { timezone: 'Europe/Brussels', flag: '🇧🇪', country: 'Belgium' },
+            'Vienna': { timezone: 'Europe/Vienna', flag: '🇦🇹', country: 'Austria' },
             'Zurich': { timezone: 'Europe/Zurich', flag: '🇨🇭', country: 'Switzerland' },
             'Stockholm': { timezone: 'Europe/Stockholm', flag: '🇸🇪', country: 'Sweden' },
-            'Oslo': { timezone: 'Europe/Oslo', flag: '🇳�', country: 'Norway' },
-            'Copenhagen': { timezone: 'Europe/Copenhagen', flag: '��', country: 'Denmark' },
-            'Helsinki': { timezone: 'Europe/Helsinki', flag: '��', country: 'Finland' },
-            'Warsaw': { timezone: 'Europe/Warsaw', flag: '��', country: 'Poland' },
-            'Prague': { timezone: 'Europe/Prague', flag: '��', country: 'Czech Republic' },
-            'Budapest': { timezone: 'Europe/Budapest', flag: '��', country: 'Hungary' },
-            'Athens': { timezone: 'Europe/Athens', flag: '��', country: 'Greece' },
-            'Lisbon': { timezone: 'Europe/Lisbon', flag: '��', country: 'Portugal' },
-            'Dublin': { timezone: 'Europe/Dublin', flag: '�🇪', country: 'Ireland' },
-            'Moscow': { timezone: 'Europe/Moscow', flag: '��', country: 'Russia' },
-            'Istanbul': { timezone: 'Europe/Istanbul', flag: '��', country: 'Turkey' },
-            'Kiev': { timezone: 'Europe/Kiev', flag: '��', country: 'Ukraine' },
-            'Bucharest': { timezone: 'Europe/Bucharest', flag: '��', country: 'Romania' },
+            'Oslo': { timezone: 'Europe/Oslo', flag: '🇳🇴', country: 'Norway' },
+            'Copenhagen': { timezone: 'Europe/Copenhagen', flag: '🇩🇰', country: 'Denmark' },
+            'Helsinki': { timezone: 'Europe/Helsinki', flag: '🇫🇮', country: 'Finland' },
+            'Warsaw': { timezone: 'Europe/Warsaw', flag: '🇵🇱', country: 'Poland' },
+            'Prague': { timezone: 'Europe/Prague', flag: '🇨🇿', country: 'Czech Republic' },
+            'Budapest': { timezone: 'Europe/Budapest', flag: '🇭🇺', country: 'Hungary' },
+            'Athens': { timezone: 'Europe/Athens', flag: '🇬🇷', country: 'Greece' },
+            'Lisbon': { timezone: 'Europe/Lisbon', flag: '🇵🇹', country: 'Portugal' },
+            'Dublin': { timezone: 'Europe/Dublin', flag: '🇮🇪', country: 'Ireland' },
+            'Moscow': { timezone: 'Europe/Moscow', flag: '🇷🇺', country: 'Russia' },
+            'Istanbul': { timezone: 'Europe/Istanbul', flag: '🇹🇷', country: 'Turkey' },
+            'Kiev': { timezone: 'Europe/Kiev', flag: '🇺🇦', country: 'Ukraine' },
+            'Bucharest': { timezone: 'Europe/Bucharest', flag: '🇷🇴', country: 'Romania' },
             'Sofia': { timezone: 'Europe/Sofia', flag: '🇧🇬', country: 'Bulgaria' },
             
             // Asia
-            'Tokyo': { timezone: 'Asia/Tokyo', flag: '��', country: 'Japan' },
+            'Tokyo': { timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
             'Beijing': { timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
-            'Shanghai': { timezone: 'Asia/Shanghai', flag: '��', country: 'China' },
+            'Shanghai': { timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
             'Hong Kong': { timezone: 'Asia/Hong_Kong', flag: '🇭🇰', country: 'Hong Kong' },
-            'Singapore': { timezone: 'Asia/Singapore', flag: '��', country: 'Singapore' },
+            'Singapore': { timezone: 'Asia/Singapore', flag: '🇸🇬', country: 'Singapore' },
             'Seoul': { timezone: 'Asia/Seoul', flag: '🇰🇷', country: 'South Korea' },
-            'Mumbai': { timezone: 'Asia/Kolkata', flag: '🇮�', country: 'India' },
-            'Delhi': { timezone: 'Asia/Kolkata', flag: '��', country: 'India' },
+            'Mumbai': { timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            'Delhi': { timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
             'Bangkok': { timezone: 'Asia/Bangkok', flag: '🇹🇭', country: 'Thailand' },
-            'Manila': { timezone: 'Asia/Manila', flag: '��', country: 'Philippines' },
-            'Jakarta': { timezone: 'Asia/Jakarta', flag: '��', country: 'Indonesia' },
-            'Kuala Lumpur': { timezone: 'Asia/Kuala_Lumpur', flag: '��', country: 'Malaysia' },
+            'Manila': { timezone: 'Asia/Manila', flag: '🇵🇭', country: 'Philippines' },
+            'Jakarta': { timezone: 'Asia/Jakarta', flag: '🇮🇩', country: 'Indonesia' },
+            'Kuala Lumpur': { timezone: 'Asia/Kuala_Lumpur', flag: '🇲🇾', country: 'Malaysia' },
             'Dubai': { timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
             'Abu Dhabi': { timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
             'Riyadh': { timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
             'Tel Aviv': { timezone: 'Asia/Jerusalem', flag: '🇮🇱', country: 'Israel' },
-            'Tehran': { timezone: 'Asia/Tehran', flag: '��', country: 'Iran' },
+            'Tehran': { timezone: 'Asia/Tehran', flag: '🇮🇷', country: 'Iran' },
             'Baghdad': { timezone: 'Asia/Baghdad', flag: '🇮🇶', country: 'Iraq' },
-            'Karachi': { timezone: 'Asia/Karachi', flag: '�🇰', country: 'Pakistan' },
+            'Karachi': { timezone: 'Asia/Karachi', flag: '🇵🇰', country: 'Pakistan' },
             'Lahore': { timezone: 'Asia/Karachi', flag: '🇵🇰', country: 'Pakistan' },
             'Dhaka': { timezone: 'Asia/Dhaka', flag: '🇧🇩', country: 'Bangladesh' },
             'Colombo': { timezone: 'Asia/Colombo', flag: '🇱🇰', country: 'Sri Lanka' },
@@ -101,12 +100,12 @@ class SimpleTimelyApp {
             'Tashkent': { timezone: 'Asia/Tashkent', flag: '🇺🇿', country: 'Uzbekistan' },
             'Baku': { timezone: 'Asia/Baku', flag: '🇦🇿', country: 'Azerbaijan' },
             'Tbilisi': { timezone: 'Asia/Tbilisi', flag: '🇬🇪', country: 'Georgia' },
-            'Yerevan': { timezone: 'Asia/Yerevan', flag: '��', country: 'Armenia' },
-            'Beirut': { timezone: 'Asia/Beirut', flag: '��', country: 'Lebanon' },
+            'Yerevan': { timezone: 'Asia/Yerevan', flag: '🇦🇲', country: 'Armenia' },
+            'Beirut': { timezone: 'Asia/Beirut', flag: '🇱🇧', country: 'Lebanon' },
             'Damascus': { timezone: 'Asia/Damascus', flag: '🇸🇾', country: 'Syria' },
             'Amman': { timezone: 'Asia/Amman', flag: '🇯🇴', country: 'Jordan' },
             'Kuwait': { timezone: 'Asia/Kuwait', flag: '🇰🇼', country: 'Kuwait' },
-            'Doha': { timezone: 'Asia/Qatar', flag: '��', country: 'Qatar' },
+            'Doha': { timezone: 'Asia/Qatar', flag: '🇶🇦', country: 'Qatar' },
             'Manama': { timezone: 'Asia/Bahrain', flag: '🇧🇭', country: 'Bahrain' },
             'Muscat': { timezone: 'Asia/Muscat', flag: '🇴🇲', country: 'Oman' },
             
@@ -114,7 +113,7 @@ class SimpleTimelyApp {
             'Cairo': { timezone: 'Africa/Cairo', flag: '🇪🇬', country: 'Egypt' },
             'Lagos': { timezone: 'Africa/Lagos', flag: '🇳🇬', country: 'Nigeria' },
             'Nairobi': { timezone: 'Africa/Nairobi', flag: '🇰🇪', country: 'Kenya' },
-            'Cape Town': { timezone: 'Africa/Johannesburg', flag: '��', country: 'South Africa' },
+            'Cape Town': { timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
             'Johannesburg': { timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
             'Casablanca': { timezone: 'Africa/Casablanca', flag: '🇲🇦', country: 'Morocco' },
             'Tunis': { timezone: 'Africa/Tunis', flag: '🇹🇳', country: 'Tunisia' },
@@ -144,7 +143,7 @@ class SimpleTimelyApp {
             'Madeira': { timezone: 'Atlantic/Madeira', flag: '🇵🇹', country: 'Portugal' }
         };
         
-        // Popular cities to show by default (like time.is)
+        // Popular cities to show by default (like time.is) - Now editable!
         this.popularCities = ['Tokyo', 'Beijing', 'Paris', 'London', 'New York', 'Los Angeles'];
         
         // Clock style settings
@@ -154,6 +153,7 @@ class SimpleTimelyApp {
         // Search suggestions
         this.searchSuggestions = [];
         this.isSearching = false;
+        this.isEditingPopular = false;
     }
     
     init() {
@@ -171,6 +171,9 @@ class SimpleTimelyApp {
             
             // Add clock style controls
             this.addClockStyleControls();
+            
+            // Add popular cities editor
+            this.addPopularCitiesEditor();
             
             // Start update interval
             this.updateInterval = setInterval(() => {
@@ -195,7 +198,7 @@ class SimpleTimelyApp {
             
             if (timeEl) {
                 timeEl.textContent = now.toLocaleTimeString('en-US', {
-                    hour12: false,
+                    hour12: this.timeFormat === '12h',
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit'
@@ -245,20 +248,53 @@ class SimpleTimelyApp {
         const container = document.getElementById('popularCities');
         if (!container) return;
         
-        container.innerHTML = this.popularCities.map(cityName => {
+        const editButton = this.isEditingPopular ? 
+            `<button class="edit-popular-btn editing" onclick="window.timelyApp.togglePopularEdit()">✓ Done</button>` :
+            `<button class="edit-popular-btn" onclick="window.timelyApp.togglePopularEdit()">✏️ Edit</button>`;
+        
+        let citiesHTML = this.popularCities.map(cityName => {
             const city = this.countryTimezones[cityName];
             if (!city) return '';
             
             const time = this.getTimeForTimezone(city.timezone);
             
-            return `
-                <a href="#" class="popular-city" onclick="event.preventDefault(); window.timelyApp.addCityToGrid('${cityName}')">
-                    <span class="city-flag">${city.flag}</span>
-                    <span class="city-name">${cityName}</span>
-                    <span class="city-time">${time}</span>
-                </a>
-            `;
+            if (this.isEditingPopular) {
+                return `
+                    <div class="popular-city editing">
+                        <span class="city-flag">${city.flag}</span>
+                        <span class="city-name">${cityName}</span>
+                        <span class="city-time">${time}</span>
+                        <button class="remove-popular-btn" onclick="window.timelyApp.removeFromPopular('${cityName}')">×</button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <a href="#" class="popular-city" onclick="event.preventDefault(); window.timelyApp.addCityToGrid('${cityName}')">
+                        <span class="city-flag">${city.flag}</span>
+                        <span class="city-name">${cityName}</span>
+                        <span class="city-time">${time}</span>
+                    </a>
+                `;
+            }
         }).join('');
+        
+        if (this.isEditingPopular) {
+            citiesHTML += `
+                <div class="add-popular-container">
+                    <input type="text" id="addPopularInput" placeholder="Add city to popular..." class="add-popular-input">
+                    <button onclick="window.timelyApp.addToPopular()" class="add-popular-btn">+</button>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = `
+            <div class="popular-header">
+                ${editButton}
+            </div>
+            <div class="popular-cities-list">
+                ${citiesHTML}
+            </div>
+        `;
     }
     
     updatePopularCities() {
@@ -267,12 +303,50 @@ class SimpleTimelyApp {
         
         const timeElements = container.querySelectorAll('.city-time');
         timeElements.forEach((el, index) => {
-            const cityName = this.popularCities[index];
-            const city = this.countryTimezones[cityName];
-            if (city) {
-                el.textContent = this.getTimeForTimezone(city.timezone);
+            if (index < this.popularCities.length) {
+                const cityName = this.popularCities[index];
+                const city = this.countryTimezones[cityName];
+                if (city) {
+                    el.textContent = this.getTimeForTimezone(city.timezone);
+                }
             }
         });
+    }
+    
+    togglePopularEdit() {
+        this.isEditingPopular = !this.isEditingPopular;
+        this.renderPopularCities();
+    }
+    
+    removeFromPopular(cityName) {
+        this.popularCities = this.popularCities.filter(city => city !== cityName);
+        this.renderPopularCities();
+    }
+    
+    addToPopular() {
+        const input = document.getElementById('addPopularInput');
+        if (!input) return;
+        
+        const cityName = input.value.trim();
+        if (!cityName) return;
+        
+        const city = this.findCityByName(cityName);
+        if (!city) {
+            alert(`City "${cityName}" not found. Please try a different city.`);
+            return;
+        }
+        
+        if (!this.popularCities.includes(city.name)) {
+            this.popularCities.push(city.name);
+            this.renderPopularCities();
+        }
+        
+        input.value = '';
+    }
+    
+    addPopularCitiesEditor() {
+        // This method adds the editing functionality which is now integrated into renderPopularCities
+        console.log('Popular cities editor functionality added');
     }
     
     addCityToGrid(cityName) {
@@ -303,7 +377,7 @@ class SimpleTimelyApp {
         if (suggestions.length > 0) {
             this.displaySuggestions(suggestions);
         } else {
-            alert(`City "${searchTerm}" not found. Try cities like: Tokyo, London, New York, Paris, Mumbai, etc.`);
+            alert(`City "${searchTerm}" not found. Try cities like: Tokyo, London, New York, Paris, Mumbai, Jamaica, etc.`);
         }
     }
     
@@ -460,7 +534,46 @@ class SimpleTimelyApp {
         }).join('');
     }
     
+    updateWorldCities() {
+        const container = document.getElementById('worldCitiesGrid');
+        if (!container) return;
+        
+        const digitalTimeElements = container.querySelectorAll('.digital-time');
+        const dateElements = container.querySelectorAll('.city-date');
+        
+        Array.from(this.addedCities).forEach((cityName, index) => {
+            const city = this.countryTimezones[cityName];
+            if (city) {
+                if (digitalTimeElements[index]) {
+                    digitalTimeElements[index].textContent = this.getTimeForTimezone(city.timezone);
+                }
+                if (dateElements[index]) {
+                    dateElements[index].textContent = this.getDateForTimezone(city.timezone);
+                }
+                
+                // Update analog clocks
+                const analogClocks = container.querySelectorAll('.analog-clock');
+                if (analogClocks[index]) {
+                    const clockFace = analogClocks[index].querySelector('.clock-face');
+                    if (clockFace) {
+                        clockFace.innerHTML = this.generateAnalogClockFace(city.timezone);
+                    }
+                }
+            }
+        });
+    }
+    
     generateAnalogClock(timezone) {
+        return `
+            <div class="analog-clock">
+                <div class="clock-face">
+                    ${this.generateAnalogClockFace(timezone)}
+                </div>
+            </div>
+        `;
+    }
+    
+    generateAnalogClockFace(timezone) {
         const now = new Date();
         const timeInZone = new Date(now.toLocaleString("en-US", {timeZone: timezone}));
         
@@ -473,18 +586,14 @@ class SimpleTimelyApp {
         const secondAngle = seconds * 6;
         
         return `
-            <div class="analog-clock">
-                <div class="clock-face">
-                    <div class="hour-hand" style="transform: rotate(${hourAngle}deg)"></div>
-                    <div class="minute-hand" style="transform: rotate(${minuteAngle}deg)"></div>
-                    <div class="second-hand" style="transform: rotate(${secondAngle}deg)"></div>
-                    <div class="center-dot"></div>
-                    <div class="hour-markers">
-                        ${Array.from({length: 12}, (_, i) => 
-                            `<div class="marker" style="transform: rotate(${i * 30}deg)"></div>`
-                        ).join('')}
-                    </div>
-                </div>
+            <div class="hour-hand" style="transform: rotate(${hourAngle}deg)"></div>
+            <div class="minute-hand" style="transform: rotate(${minuteAngle}deg)"></div>
+            <div class="second-hand" style="transform: rotate(${secondAngle}deg)"></div>
+            <div class="center-dot"></div>
+            <div class="hour-markers">
+                ${Array.from({length: 12}, (_, i) => 
+                    `<div class="marker" style="transform: rotate(${i * 30}deg)"></div>`
+                ).join('')}
             </div>
         `;
     }
@@ -499,22 +608,6 @@ class SimpleTimelyApp {
         } catch (error) {
             return 'UTC';
         }
-    }
-    
-    updateWorldCities() {
-        const container = document.getElementById('worldCitiesGrid');
-        if (!container) return;
-        
-        const timeElements = container.querySelectorAll('.city-time');
-        const dateElements = container.querySelectorAll('.city-date');
-        
-        Array.from(this.addedCities).forEach((cityName, index) => {
-            const city = this.countryTimezones[cityName];
-            if (city && timeElements[index] && dateElements[index]) {
-                timeElements[index].textContent = this.getTimeForTimezone(city.timezone);
-                dateElements[index].textContent = this.getDateForTimezone(city.timezone);
-            }
-        });
     }
     
     getTimeForTimezone(timezone) {
