@@ -93,6 +93,112 @@ class TimeService {
         this.logger = new Logger();
         this.retryCount = 3;
         this.baseDelay = 1000;
+        
+        // Comprehensive country and timezone database
+        this.countryTimezones = {
+            // North America
+            'United States (New York)': { timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            'United States (Los Angeles)': { timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            'United States (Chicago)': { timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            'Canada (Toronto)': { timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            'Canada (Vancouver)': { timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            'Mexico (Mexico City)': { timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            
+            // Europe
+            'United Kingdom (London)': { timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            'France (Paris)': { timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            'Germany (Berlin)': { timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            'Italy (Rome)': { timezone: 'Europe/Rome', flag: '🇮🇹', country: 'Italy' },
+            'Spain (Madrid)': { timezone: 'Europe/Madrid', flag: '🇪🇸', country: 'Spain' },
+            'Netherlands (Amsterdam)': { timezone: 'Europe/Amsterdam', flag: '🇳🇱', country: 'Netherlands' },
+            'Switzerland (Zurich)': { timezone: 'Europe/Zurich', flag: '🇨🇭', country: 'Switzerland' },
+            'Russia (Moscow)': { timezone: 'Europe/Moscow', flag: '🇷🇺', country: 'Russia' },
+            'Turkey (Istanbul)': { timezone: 'Europe/Istanbul', flag: '🇹🇷', country: 'Turkey' },
+            
+            // Asia
+            'Japan (Tokyo)': { timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
+            'China (Shanghai)': { timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            'India (Mumbai)': { timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            'UAE (Dubai)': { timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
+            'Singapore': { timezone: 'Asia/Singapore', flag: '🇸🇬', country: 'Singapore' },
+            'South Korea (Seoul)': { timezone: 'Asia/Seoul', flag: '🇰🇷', country: 'South Korea' },
+            'Thailand (Bangkok)': { timezone: 'Asia/Bangkok', flag: '🇹🇭', country: 'Thailand' },
+            'Malaysia (Kuala Lumpur)': { timezone: 'Asia/Kuala_Lumpur', flag: '🇲🇾', country: 'Malaysia' },
+            'Indonesia (Jakarta)': { timezone: 'Asia/Jakarta', flag: '🇮🇩', country: 'Indonesia' },
+            'Philippines (Manila)': { timezone: 'Asia/Manila', flag: '🇵🇭', country: 'Philippines' },
+            'Hong Kong': { timezone: 'Asia/Hong_Kong', flag: '🇭🇰', country: 'Hong Kong' },
+            'Taiwan (Taipei)': { timezone: 'Asia/Taipei', flag: '🇹🇼', country: 'Taiwan' },
+            
+            // Middle East & Africa
+            'Saudi Arabia (Riyadh)': { timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
+            'Qatar (Doha)': { timezone: 'Asia/Qatar', flag: '🇶🇦', country: 'Qatar' },
+            'Kuwait': { timezone: 'Asia/Kuwait', flag: '🇰🇼', country: 'Kuwait' },
+            'Israel (Jerusalem)': { timezone: 'Asia/Jerusalem', flag: '🇮🇱', country: 'Israel' },
+            'Egypt (Cairo)': { timezone: 'Africa/Cairo', flag: '🇪🇬', country: 'Egypt' },
+            'South Africa (Johannesburg)': { timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
+            'Nigeria (Lagos)': { timezone: 'Africa/Lagos', flag: '🇳🇬', country: 'Nigeria' },
+            'Kenya (Nairobi)': { timezone: 'Africa/Nairobi', flag: '🇰🇪', country: 'Kenya' },
+            
+            // Oceania
+            'Australia (Sydney)': { timezone: 'Australia/Sydney', flag: '🇦🇺', country: 'Australia' },
+            'Australia (Melbourne)': { timezone: 'Australia/Melbourne', flag: '🇦🇺', country: 'Australia' },
+            'Australia (Perth)': { timezone: 'Australia/Perth', flag: '🇦🇺', country: 'Australia' },
+            'New Zealand (Auckland)': { timezone: 'Pacific/Auckland', flag: '🇳🇿', country: 'New Zealand' },
+            
+            // South America
+            'Brazil (São Paulo)': { timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            'Argentina (Buenos Aires)': { timezone: 'America/Argentina/Buenos_Aires', flag: '🇦🇷', country: 'Argentina' },
+            'Chile (Santiago)': { timezone: 'America/Santiago', flag: '🇨🇱', country: 'Chile' },
+            'Colombia (Bogota)': { timezone: 'America/Bogota', flag: '🇨🇴', country: 'Colombia' },
+            'Peru (Lima)': { timezone: 'America/Lima', flag: '🇵🇪', country: 'Peru' }
+        };
+        
+        // Quick search mapping for common city names
+        this.cityMappings = {
+            'london': 'United Kingdom (London)',
+            'paris': 'France (Paris)',
+            'tokyo': 'Japan (Tokyo)',
+            'dubai': 'UAE (Dubai)',
+            'new york': 'United States (New York)',
+            'los angeles': 'United States (Los Angeles)',
+            'sydney': 'Australia (Sydney)',
+            'berlin': 'Germany (Berlin)',
+            'chicago': 'United States (Chicago)',
+            'shanghai': 'China (Shanghai)',
+            'mumbai': 'India (Mumbai)',
+            'singapore': 'Singapore',
+            'seoul': 'South Korea (Seoul)',
+            'bangkok': 'Thailand (Bangkok)',
+            'toronto': 'Canada (Toronto)',
+            'vancouver': 'Canada (Vancouver)',
+            'moscow': 'Russia (Moscow)',
+            'rome': 'Italy (Rome)',
+            'madrid': 'Spain (Madrid)',
+            'amsterdam': 'Netherlands (Amsterdam)',
+            'zurich': 'Switzerland (Zurich)',
+            'istanbul': 'Turkey (Istanbul)',
+            'cairo': 'Egypt (Cairo)',
+            'johannesburg': 'South Africa (Johannesburg)',
+            'lagos': 'Nigeria (Lagos)',
+            'nairobi': 'Kenya (Nairobi)',
+            'melbourne': 'Australia (Melbourne)',
+            'perth': 'Australia (Perth)',
+            'auckland': 'New Zealand (Auckland)',
+            'sao paulo': 'Brazil (São Paulo)',
+            'buenos aires': 'Argentina (Buenos Aires)',
+            'santiago': 'Chile (Santiago)',
+            'bogota': 'Colombia (Bogota)',
+            'lima': 'Peru (Lima)',
+            'riyadh': 'Saudi Arabia (Riyadh)',
+            'doha': 'Qatar (Doha)',
+            'kuwait': 'Kuwait',
+            'jerusalem': 'Israel (Jerusalem)',
+            'kuala lumpur': 'Malaysia (Kuala Lumpur)',
+            'jakarta': 'Indonesia (Jakarta)',
+            'manila': 'Philippines (Manila)',
+            'hong kong': 'Hong Kong',
+            'taipei': 'Taiwan (Taipei)'
+        };
     }
 
     async getTimezoneData(timezone) {
@@ -118,6 +224,82 @@ class TimeService {
             this.logger.error('Failed to get timezone data:', error);
             throw error;
         }
+    }
+
+    getCountryInfo(searchTerm) {
+        // Check if it's already a country key
+        if (this.countryTimezones[searchTerm]) {
+            return {
+                displayName: searchTerm,
+                ...this.countryTimezones[searchTerm]
+            };
+        }
+        
+        // Check city mappings
+        const normalized = searchTerm.toLowerCase().trim();
+        const countryKey = this.cityMappings[normalized];
+        
+        if (countryKey && this.countryTimezones[countryKey]) {
+            return {
+                displayName: countryKey,
+                ...this.countryTimezones[countryKey]
+            };
+        }
+        
+        // Search through country names
+        const searchResults = Object.keys(this.countryTimezones).filter(key =>
+            key.toLowerCase().includes(normalized) ||
+            this.countryTimezones[key].country.toLowerCase().includes(normalized)
+        );
+        
+        if (searchResults.length > 0) {
+            const bestMatch = searchResults[0];
+            return {
+                displayName: bestMatch,
+                ...this.countryTimezones[bestMatch]
+            };
+        }
+        
+        // Fallback for unknown timezones
+        return {
+            displayName: searchTerm,
+            timezone: searchTerm,
+            flag: '🌍',
+            country: this.extractCountryFromTimezone(searchTerm)
+        };
+    }
+    
+    extractCountryFromTimezone(timezone) {
+        if (timezone.includes('/')) {
+            const parts = timezone.split('/');
+            return parts[0].replace(/_/g, ' ');
+        }
+        return timezone.replace(/_/g, ' ');
+    }
+    
+    getAllCountries() {
+        return Object.keys(this.countryTimezones).map(key => ({
+            displayName: key,
+            ...this.countryTimezones[key]
+        }));
+    }
+    
+    getPopularCountries() {
+        return [
+            'United Kingdom (London)',
+            'United States (New York)',
+            'Japan (Tokyo)',
+            'UAE (Dubai)',
+            'France (Paris)',
+            'Germany (Berlin)',
+            'China (Shanghai)',
+            'India (Mumbai)',
+            'Australia (Sydney)',
+            'Singapore'
+        ].map(key => ({
+            displayName: key,
+            ...this.countryTimezones[key]
+        }));
     }
 
     async getCurrentTime(timezone) {
@@ -200,8 +382,8 @@ class TimeService {
 
 // Clock Component
 class ClockComponent {
-    constructor(timezone, timeService) {
-        this.timezone = timezone;
+    constructor(countryInfo, timeService) {
+        this.countryInfo = countryInfo; // Now contains displayName, timezone, flag, country
         this.timeService = timeService;
         this.logger = new Logger();
         this.element = null;
@@ -213,13 +395,14 @@ class ClockComponent {
         try {
             this.element = document.createElement('div');
             this.element.className = 'clock-card';
-            this.element.setAttribute('data-timezone', this.timezone);
+            this.element.setAttribute('data-timezone', this.countryInfo.timezone);
+            this.element.setAttribute('data-country', this.countryInfo.country);
             
             await this.render();
             this.startUpdating();
             this.isActive = true;
             
-            this.logger.debug('Clock component created for:', this.timezone);
+            this.logger.debug('Clock component created for:', this.countryInfo.displayName);
             return this.element;
         } catch (error) {
             this.logger.error('Failed to create clock component:', error);
@@ -229,12 +412,24 @@ class ClockComponent {
 
     async render() {
         try {
-            const currentTime = await this.timeService.getCurrentTime(this.timezone);
-            const cityName = this.extractCityName(this.timezone);
+            const currentTime = await this.timeService.getCurrentTime(this.countryInfo.timezone);
+            const cityName = this.extractCityName(this.countryInfo.displayName);
+            const countryName = this.countryInfo.country;
+            const flag = this.countryInfo.flag;
+            
+            // Calculate time difference from user's local time
+            const localTime = new Date();
+            const timeDiff = this.calculateTimeDifference(currentTime, localTime);
             
             this.element.innerHTML = `
                 <div class="clock-header">
-                    <h3 class="city-name">${cityName}</h3>
+                    <div class="country-info">
+                        <span class="flag">${flag}</span>
+                        <div class="location-details">
+                            <h3 class="city-name">${cityName}</h3>
+                            <span class="country-name">${countryName}</span>
+                        </div>
+                    </div>
                     <button class="remove-btn" aria-label="Remove ${cityName} clock" title="Remove clock">
                         ✕
                     </button>
@@ -242,9 +437,11 @@ class ClockComponent {
                 <div class="clock-display">
                     <div class="time">${this.timeService.formatTime(currentTime)}</div>
                     <div class="date">${this.timeService.formatDate(currentTime, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+                    <div class="time-difference">${timeDiff}</div>
                 </div>
                 <div class="timezone-info">
-                    <span class="timezone-name">${this.timezone}</span>
+                    <span class="timezone-name">${this.countryInfo.timezone}</span>
+                    <span class="utc-offset">${this.getUTCOffset(currentTime)}</span>
                 </div>
             `;
 
@@ -258,7 +455,10 @@ class ClockComponent {
             this.logger.error('Failed to render clock:', error);
             this.element.innerHTML = `
                 <div class="clock-error">
-                    <h3>${this.extractCityName(this.timezone)}</h3>
+                    <div class="country-info">
+                        <span class="flag">${this.countryInfo.flag}</span>
+                        <h3>${this.extractCityName(this.countryInfo.displayName)}</h3>
+                    </div>
                     <p>Unable to load time</p>
                     <button class="remove-btn">✕</button>
                 </div>
@@ -270,9 +470,14 @@ class ClockComponent {
         if (!this.isActive || !this.element) return;
 
         try {
-            const currentTime = await this.timeService.getCurrentTime(this.timezone);
+            const currentTime = await this.timeService.getCurrentTime(this.countryInfo.timezone);
+            const localTime = new Date();
+            const timeDiff = this.calculateTimeDifference(currentTime, localTime);
+            
             const timeElement = this.element.querySelector('.time');
             const dateElement = this.element.querySelector('.date');
+            const timeDiffElement = this.element.querySelector('.time-difference');
+            const utcOffsetElement = this.element.querySelector('.utc-offset');
             
             if (timeElement) {
                 timeElement.textContent = this.timeService.formatTime(currentTime);
@@ -282,9 +487,40 @@ class ClockComponent {
                     weekday: 'short', month: 'short', day: 'numeric' 
                 });
             }
+            if (timeDiffElement) {
+                timeDiffElement.textContent = timeDiff;
+            }
+            if (utcOffsetElement) {
+                utcOffsetElement.textContent = this.getUTCOffset(currentTime);
+            }
         } catch (error) {
             this.logger.error('Failed to update clock:', error);
         }
+    }
+
+    calculateTimeDifference(targetTime, localTime) {
+        const diffMs = targetTime.getTime() - localTime.getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((Math.abs(diffMs) % (1000 * 60 * 60)) / (1000 * 60));
+        
+        if (diffHours === 0 && diffMinutes === 0) {
+            return 'Same time';
+        }
+        
+        const sign = diffHours >= 0 ? '+' : '';
+        if (diffMinutes === 0) {
+            return `${sign}${diffHours}h`;
+        } else {
+            return `${sign}${diffHours}h ${diffMinutes}m`;
+        }
+    }
+    
+    getUTCOffset(date) {
+        const offset = -date.getTimezoneOffset();
+        const hours = Math.floor(Math.abs(offset) / 60);
+        const minutes = Math.abs(offset) % 60;
+        const sign = offset >= 0 ? '+' : '-';
+        return `UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     }
 
     startUpdating() {
@@ -307,11 +543,11 @@ class ClockComponent {
         
         // Emit custom event for parent to handle
         const event = new CustomEvent('clockRemoved', {
-            detail: { timezone: this.timezone }
+            detail: { countryInfo: this.countryInfo }
         });
         document.dispatchEvent(event);
         
-        this.logger.debug('Clock component removed for:', this.timezone);
+        this.logger.debug('Clock component removed for:', this.countryInfo.displayName);
     }
 
     createErrorElement() {
@@ -319,7 +555,10 @@ class ClockComponent {
         element.className = 'clock-card clock-error';
         element.innerHTML = `
             <div class="clock-header">
-                <h3>${this.extractCityName(this.timezone)}</h3>
+                <div class="country-info">
+                    <span class="flag">${this.countryInfo.flag}</span>
+                    <h3>${this.extractCityName(this.countryInfo.displayName)}</h3>
+                </div>
                 <button class="remove-btn">✕</button>
             </div>
             <div class="error-message">
@@ -329,8 +568,14 @@ class ClockComponent {
         return element;
     }
 
-    extractCityName(timezone) {
-        return timezone.split('/').pop().replace(/_/g, ' ');
+    extractCityName(displayName) {
+        // Extract city from "Country (City)" format
+        const match = displayName.match(/\(([^)]+)\)/);
+        if (match) {
+            return match[1];
+        }
+        // Fallback to timezone extraction
+        return displayName.split('/').pop().replace(/_/g, ' ');
     }
 
     destroy() {
@@ -349,16 +594,16 @@ class SearchComponent {
         this.isInitialized = false;
         
         this.popularTimezones = [
-            'America/New_York',
-            'America/Los_Angeles',
-            'Europe/London',
-            'Europe/Paris',
-            'Asia/Tokyo',
-            'Asia/Dubai',
-            'Australia/Sydney',
-            'Asia/Shanghai',
-            'America/Chicago',
-            'Europe/Berlin'
+            'United Kingdom (London)',
+            'United States (New York)',
+            'Japan (Tokyo)',
+            'UAE (Dubai)',
+            'France (Paris)',
+            'Germany (Berlin)',
+            'China (Shanghai)',
+            'India (Mumbai)',
+            'Australia (Sydney)',
+            'Singapore'
         ];
     }
 
@@ -404,39 +649,28 @@ class SearchComponent {
     handleSearch() {
         const input = this.searchInput.value.trim();
         if (!input) {
-            this.showError('Please enter a city or timezone');
+            this.showError('Please enter a city or country');
             return;
         }
 
-        const timezone = this.normalizeTimezone(input);
-        this.emitTimezoneAdd(timezone);
+        const countryInfo = this.timeService.getCountryInfo(input);
+        this.emitCountryAdd(countryInfo);
         this.searchInput.value = '';
     }
 
     handleRandomTimezone() {
-        const randomTimezone = this.popularTimezones[
+        const randomCountry = this.popularTimezones[
             Math.floor(Math.random() * this.popularTimezones.length)
         ];
-        this.emitTimezoneAdd(randomTimezone);
+        const countryInfo = this.timeService.getCountryInfo(randomCountry);
+        this.emitCountryAdd(countryInfo);
     }
 
-    normalizeTimezone(input) {
-        // Simple timezone normalization
-        const cityMappings = {
-            'london': 'Europe/London',
-            'paris': 'Europe/Paris',
-            'tokyo': 'Asia/Tokyo',
-            'dubai': 'Asia/Dubai',
-            'new york': 'America/New_York',
-            'los angeles': 'America/Los_Angeles',
-            'sydney': 'Australia/Sydney',
-            'berlin': 'Europe/Berlin',
-            'chicago': 'America/Chicago',
-            'shanghai': 'Asia/Shanghai'
-        };
-
-        const normalized = input.toLowerCase();
-        return cityMappings[normalized] || input;
+    emitCountryAdd(countryInfo) {
+        const event = new CustomEvent('countryAdd', {
+            detail: { countryInfo: countryInfo }
+        });
+        document.dispatchEvent(event);
     }
 
     validateInput() {
@@ -450,25 +684,24 @@ class SearchComponent {
         const favoritesSection = document.querySelector('.favorites-section');
         if (!favoritesSection) return;
 
-        // Add some popular timezone buttons
-        const popularCities = ['London', 'Tokyo', 'Dubai', 'New York'];
-        popularCities.forEach(city => {
+        // Add popular country/city buttons with flags
+        const popularCountries = this.timeService.getPopularCountries();
+        const displayCountries = popularCountries.slice(0, 6); // Show first 6
+        
+        displayCountries.forEach(countryInfo => {
             const btn = document.createElement('button');
             btn.className = 'favorite-btn btn btn-secondary';
-            btn.textContent = city;
+            btn.innerHTML = `${countryInfo.flag} ${this.extractCityName(countryInfo.displayName)}`;
             btn.addEventListener('click', () => {
-                this.searchInput.value = city;
-                this.handleSearch();
+                this.emitCountryAdd(countryInfo);
             });
             favoritesSection.appendChild(btn);
         });
     }
-
-    emitTimezoneAdd(timezone) {
-        const event = new CustomEvent('timezoneAdd', {
-            detail: { timezone: timezone }
-        });
-        document.dispatchEvent(event);
+    
+    extractCityName(displayName) {
+        const match = displayName.match(/\(([^)]+)\)/);
+        return match ? match[1] : displayName;
     }
 
     showError(message) {
@@ -503,14 +736,20 @@ class TimelyApp {
         try {
             this.logger.info('Initializing Timely World Clock Application...');
             
+            // Initialize main clock first
+            await this.initMainClock();
+            
+            // Initialize popular times display
+            this.initPopularTimes();
+            
             // Initialize search component
             this.searchComponent.init();
             
             // Set up event listeners
             this.attachEventListeners();
             
-            // Load saved timezones
-            await this.loadSavedTimezones();
+            // Load saved countries
+            await this.loadSavedCountries();
             
             // Show welcome message if no clocks
             this.updateWelcomeSection();
@@ -524,15 +763,179 @@ class TimelyApp {
         }
     }
 
+    async initMainClock() {
+        try {
+            // Detect user's timezone and location
+            const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const locationInfo = this.timeService.getCountryInfo(userTimezone) || {
+                displayName: 'Your Location',
+                timezone: userTimezone,
+                flag: '🌍',
+                country: 'Local Time'
+            };
+
+            // Update main clock display
+            await this.updateMainClock(locationInfo);
+            
+            // Start main clock updates
+            this.startMainClockUpdates(locationInfo);
+            
+            this.logger.debug('Main clock initialized for:', userTimezone);
+        } catch (error) {
+            this.logger.error('Failed to initialize main clock:', error);
+            // Fallback to system time
+            this.updateMainClockFallback();
+        }
+    }
+
+    async updateMainClock(locationInfo) {
+        try {
+            const currentTime = await this.timeService.getCurrentTime(locationInfo.timezone);
+            
+            const mainTimeEl = document.getElementById('mainTime');
+            const mainDateEl = document.getElementById('mainDate');
+            const mainLocationEl = document.getElementById('mainLocation');
+            
+            if (mainTimeEl) {
+                mainTimeEl.textContent = this.timeService.formatTime(currentTime);
+            }
+            
+            if (mainDateEl) {
+                mainDateEl.textContent = this.timeService.formatDate(currentTime, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+            
+            if (mainLocationEl) {
+                const cityName = this.extractCityFromTimezone(locationInfo.timezone);
+                mainLocationEl.innerHTML = `
+                    <span class="location-flag">${locationInfo.flag}</span>
+                    Time in ${cityName}
+                `;
+            }
+        } catch (error) {
+            this.logger.error('Failed to update main clock:', error);
+        }
+    }
+
+    updateMainClockFallback() {
+        const now = new Date();
+        const mainTimeEl = document.getElementById('mainTime');
+        const mainDateEl = document.getElementById('mainDate');
+        const mainLocationEl = document.getElementById('mainLocation');
+        
+        if (mainTimeEl) {
+            mainTimeEl.textContent = this.timeService.formatTime(now);
+        }
+        
+        if (mainDateEl) {
+            mainDateEl.textContent = this.timeService.formatDate(now);
+        }
+        
+        if (mainLocationEl) {
+            mainLocationEl.innerHTML = `
+                <span class="location-flag">🌍</span>
+                Local Time
+            `;
+        }
+    }
+
+    startMainClockUpdates(locationInfo) {
+        // Update main clock every second
+        this.mainClockInterval = setInterval(async () => {
+            await this.updateMainClock(locationInfo);
+        }, 1000);
+    }
+
+    extractCityFromTimezone(timezone) {
+        const parts = timezone.split('/');
+        if (parts.length > 1) {
+            return parts[parts.length - 1].replace(/_/g, ' ');
+        }
+        return timezone.replace(/_/g, ' ');
+    }
+
+    initPopularTimes() {
+        try {
+            const popularTimesGrid = document.getElementById('popularTimesGrid');
+            if (!popularTimesGrid) return;
+
+            // Get popular countries for quick time display
+            const popularCountries = this.timeService.getPopularCountries().slice(0, 6);
+            
+            popularCountries.forEach(countryInfo => {
+                const timeItem = this.createPopularTimeItem(countryInfo);
+                popularTimesGrid.appendChild(timeItem);
+            });
+
+            // Start updating popular times
+            this.startPopularTimesUpdates(popularCountries);
+            
+            this.logger.debug('Popular times initialized');
+        } catch (error) {
+            this.logger.error('Failed to initialize popular times:', error);
+        }
+    }
+
+    createPopularTimeItem(countryInfo) {
+        const item = document.createElement('div');
+        item.className = 'popular-time-item';
+        item.setAttribute('data-timezone', countryInfo.timezone);
+        
+        const cityName = this.extractCityFromTimezone(countryInfo.timezone);
+        
+        item.innerHTML = `
+            <span class="popular-time-flag">${countryInfo.flag}</span>
+            <div class="popular-time-details">
+                <div class="popular-time-city">${cityName}</div>
+                <div class="popular-time-time">--:--</div>
+            </div>
+        `;
+        
+        // Add click handler to add as full clock
+        item.addEventListener('click', () => {
+            this.handleCountryAdd(countryInfo);
+        });
+        
+        return item;
+    }
+
+    startPopularTimesUpdates(popularCountries) {
+        const updatePopularTimes = async () => {
+            for (const countryInfo of popularCountries) {
+                try {
+                    const currentTime = await this.timeService.getCurrentTime(countryInfo.timezone);
+                    const timeElement = document.querySelector(
+                        `[data-timezone="${countryInfo.timezone}"] .popular-time-time`
+                    );
+                    if (timeElement) {
+                        timeElement.textContent = this.timeService.formatTime(currentTime);
+                    }
+                } catch (error) {
+                    this.logger.warn('Failed to update popular time for:', countryInfo.timezone);
+                }
+            }
+        };
+
+        // Initial update
+        updatePopularTimes();
+        
+        // Update every 30 seconds (less frequent than main clock)
+        this.popularTimesInterval = setInterval(updatePopularTimes, 30000);
+    }
+
     attachEventListeners() {
-        // Listen for timezone add events
-        document.addEventListener('timezoneAdd', (event) => {
-            this.handleTimezoneAdd(event.detail.timezone);
+        // Listen for country add events
+        document.addEventListener('countryAdd', (event) => {
+            this.handleCountryAdd(event.detail.countryInfo);
         });
         
         // Listen for clock remove events
         document.addEventListener('clockRemoved', (event) => {
-            this.handleClockRemoved(event.detail.timezone);
+            this.handleClockRemoved(event.detail.countryInfo);
         });
         
         // Page visibility change (pause/resume updates)
@@ -545,10 +948,11 @@ class TimelyApp {
         });
     }
 
-    async handleTimezoneAdd(timezone) {
+    async handleCountryAdd(countryInfo) {
         try {
-            if (this.clocks.has(timezone)) {
-                this.logger.warn('Clock already exists for timezone:', timezone);
+            const key = countryInfo.displayName;
+            if (this.clocks.has(key)) {
+                this.logger.warn('Clock already exists for:', countryInfo.displayName);
                 return;
             }
 
@@ -557,25 +961,26 @@ class TimelyApp {
                 return;
             }
 
-            await this.addClock(timezone);
-            this.saveTimezones();
+            await this.addClock(countryInfo);
+            this.saveCountries();
             this.updateWelcomeSection();
             
         } catch (error) {
-            this.logger.error('Failed to handle timezone add:', error);
+            this.logger.error('Failed to handle country add:', error);
         }
     }
 
-    handleClockRemoved(timezone) {
-        this.clocks.delete(timezone);
-        this.saveTimezones();
+    handleClockRemoved(countryInfo) {
+        const key = countryInfo.displayName;
+        this.clocks.delete(key);
+        this.saveCountries();
         this.updateWelcomeSection();
-        this.logger.debug('Clock removed:', timezone);
+        this.logger.debug('Clock removed:', countryInfo.displayName);
     }
 
-    async addClock(timezone) {
+    async addClock(countryInfo) {
         try {
-            const clock = new ClockComponent(timezone, this.timeService);
+            const clock = new ClockComponent(countryInfo, this.timeService);
             const clockElement = await clock.create();
             
             const container = document.getElementById('clockContainer');
@@ -584,9 +989,9 @@ class TimelyApp {
             }
             
             container.appendChild(clockElement);
-            this.clocks.set(timezone, clock);
+            this.clocks.set(countryInfo.displayName, clock);
             
-            this.logger.debug('Clock added:', timezone);
+            this.logger.debug('Clock added:', countryInfo.displayName);
             
         } catch (error) {
             this.logger.error('Failed to add clock:', error);
@@ -619,28 +1024,29 @@ class TimelyApp {
         }
     }
 
-    saveTimezones() {
+    saveCountries() {
         try {
-            const timezones = Array.from(this.clocks.keys());
-            localStorage.setItem('timely_saved_timezones', JSON.stringify(timezones));
+            const countries = Array.from(this.clocks.keys());
+            localStorage.setItem('timely_saved_countries', JSON.stringify(countries));
         } catch (error) {
-            this.logger.error('Failed to save timezones:', error);
+            this.logger.error('Failed to save countries:', error);
         }
     }
 
-    async loadSavedTimezones() {
+    async loadSavedCountries() {
         try {
-            const saved = localStorage.getItem('timely_saved_timezones');
+            const saved = localStorage.getItem('timely_saved_countries');
             if (!saved) return;
 
-            const timezones = JSON.parse(saved);
-            for (const timezone of timezones) {
-                await this.addClock(timezone);
+            const countryNames = JSON.parse(saved);
+            for (const countryName of countryNames) {
+                const countryInfo = this.timeService.getCountryInfo(countryName);
+                await this.addClock(countryInfo);
             }
             
-            this.logger.debug('Loaded saved timezones:', timezones);
+            this.logger.debug('Loaded saved countries:', countryNames);
         } catch (error) {
-            this.logger.error('Failed to load saved timezones:', error);
+            this.logger.error('Failed to load saved countries:', error);
         }
     }
 
@@ -672,21 +1078,29 @@ class TimelyApp {
 
     exportTimezoneData() {
         const data = {
-            timezones: Array.from(this.clocks.keys()),
+            countries: Array.from(this.clocks.keys()),
             exportDate: new Date().toISOString(),
-            version: '1.0.0'
+            version: '1.0.1'
         };
         
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'timely-timezones.json';
+        a.download = 'timely-countries.json';
         a.click();
         URL.revokeObjectURL(url);
     }
 
     destroy() {
+        // Clear intervals
+        if (this.mainClockInterval) {
+            clearInterval(this.mainClockInterval);
+        }
+        if (this.popularTimesInterval) {
+            clearInterval(this.popularTimesInterval);
+        }
+        
         this.clocks.forEach(clock => clock.destroy());
         this.clocks.clear();
         this.searchComponent.destroy();

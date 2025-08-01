@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Timely World Clock - Version 1.0.1 - Fixed loading issue -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Your ultimate world clock and timezone companion with real-time updates">
@@ -36,32 +37,55 @@
         <!-- Header Section -->
         <header class="header">
             <h1>🕐 Timely</h1>
-            <p>Your ultimate world clock and time zone companion</p>
+            <p class="tagline">Exact time for any location worldwide</p>
         </header>
         
+        <!-- Main Clock Display Section -->
+        <section class="main-clock-section" id="mainClockSection">
+            <div class="main-clock-container">
+                <div class="current-time-display">
+                    <div class="main-time" id="mainTime">Loading...</div>
+                    <div class="main-date" id="mainDate">Loading...</div>
+                    <div class="location-info" id="locationInfo">
+                        <span class="main-location" id="mainLocation">Detecting location...</span>
+                        <div class="accuracy-info" id="accuracyInfo">
+                            <span class="accuracy-text">Accuracy: ±0.1 seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Times Section -->
+        <section class="popular-times-section">
+            <div class="popular-times-grid" id="popularTimesGrid">
+                <!-- Popular city times will be displayed here -->
+            </div>
+        </section>
+        
         <!-- Search Section -->
-        <section class="search-section" aria-label="Timezone Search">
+        <section class="search-section" aria-label="Add More Clocks">
             <div class="search-container">
                 <input 
                     type="text" 
                     class="search-input" 
                     id="timezoneInput" 
-                    placeholder="Enter city or timezone (e.g., London, Tokyo, New York)..."
+                    placeholder="Add more cities (e.g., London, Tokyo, New York)..."
                     aria-label="Search for a city or timezone"
                     autocomplete="off"
                     spellcheck="false"
                 >
                 <button class="search-btn btn btn-primary" aria-label="Add timezone">
-                    🔍 Add Clock
+                    Add Clock
                 </button>
-                <button class="random-btn btn btn-primary" aria-label="Add random timezone">
+                <button class="random-btn btn btn-secondary" aria-label="Add random timezone">
                     🎲 Random
                 </button>
             </div>
             
-            <div class="favorites-section" aria-label="Quick access to favorite timezones">
-                <span class="favorites-label">Quick Access:</span>
-                <!-- Favorite timezone buttons will be dynamically generated here -->
+            <div class="favorites-section" aria-label="Quick access to popular cities">
+                <span class="favorites-label">Popular:</span>
+                <!-- Popular city buttons will be dynamically generated here -->
             </div>
         </section>
         
