@@ -1,162 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Timely World Clock - Version 1.0.1 - Fixed loading issue -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Your ultimate world clock and timezone companion with real-time updates">
-    <meta name="keywords" content="world clock, timezone, time zones, GMT, UTC, international time">
-    <meta name="author" content="Timely World Clock">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="🕐 Timely - World Clock">
-    <meta property="og:description" content="Your ultimate world clock and timezone companion with real-time updates">
-    <meta property="og:url" content="">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="🕐 Timely - World Clock">
-    <meta property="twitter:description" content="Your ultimate world clock and timezone companion with real-time updates">
-    
-    <title>🕐 Timely - World Clock & Time Zone Explorer</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="src/css/styles.css" as="style">
-    <link rel="preload" href="src/js/app.js" as="script">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="src/css/styles.css">
-    
-    <!-- Favicon (you can add your own) -->
+    <meta name="description" content="Exact time for any location worldwide">
+    <title>TIMELY</title>
+    <link rel="stylesheet" href="src/css/simple-styles.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
 </head>
 <body>
-    <!-- Application Container -->
-    <div class="container">
-        <!-- Header Section -->
-        <header class="header">
-            <h1>🕐 Timely</h1>
-            <p class="tagline">Exact time for any location worldwide</p>
-        </header>
+    <!-- Simple Header like time.is -->
+    <header class="simple-header">
+        <div class="header-content">
+            <h1 class="site-title">TIMELY</h1>
+            <div class="header-nav">
+                <span class="search-link" onclick="document.getElementById('searchInput').focus()">search</span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Clock Accuracy Notice (like time.is) -->
+        <div class="accuracy-notice" id="accuracyNotice">
+            Your clock is synchronized. Accuracy ±0.1 seconds.
+        </div>
         
-        <!-- Main Clock Display Section -->
-        <section class="main-clock-section" id="mainClockSection">
-            <div class="main-clock-container">
-                <div class="current-time-display">
-                    <div class="main-time" id="mainTime">Loading...</div>
-                    <div class="main-date" id="mainDate">Loading...</div>
-                    <div class="location-info" id="locationInfo">
-                        <span class="main-location" id="mainLocation">Detecting location...</span>
-                        <div class="accuracy-info" id="accuracyInfo">
-                            <span class="accuracy-text">Accuracy: ±0.1 seconds</span>
-                        </div>
-                    </div>
+        <!-- Primary Time Display -->
+        <div class="primary-time-container">
+            <div class="primary-location" id="primaryLocation">
+                Time in Your Location now:
+            </div>
+            <div class="primary-time-display">
+                <div class="time-digits" id="primaryTime">00:00:00</div>
+                <div class="date-info" id="primaryDate">Loading...</div>
+                <div class="timezone-details" id="timezoneDetails">
+                    <span class="sun-info" id="sunInfo">☀️ Loading sun times...</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Popular Times Section -->
-        <section class="popular-times-section">
-            <div class="popular-times-grid" id="popularTimesGrid">
-                <!-- Popular city times will be displayed here -->
-            </div>
-        </section>
+        </div>
         
-        <!-- Search Section -->
-        <section class="search-section" aria-label="Add More Clocks">
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    id="timezoneInput" 
-                    placeholder="Add more cities (e.g., London, Tokyo, New York)..."
-                    aria-label="Search for a city or timezone"
-                    autocomplete="off"
-                    spellcheck="false"
-                >
-                <button class="search-btn btn btn-primary" aria-label="Add timezone">
-                    Add Clock
-                </button>
-                <button class="random-btn btn btn-secondary" aria-label="Add random timezone">
-                    🎲 Random
-                </button>
+        <!-- Popular Cities (like time.is popular times) -->
+        <div class="popular-cities-container">
+            <div class="popular-cities" id="popularCities">
+                <!-- Popular cities will be loaded here -->
             </div>
-            
-            <div class="favorites-section" aria-label="Quick access to popular cities">
-                <span class="favorites-label">Popular:</span>
-                <!-- Popular city buttons will be dynamically generated here -->
-            </div>
-        </section>
+        </div>
         
-        <!-- Main Display Section -->
-        <main class="main-display" aria-label="World clocks display">
-            <!-- Clock Grid Container -->
-            <div class="clock-grid" id="clockContainer">
-                <!-- World clocks will be dynamically added here -->
+        <!-- Simple Search -->
+        <div class="simple-search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="simple-search"
+                placeholder="Search for any city or timezone..."
+                autocomplete="off"
+            >
+            <button class="add-btn" onclick="addCityFromSearch()">Add</button>
+        </div>
+        
+        <!-- World Cities Grid (expandable like time.is) -->
+        <div class="world-cities-grid" id="worldCitiesGrid">
+            <!-- Additional cities will be displayed here -->
+        </div>
+        
+        <!-- Footer Links (minimal like time.is) -->
+        <div class="footer-links">
+            <span class="footer-quote">
+                "Time is the most valuable thing we have" - Timely
+            </span>
+            <div class="small-text">
+                Timely displays exact time for any location worldwide.
+                What time is it? 几点了？ ¿Qué hora es? Quelle heure est-il?
             </div>
-            
-            <!-- Welcome/Empty State -->
-            <div class="welcome-section" id="welcomeSection">
-                <!-- Welcome content will be loaded here -->
-            </div>
-            
-            <!-- Timezone Converter (Optional Feature) -->
-            <div class="converter-section" id="converterSection" style="display: none;">
-                <h3>⏰ Time Converter</h3>
-                <div class="converter-inputs">
-                    <div class="time-input-group">
-                        <label for="sourceTime">Time:</label>
-                        <input type="time" id="sourceTime" class="time-input">
-                    </div>
-                    <div class="timezone-select-group">
-                        <label for="sourceTimezone">From:</label>
-                        <select id="sourceTimezone" class="timezone-select"></select>
-                    </div>
-                    <div class="timezone-select-group">
-                        <label for="targetTimezone">To:</label>
-                        <select id="targetTimezone" class="timezone-select"></select>
-                    </div>
-                    <div class="converter-result" id="converterResult">
-                        <!-- Conversion result will appear here -->
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
+        </div>
+    </main>
     <!-- Loading Script -->
     <script>
-        // Show loading indicator while JavaScript loads
+        // Simple search functionality
+        function addCityFromSearch() {
+            const input = document.getElementById('searchInput');
+            const city = input.value.trim();
+            if (city && window.timelyApp) {
+                window.timelyApp.addCityToGrid(city);
+                input.value = '';
+            }
+        }
+        
+        // Enter key support for search
         document.addEventListener('DOMContentLoaded', () => {
-            const welcomeSection = document.getElementById('welcomeSection');
-            if (welcomeSection) {
-                welcomeSection.innerHTML = `
-                    <div class="loading">
-                        🔄 Loading Timely application...
-                    </div>
-                `;
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        addCityFromSearch();
+                    }
+                });
             }
         });
     </script>
 
     <!-- Application Scripts -->
-    <script src="./timely-bundle.js"></script>
-
-    <!-- Service Worker for offline functionality (optional) -->
-    <script>
-        // Register service worker if available
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-    </script>
+    <script src="./simple-timely.js"></script>
 </body>
 </html>
