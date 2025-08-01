@@ -166,7 +166,103 @@ body {
     margin-right: 5px;
 }
 
-/* Simple Search */
+/* Clock Controls */
+.clock-controls {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.style-controls, .format-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.clock-controls label {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.clock-controls select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.clock-controls select:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+/* Enhanced Search with Suggestions */
+.simple-search-container {
+    position: relative;
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 400px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+}
+
+.suggestion-item:hover {
+    background: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-flag {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.suggestion-name {
+    font-weight: bold;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.suggestion-country {
+    color: #666;
+    font-size: 12px;
+}
 .simple-search-container {
     margin: 40px 0;
     display: flex;
@@ -205,13 +301,13 @@ body {
     background: #0052a3;
 }
 
-/* World Cities Grid */
+/* World Cities Grid - Enhanced */
 .world-cities-grid {
     margin: 40px 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    max-width: 1000px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -219,59 +315,185 @@ body {
 .world-city-item {
     background: #f8f9fa;
     border: 1px solid #e9ecef;
-    border-radius: 6px;
-    padding: 15px;
+    border-radius: 8px;
+    padding: 20px;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    position: relative;
 }
 
 .world-city-item:hover {
     background: #e9ecef;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .world-city-item .flag {
-    font-size: 24px;
-    margin-bottom: 8px;
+    font-size: 28px;
+    margin-bottom: 10px;
     display: block;
 }
 
 .world-city-item .city-name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     color: #333;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
-.world-city-item .city-time {
+.clock-container {
+    margin: 15px 0;
+}
+
+.digital-time {
     font-family: 'Courier New', monospace;
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 3px;
+    font-size: 22px;
+    color: #0066cc;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Analog Clock Styles */
+.analog-clock {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.clock-face {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #333;
+    border-radius: 50%;
+    position: relative;
+    background: white;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hour-hand, .minute-hand, .second-hand {
+    position: absolute;
+    background: #333;
+    border-radius: 2px;
+    transform-origin: bottom center;
+    left: 50%;
+}
+
+.hour-hand {
+    width: 3px;
+    height: 25px;
+    margin-left: -1.5px;
+    bottom: 50%;
+    background: #333;
+    z-index: 3;
+}
+
+.minute-hand {
+    width: 2px;
+    height: 32px;
+    margin-left: -1px;
+    bottom: 50%;
+    background: #333;
+    z-index: 2;
+}
+
+.second-hand {
+    width: 1px;
+    height: 35px;
+    margin-left: -0.5px;
+    bottom: 50%;
+    background: #dc3545;
+    z-index: 4;
+}
+
+.center-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+.hour-markers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.marker {
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: #666;
+    top: 2px;
+    left: 50%;
+    margin-left: -1px;
+    transform-origin: 50% 37px;
+}
+
+.marker:nth-child(3n) {
+    background: #333;
+    width: 3px;
+    height: 12px;
+    margin-left: -1.5px;
 }
 
 .world-city-item .city-date {
-    font-size: 12px;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.world-city-item .city-timezone {
+    font-size: 11px;
     color: #888;
+    font-family: monospace;
+    margin-bottom: 10px;
 }
 
 .world-city-item .remove-btn {
     background: #dc3545;
     color: white;
     border: none;
-    border-radius: 3px;
-    padding: 4px 8px;
-    font-size: 12px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-    margin-top: 8px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
     opacity: 0.7;
-    transition: opacity 0.2s ease;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .world-city-item .remove-btn:hover {
     opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Different clock style layouts */
+.world-city-item.both .clock-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.world-city-item.analog .digital-time {
+    display: none;
+}
+
+.world-city-item.digital .analog-clock {
+    display: none;
 }
 
 /* Footer Links (minimal like time.is) */
@@ -312,6 +534,16 @@ body {
         font-size: 48px;
     }
     
+    .clock-controls {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .style-controls, .format-controls {
+        justify-content: center;
+    }
+    
     .popular-cities {
         gap: 10px;
     }
@@ -332,15 +564,49 @@ body {
         max-width: 300px;
     }
     
+    .search-suggestions {
+        min-width: 280px;
+        max-width: 320px;
+    }
+    
     .world-cities-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .world-city-item {
+        padding: 15px;
+    }
+    
+    .digital-time {
+        font-size: 18px;
+    }
+    
+    .clock-face {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .hour-hand {
+        height: 20px;
+    }
+    
+    .minute-hand {
+        height: 25px;
+    }
+    
+    .second-hand {
+        height: 28px;
     }
 }
 
 @media (max-width: 480px) {
     .time-digits {
         font-size: 36px;
+    }
+    
+    .clock-controls {
+        padding: 10px;
     }
     
     .popular-cities {
@@ -350,6 +616,36 @@ body {
     
     .world-cities-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .search-suggestions {
+        min-width: 250px;
+        max-width: 280px;
+    }
+    
+    .suggestion-item {
+        padding: 8px 12px;
+    }
+    
+    .clock-face {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .hour-hand {
+        height: 16px;
+    }
+    
+    .minute-hand {
+        height: 20px;
+    }
+    
+    .second-hand {
+        height: 22px;
+    }
+    
+    .marker {
+        transform-origin: 50% 23px;
     }
 }
 
