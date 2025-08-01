@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your ultimate world clock and timezone companion with real-time updates">
+    <meta name="keywords" content="world clock, timezone, time zones, GMT, UTC, international time">
+    <meta name="author" content="Timely World Clock">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🕐 Timely - World Clock">
+    <meta property="og:description" content="Your ultimate world clock and timezone companion with real-time updates">
+    <meta property="og:url" content="">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="🕐 Timely - World Clock">
+    <meta property="twitter:description" content="Your ultimate world clock and timezone companion with real-time updates">
+    
+    <title>🕐 Timely - World Clock & Time Zone Explorer</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="src/css/styles.css" as="style">
+    <link rel="preload" href="src/js/app.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="src/css/styles.css">
+    
+    <!-- Favicon (you can add your own) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+</head>
+<body>
+    <!-- Application Container -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>🕐 Timely</h1>
+            <p>Your ultimate world clock and time zone companion</p>
+        </header>
+        
+        <!-- Search Section -->
+        <section class="search-section" aria-label="Timezone Search">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="timezoneInput" 
+                    placeholder="Enter city or timezone (e.g., London, Tokyo, New York)..."
+                    aria-label="Search for a city or timezone"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <button class="search-btn btn btn-primary" aria-label="Add timezone">
+                    🔍 Add Clock
+                </button>
+                <button class="random-btn btn btn-primary" aria-label="Add random timezone">
+                    🎲 Random
+                </button>
+            </div>
+            
+            <div class="favorites-section" aria-label="Quick access to favorite timezones">
+                <span class="favorites-label">Quick Access:</span>
+                <!-- Favorite timezone buttons will be dynamically generated here -->
+            </div>
+        </section>
+        
+        <!-- Main Display Section -->
+        <main class="main-display" aria-label="World clocks display">
+            <!-- Clock Grid Container -->
+            <div class="clock-grid" id="clockContainer">
+                <!-- World clocks will be dynamically added here -->
+            </div>
+            
+            <!-- Welcome/Empty State -->
+            <div class="welcome-section" id="welcomeSection">
+                <!-- Welcome content will be loaded here -->
+            </div>
+            
+            <!-- Timezone Converter (Optional Feature) -->
+            <div class="converter-section" id="converterSection" style="display: none;">
+                <h3>⏰ Time Converter</h3>
+                <div class="converter-inputs">
+                    <div class="time-input-group">
+                        <label for="sourceTime">Time:</label>
+                        <input type="time" id="sourceTime" class="time-input">
+                    </div>
+                    <div class="timezone-select-group">
+                        <label for="sourceTimezone">From:</label>
+                        <select id="sourceTimezone" class="timezone-select"></select>
+                    </div>
+                    <div class="timezone-select-group">
+                        <label for="targetTimezone">To:</label>
+                        <select id="targetTimezone" class="timezone-select"></select>
+                    </div>
+                    <div class="converter-result" id="converterResult">
+                        <!-- Conversion result will appear here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Script -->
+    <script>
+        // Show loading indicator while JavaScript loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeSection = document.getElementById('welcomeSection');
+            if (welcomeSection) {
+                welcomeSection.innerHTML = `
+                    <div class="loading">
+                        🔄 Loading Timely application...
+                    </div>
+                `;
+            }
+        });
+    </script>
+
+    <!-- Application Scripts (ES6 Modules) -->
+    <script type="module">
+        // Import and initialize the main application
+        import { TimelyApp } from './src/js/app.js';
+        
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                window.timelyApp = new TimelyApp();
+                await window.timelyApp.init();
+                
+                // Development tools (only in debug mode)
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    window.appMetrics = () => console.table(window.timelyApp.getMetrics());
+                    window.clearAppCache = () => window.timelyApp.clearCache();
+                    window.exportData = () => window.timelyApp.exportTimezoneData();
+                    console.log('%cTimely World Clock Debug Mode', 'color: #667eea; font-size: 16px; font-weight: bold;');
+                    console.log('Available debug commands: appMetrics(), clearAppCache(), exportData()');
+                }
+                
+            } catch (error) {
+                console.error('Failed to initialize Timely:', error);
+                
+                // Fallback error display
+                const welcomeSection = document.getElementById('welcomeSection');
+                if (welcomeSection) {
+                    welcomeSection.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Application Error</h3>
+                            <p>Sorry, Timely failed to load. Please refresh the page to try again.</p>
+                            <button onclick="window.location.reload()" class="btn btn-primary" style="margin-top: 15px;">
+                                🔄 Refresh Page
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        });
+    </script>
+
+    <!-- Service Worker for offline functionality (optional) -->
+    <script>
+        // Register service worker if available
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
