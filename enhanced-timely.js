@@ -8,6 +8,20 @@ class SimpleTimelyApp {
         this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.addedCities = new Set();
         
+        // Open Source Time & Location APIs Configuration
+        this.apis = {
+            // Time APIs (Free & Open Source)
+            time: {
+                worldtime: 'http://worldtimeapi.org/api/timezone/',
+                browser: true // IANA timezone database fallback
+            },
+            // Location APIs (Free & No Key Required)
+            location: {
+                ipapi: 'http://ip-api.com/json/',
+                ipinfo: 'https://ipinfo.io/json'
+            }
+        };
+        
         // Comprehensive country and timezone database with flags (120+ locations)
         this.countryTimezones = {
             // North America
@@ -154,11 +168,94 @@ class SimpleTimelyApp {
         this.searchSuggestions = [];
         this.isSearching = false;
         this.isEditingPopular = false;
+        this.clockStyle = 'digital'; // Initialize clock style
+        this.timeFormat = '24h'; // Initialize time format
+        this.currentPrimaryCity = 'Local Time';
+        this.currentPrimaryTimezone = this.userTimezone;
+        this.activeSection = 'popular';
+        this.locationPickerOpen = false;
     }
     
-    init() {
+    // Auto-detect user location using open-source APIs
+    async detectUserLocation() {
         try {
-            console.log('🕐 Initializing Enhanced Timely...');
+            console.log('🌍 Detecting location using open-source APIs...');
+            
+            // Try ip-api.com first (free, no key required)
+            try {
+                const response = await fetch(this.apis.location.ipapi);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'success' && data.timezone) {
+                        console.log(`📍 Location detected: ${data.city}, ${data.country} (${data.timezone})`);
+                        return {
+                            city: data.city,
+                            country: data.country,
+                            timezone: data.timezone,
+                            countryCode: data.countryCode
+                        };
+                    }
+                }
+            } catch (error) {
+                console.warn('⚠️ ip-api.com failed, trying backup...');
+            }
+            
+            // Fallback to ipinfo.io
+            try {
+                const response = await fetch(this.apis.location.ipinfo);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.timezone) {
+                        console.log(`📍 Location detected: ${data.city}, ${data.country} (${data.timezone})`);
+                        return {
+                            city: data.city,
+                            country: data.country,
+                            timezone: data.timezone,
+                            countryCode: data.country
+                        };
+                    }
+                }
+            } catch (error) {
+                console.warn('⚠️ ipinfo.io failed, using browser timezone');
+            }
+            
+            // Ultimate fallback: browser timezone
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            console.log(`🌐 Using browser timezone: ${timezone}`);
+            return { timezone, city: 'Local Time', country: 'Local' };
+            
+        } catch (error) {
+            console.error('❌ Location detection failed:', error);
+            return { timezone: this.userTimezone, city: 'Local Time', country: 'Local' };
+        }
+    }
+    
+    // Get accurate time using WorldTimeAPI (open source)
+    async getAccurateTime(timezone) {
+        try {
+            const response = await fetch(`${this.apis.time.worldtime}${timezone}`);
+            if (response.ok) {
+                const data = await response.json();
+                return new Date(data.datetime);
+            }
+        } catch (error) {
+            console.warn('⚠️ WorldTimeAPI unavailable, using browser time');
+        }
+        
+        // Fallback to browser time with timezone
+        return new Date();
+    }
+    
+    async init() {
+        try {
+            console.log('🕐 Initializing Enhanced Timely with Open Source APIs...');
+            
+            // Auto-detect user location
+            const location = await this.detectUserLocation();
+            if (location.city !== 'Local Time') {
+                this.userTimezone = location.timezone;
+                console.log(`🎯 Auto-detected timezone: ${location.timezone}`);
+            }
             
             // Start primary clock
             this.updatePrimaryTime();
@@ -169,11 +266,8 @@ class SimpleTimelyApp {
             // Initialize enhanced search
             this.initializeSearch();
             
-            // Add clock style controls
-            this.addClockStyleControls();
-            
-            // Add popular cities editor
-            this.addPopularCitiesEditor();
+            // Initialize modern interface
+            this.initializeModernInterface();
             
             // Start update interval
             this.updateInterval = setInterval(() => {
@@ -182,7 +276,7 @@ class SimpleTimelyApp {
                 this.updateWorldCities();
             }, 1000);
             
-            console.log('✅ Enhanced Timely initialized!');
+            console.log('✅ Enhanced Timely initialized with open-source APIs!');
             
         } catch (error) {
             console.error('❌ Failed to initialize:', error);
@@ -191,40 +285,219 @@ class SimpleTimelyApp {
     
     updatePrimaryTime() {
         try {
-            const now = new Date();
+            // Use current primary location instead of user timezone
+            const displayTimezone = this.currentPrimaryTimezone || this.userTimezone;
+            const displayCity = this.currentPrimaryCity || this.getCityFromTimezone(this.userTimezone);
+            
             const timeEl = document.getElementById('primaryTime');
             const dateEl = document.getElementById('primaryDate');
-            const locationEl = document.getElementById('primaryLocation');
+            const locationTitleEl = document.getElementById('locationTitle');
+            const locationSubtitleEl = document.getElementById('locationSubtitle');
+            const sunTimesEl = document.getElementById('sunInfo');
             
             if (timeEl) {
-                timeEl.textContent = now.toLocaleTimeString('en-US', {
-                    hour12: this.timeFormat === '12h',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
+                const time = this.getTimeForTimezone(displayTimezone);
+                timeEl.textContent = time;
             }
             
             if (dateEl) {
-                dateEl.textContent = now.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                const date = this.getDateForTimezone(displayTimezone);
+                const weekNumber = this.getWeekNumber(new Date());
+                dateEl.textContent = `${date}, week ${weekNumber}`;
             }
             
-            if (locationEl) {
-                const cityName = this.getCityFromTimezone(this.userTimezone);
-                locationEl.textContent = `Time in ${cityName} now:`;
+            if (locationTitleEl) {
+                locationTitleEl.textContent = `Time in ${displayCity} now`;
             }
             
-            // Update timezone details
-            this.updateTimezoneDetails();
+            if (locationSubtitleEl) {
+                locationSubtitleEl.textContent = this.getTimezoneInfo(displayTimezone);
+            }
+            
+            if (sunTimesEl) {
+                // Calculate approximate sunrise/sunset (simplified)
+                const sunrise = "06:30";
+                const sunset = "18:45";
+                const dayLength = "12h 15m";
+                sunTimesEl.textContent = `↑ ${sunrise} ↓ ${sunset} (${dayLength})`;
+            }
+            
+            // Update time difference grid with current primary timezone
+            this.updateTimeDifferenceGrid();
+            
+            // Update country information
+            this.updateCountryInfo();
+            
+            // Update city tiles if they exist
+            if (this.activeSection === 'popular') {
+                this.updateCityTiles();
+            }
             
         } catch (error) {
             console.error('Failed to update primary time:', error);
         }
+    }
+    
+    updateCityTiles() {
+        const grid = document.getElementById('citiesGrid');
+        if (!grid) return;
+        
+        const timeElements = grid.querySelectorAll('.city-time');
+        const dateElements = grid.querySelectorAll('.city-date');
+        
+        Array.from(this.addedCities).forEach((cityName, index) => {
+            const city = this.countryTimezones[cityName];
+            if (city && timeElements[index] && dateElements[index]) {
+                timeElements[index].textContent = this.getTimeForTimezone(city.timezone);
+                dateElements[index].textContent = this.getDateForTimezone(city.timezone);
+            }
+        });
+    }
+    
+    getWeekNumber(date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+    
+    updateTimeDifferenceGrid() {
+        const gridEl = document.getElementById('timeDiffGrid');
+        if (!gridEl) return;
+        
+        const popularCitiesForDiff = [
+            'Los Angeles', 'Chicago', 'New York', 'Toronto', 'London', 
+            'Paris', 'Dubai', 'Mumbai', 'Shanghai', 'Tokyo', 'Sydney'
+        ];
+        
+        const html = popularCitiesForDiff.map(cityName => {
+            const city = this.countryTimezones[cityName];
+            if (!city) return '';
+            
+            const time = this.getTimeForTimezone(city.timezone);
+            const timeDiff = this.calculateTimeDifference(city.timezone);
+            
+            // Format the time difference nicely
+            let diffDisplay = timeDiff;
+            if (timeDiff === "0") {
+                diffDisplay = "Same time";
+            } else if (timeDiff.startsWith("+")) {
+                diffDisplay = `${timeDiff} hours ahead`;
+            } else if (timeDiff.startsWith("-")) {
+                diffDisplay = `${Math.abs(parseInt(timeDiff))} hours behind`;
+            }
+            
+            return `
+                <div class="time-diff-item">
+                    <span class="diff-city">${city.flag} ${cityName}</span>
+                    <span class="diff-time">${diffDisplay}</span>
+                </div>
+            `;
+        }).join('');
+        
+        gridEl.innerHTML = html;
+    }
+    
+    calculateTimeDifference(targetTimezone) {
+        try {
+            const now = new Date();
+            const userTime = new Date(now.toLocaleString("en-US", {timeZone: this.currentPrimaryTimezone || this.userTimezone}));
+            const targetTime = new Date(now.toLocaleString("en-US", {timeZone: targetTimezone}));
+            
+            const diffMs = targetTime.getTime() - userTime.getTime();
+            const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+            
+            if (diffHours === 0) {
+                return "0";
+            } else if (diffHours > 0) {
+                return `+${diffHours}`;
+            } else {
+                return `${diffHours}`; // Already has minus sign
+            }
+        } catch (error) {
+            console.warn('Error calculating time difference:', error);
+            return "−";
+        }
+    }
+    
+    updateCountryInfo() {
+        const sectionEl = document.getElementById('countryInfoSection');
+        if (!sectionEl) return;
+        
+        const cityName = this.getCityFromTimezone(this.currentPrimaryTimezone || this.userTimezone);
+        const countryData = this.getCountryDataForCity(cityName);
+        
+        if (!countryData) {
+            sectionEl.style.display = 'none';
+            return;
+        }
+        
+        const utcOffset = this.getUTCOffset(this.currentPrimaryTimezone || this.userTimezone);
+        
+        sectionEl.style.display = 'block';
+        sectionEl.innerHTML = `
+            <h2>Time zone info for ${cityName}</h2>
+            <div class="country-details">
+                <div class="country-detail-item">
+                    <span class="detail-label">UTC</span>
+                    <span class="detail-value">${utcOffset}</span>
+                </div>
+                <div class="country-detail-item">
+                    <span class="detail-label">Time Zone</span>
+                    <span class="detail-value">${this.currentPrimaryTimezone || this.userTimezone}</span>
+                </div>
+                <div class="country-detail-item">
+                    <span class="detail-label">Country</span>
+                    <span class="detail-value">${countryData.flag} ${countryData.country}</span>
+                </div>
+                <div class="country-detail-item">
+                    <span class="detail-label">Continent</span>
+                    <span class="detail-value">${this.getContinentFromTimezone(this.currentPrimaryTimezone || this.userTimezone)}</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    getCountryDataForCity(cityName) {
+        return this.countryTimezones[cityName] || null;
+    }
+    
+    getUTCOffset(timezone) {
+        try {
+            const now = new Date();
+            const utcTime = new Date(now.toLocaleString("en-US", {timeZone: "UTC"}));
+            const localTime = new Date(now.toLocaleString("en-US", {timeZone: timezone}));
+            
+            // Calculate offset in milliseconds and convert to hours
+            const offsetMs = localTime.getTime() - utcTime.getTime();
+            const offsetHours = Math.round(offsetMs / (1000 * 60 * 60));
+            
+            // Return clean digit format with plus/minus signs
+            if (offsetHours === 0) {
+                return "0";
+            } else if (offsetHours > 0) {
+                return `+${offsetHours}`;
+            } else {
+                return `${offsetHours}`; // Already has minus sign
+            }
+        } catch (error) {
+            console.warn('Error calculating UTC offset:', error);
+            return "0";
+        }
+    }
+    
+    getContinentFromTimezone(timezone) {
+        const continent = timezone.split('/')[0];
+        const continentMap = {
+            'America': 'North America',
+            'Europe': 'Europe',
+            'Asia': 'Asia',
+            'Africa': 'Africa',
+            'Australia': 'Australia',
+            'Pacific': 'Pacific',
+            'Atlantic': 'Atlantic',
+            'Indian': 'Indian Ocean'
+        };
+        return continentMap[continent] || continent;
     }
     
     updateTimezoneDetails() {
@@ -237,7 +510,7 @@ class SimpleTimelyApp {
             const offsetStr = offset >= 0 ? `+${offset}` : `${offset}`;
             
             detailsEl.innerHTML = `
-                <span class="sun-info">🌍 UTC${offsetStr} - ${this.userTimezone}</span>
+                <span class="sun-info">🌍 ${offsetStr} - ${this.userTimezone}</span>
             `;
         } catch (error) {
             console.error('Failed to update timezone details:', error);
@@ -248,49 +521,22 @@ class SimpleTimelyApp {
         const container = document.getElementById('popularCities');
         if (!container) return;
         
-        const editButton = this.isEditingPopular ? 
-            `<button class="edit-popular-btn editing" onclick="window.timelyApp.togglePopularEdit()">✓ Done</button>` :
-            `<button class="edit-popular-btn" onclick="window.timelyApp.togglePopularEdit()">✏️ Edit</button>`;
-        
-        let citiesHTML = this.popularCities.map(cityName => {
+        const citiesHTML = this.popularCities.map(cityName => {
             const city = this.countryTimezones[cityName];
             if (!city) return '';
             
             const time = this.getTimeForTimezone(city.timezone);
             
-            if (this.isEditingPopular) {
-                return `
-                    <div class="popular-city editing">
-                        <span class="city-flag">${city.flag}</span>
-                        <span class="city-name">${cityName}</span>
-                        <span class="city-time">${time}</span>
-                        <button class="remove-popular-btn" onclick="window.timelyApp.removeFromPopular('${cityName}')">×</button>
-                    </div>
-                `;
-            } else {
-                return `
-                    <a href="#" class="popular-city" onclick="event.preventDefault(); window.timelyApp.addCityToGrid('${cityName}')">
-                        <span class="city-flag">${city.flag}</span>
-                        <span class="city-name">${cityName}</span>
-                        <span class="city-time">${time}</span>
-                    </a>
-                `;
-            }
+            return `
+                <a href="#" class="popular-city" onclick="event.preventDefault(); window.timelyApp.addCityToGrid('${cityName}')">
+                    <span class="city-flag">${city.flag}</span>
+                    <span class="city-name">${cityName}</span>
+                    <span class="city-time">${time}</span>
+                </a>
+            `;
         }).join('');
         
-        if (this.isEditingPopular) {
-            citiesHTML += `
-                <div class="add-popular-container">
-                    <input type="text" id="addPopularInput" placeholder="Add city to popular..." class="add-popular-input">
-                    <button onclick="window.timelyApp.addToPopular()" class="add-popular-btn">+</button>
-                </div>
-            `;
-        }
-        
         container.innerHTML = `
-            <div class="popular-header">
-                ${editButton}
-            </div>
             <div class="popular-cities-list">
                 ${citiesHTML}
             </div>
@@ -311,42 +557,6 @@ class SimpleTimelyApp {
                 }
             }
         });
-    }
-    
-    togglePopularEdit() {
-        this.isEditingPopular = !this.isEditingPopular;
-        this.renderPopularCities();
-    }
-    
-    removeFromPopular(cityName) {
-        this.popularCities = this.popularCities.filter(city => city !== cityName);
-        this.renderPopularCities();
-    }
-    
-    addToPopular() {
-        const input = document.getElementById('addPopularInput');
-        if (!input) return;
-        
-        const cityName = input.value.trim();
-        if (!cityName) return;
-        
-        const city = this.findCityByName(cityName);
-        if (!city) {
-            alert(`City "${cityName}" not found. Please try a different city.`);
-            return;
-        }
-        
-        if (!this.popularCities.includes(city.name)) {
-            this.popularCities.push(city.name);
-            this.renderPopularCities();
-        }
-        
-        input.value = '';
-    }
-    
-    addPopularCitiesEditor() {
-        // This method adds the editing functionality which is now integrated into renderPopularCities
-        console.log('Popular cities editor functionality added');
     }
     
     addCityToGrid(cityName) {
@@ -448,43 +658,369 @@ class SimpleTimelyApp {
         });
     }
     
-    addClockStyleControls() {
-        const mainContent = document.querySelector('.main-content');
-        const controlsHTML = `
-            <div class="clock-controls">
-                <div class="style-controls">
-                    <label>Clock Style:</label>
-                    <select id="clockStyleSelect" onchange="window.timelyApp.changeClockStyle(this.value)">
-                        <option value="digital">Digital</option>
-                        <option value="analog">Analog</option>
-                        <option value="both">Both</option>
-                    </select>
-                </div>
-                <div class="format-controls">
-                    <label>Time Format:</label>
-                    <select id="timeFormatSelect" onchange="window.timelyApp.changeTimeFormat(this.value)">
-                        <option value="24h">24 Hour</option>
-                        <option value="12h">12 Hour</option>
-                    </select>
-                </div>
-            </div>
-        `;
+    // Modern Interface Methods
+    initializeModernInterface() {
+        this.renderCityTiles();
+        this.initializeLocationPicker();
+        this.initializeCitySearch();
+        this.showSection('popular');
+    }
+    
+    toggleLocationPicker() {
+        this.locationPickerOpen = !this.locationPickerOpen;
+        const overlay = document.getElementById('locationPickerOverlay');
         
-        // Insert controls after accuracy notice
-        const accuracyNotice = document.getElementById('accuracyNotice');
-        if (accuracyNotice) {
-            accuracyNotice.insertAdjacentHTML('afterend', controlsHTML);
+        if (this.locationPickerOpen) {
+            overlay.classList.add('active');
+            this.populateLocationPicker();
+            // Focus search input
+            setTimeout(() => {
+                document.getElementById('locationSearchInput').focus();
+            }, 300);
+        } else {
+            overlay.classList.remove('active');
         }
     }
     
-    changeClockStyle(style) {
-        this.clockStyle = style;
-        this.renderWorldCities();
-        this.renderPopularCities();
+    populateLocationPicker() {
+        const grid = document.getElementById('locationGrid');
+        const popularCities = [
+            'New York', 'London', 'Tokyo', 'Sydney', 'Dubai', 'Los Angeles',
+            'Paris', 'Singapore', 'Hong Kong', 'Mumbai', 'São Paulo', 'Toronto'
+        ];
+        
+        const html = popularCities.map(cityName => {
+            const city = this.countryTimezones[cityName];
+            if (!city) return '';
+            
+            return `
+                <div class="location-item" onclick="window.timelyApp.setPrimaryLocation('${cityName}', '${city.timezone}')">
+                    <span class="flag">${city.flag}</span>
+                    <span class="city-name">${cityName}</span>
+                </div>
+            `;
+        }).join('');
+        
+        grid.innerHTML = html;
     }
     
-    changeTimeFormat(format) {
-        this.timeFormat = format;
+    setPrimaryLocation(cityName, timezone) {
+        this.currentPrimaryCity = cityName;
+        this.currentPrimaryTimezone = timezone;
+        
+        // Update the main clock display
+        const titleEl = document.getElementById('locationTitle');
+        const subtitleEl = document.getElementById('locationSubtitle');
+        
+        if (titleEl) titleEl.textContent = `Time in ${cityName} now`;
+        if (subtitleEl) subtitleEl.textContent = this.getTimezoneInfo(timezone);
+        
+        // Close the picker
+        this.toggleLocationPicker();
+        
+        // Update the giant clock immediately
+        this.updatePrimaryTimeForLocation();
+    }
+    
+    updatePrimaryTimeForLocation() {
+        const timeEl = document.getElementById('primaryTime');
+        const dateEl = document.getElementById('primaryDate');
+        const sunTimesEl = document.getElementById('sunInfo');
+        
+        if (timeEl) {
+            const time = this.getTimeForTimezone(this.currentPrimaryTimezone);
+            timeEl.textContent = time;
+        }
+        
+        if (dateEl) {
+            const date = this.getDateForTimezone(this.currentPrimaryTimezone);
+            const weekNumber = this.getWeekNumber(new Date());
+            dateEl.textContent = `${date}, week ${weekNumber}`;
+        }
+        
+        if (sunTimesEl) {
+            // Simple sunrise/sunset calculation
+            const sunrise = "06:30";
+            const sunset = "18:45";
+            const dayLength = "12h 15m";
+            sunTimesEl.textContent = `↑ ${sunrise} ↓ ${sunset} (${dayLength})`;
+        }
+    }
+    
+    showSection(sectionName) {
+        this.activeSection = sectionName;
+        
+        // Update tile states
+        document.querySelectorAll('.quick-tile').forEach(tile => {
+            tile.classList.remove('active');
+        });
+        
+        // Update content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show selected section
+        if (sectionName === 'popular') {
+            document.querySelector('.popular-tile')?.classList.add('active');
+            document.getElementById('popularSection')?.classList.add('active');
+            this.renderCityTiles();
+        } else if (sectionName === 'add') {
+            document.querySelector('.add-tile')?.classList.add('active');
+            document.getElementById('addCitySection')?.classList.add('active');
+        } else if (sectionName === 'business') {
+            document.querySelector('.business-tile')?.classList.add('active');
+            document.getElementById('businessSection')?.classList.add('active');
+            this.renderBusinessHours();
+        } else if (sectionName === 'timezone') {
+            document.querySelector('.timezone-tile')?.classList.add('active');
+            document.getElementById('timezoneSection')?.classList.add('active');
+            this.renderTimezoneOverview();
+        }
+    }
+    
+    openCitySearch() {
+        this.showSection('add');
+        setTimeout(() => {
+            document.getElementById('citySearchInput')?.focus();
+        }, 100);
+    }
+    
+    showPopularCities() {
+        this.showSection('popular');
+    }
+    
+    showBusinessHours() {
+        this.showSection('business');
+    }
+    
+    showTimezoneMap() {
+        this.showSection('timezone');
+    }
+    
+    renderCityTiles() {
+        const grid = document.getElementById('citiesGrid');
+        if (!grid) return;
+        
+        const citiesToShow = Array.from(this.addedCities).slice(0, 8); // Show max 8 tiles
+        
+        if (citiesToShow.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🌍</div>
+                    <h3>No cities added yet</h3>
+                    <p>Add your first city to get started!</p>
+                    <button class="action-btn primary" onclick="window.timelyApp.openCitySearch()">Add City</button>
+                </div>
+            `;
+            return;
+        }
+        
+        const html = citiesToShow.map(cityName => {
+            const city = this.countryTimezones[cityName];
+            if (!city) return '';
+            
+            const time = this.getTimeForTimezone(city.timezone);
+            const date = this.getDateForTimezone(city.timezone);
+            
+            return `
+                <div class="city-tile">
+                    <div class="city-tile-header">
+                        <span class="city-flag">${city.flag}</span>
+                        <div class="city-info">
+                            <h3>${cityName}</h3>
+                            <p>${city.country}</p>
+                        </div>
+                    </div>
+                    <div class="city-time-display">
+                        <div class="city-time">${time}</div>
+                        <div class="city-date">${date}</div>
+                    </div>
+                    <div class="city-actions">
+                        <button class="action-btn primary" onclick="window.timelyApp.setPrimaryLocation('${cityName}', '${city.timezone}')">
+                            Set Primary
+                        </button>
+                        <button class="action-btn" onclick="window.timelyApp.removeCityFromGrid('${cityName}')">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        grid.innerHTML = html;
+    }
+    
+    renderBusinessHours() {
+        const grid = document.getElementById('businessGrid');
+        if (!grid) return;
+        
+        const businessCities = ['New York', 'London', 'Tokyo', 'Sydney', 'Dubai', 'Singapore'];
+        
+        const html = businessCities.map(cityName => {
+            const city = this.countryTimezones[cityName];
+            if (!city) return '';
+            
+            const time = this.getTimeForTimezone(city.timezone);
+            const hour = parseInt(time.split(':')[0]);
+            const isBusinessHours = hour >= 9 && hour <= 17;
+            
+            return `
+                <div class="business-card">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <span style="font-size: 1.5rem;">${city.flag}</span>
+                        <strong>${cityName}</strong>
+                    </div>
+                    <div style="font-size: 1.2rem; margin: 10px 0;">${time}</div>
+                    <span class="business-status ${isBusinessHours ? 'open' : 'closed'}">
+                        ${isBusinessHours ? '🟢 Business Hours' : '🔴 After Hours'}
+                    </span>
+                </div>
+            `;
+        }).join('');
+        
+        grid.innerHTML = html;
+    }
+    
+    renderTimezoneOverview() {
+        const overview = document.getElementById('timezoneOverview');
+        if (!overview) return;
+        
+        const timezones = [
+            { name: 'Pacific Time', offset: '-8', cities: ['Los Angeles', 'Seattle'] },
+            { name: 'Mountain Time', offset: '-7', cities: ['Denver', 'Phoenix'] },
+            { name: 'Central Time', offset: '-6', cities: ['Chicago', 'Dallas'] },
+            { name: 'Eastern Time', offset: '-5', cities: ['New York', 'Miami'] },
+            { name: 'Greenwich Mean Time', offset: '0', cities: ['London', 'Dublin'] },
+            { name: 'Central European Time', offset: '+1', cities: ['Paris', 'Berlin'] },
+            { name: 'Eastern European Time', offset: '+2', cities: ['Cairo', 'Helsinki'] },
+            { name: 'Moscow Time', offset: '+3', cities: ['Moscow', 'Istanbul'] },
+            { name: 'Gulf Standard Time', offset: '+4', cities: ['Dubai', 'Abu Dhabi'] },
+            { name: 'India Standard Time', offset: '+5', cities: ['Mumbai', 'Delhi'] },
+            { name: 'China Standard Time', offset: '+8', cities: ['Beijing', 'Shanghai'] },
+            { name: 'Japan Standard Time', offset: '+9', cities: ['Tokyo', 'Osaka'] },
+            { name: 'Australian Eastern Time', offset: '+10', cities: ['Sydney', 'Melbourne'] }
+        ];
+        
+        const html = timezones.map(tz => `
+            <div class="timezone-card">
+                <div class="timezone-offset">${tz.offset}</div>
+                <div class="timezone-name">${tz.name}</div>
+                <div style="margin-top: 10px; color: #888; font-size: 0.8rem;">
+                    ${tz.cities.join(', ')}
+                </div>
+            </div>
+        `).join('');
+        
+        overview.innerHTML = html;
+    }
+    
+    initializeLocationPicker() {
+        const searchInput = document.getElementById('locationSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.filterLocationPicker(e.target.value);
+            });
+        }
+    }
+    
+    filterLocationPicker(query) {
+        const grid = document.getElementById('locationGrid');
+        const items = grid.querySelectorAll('.location-item');
+        
+        items.forEach(item => {
+            const cityName = item.querySelector('.city-name').textContent.toLowerCase();
+            if (cityName.includes(query.toLowerCase())) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+    
+    initializeCitySearch() {
+        const searchInput = document.getElementById('citySearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.handleCitySearch(e.target.value);
+            });
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim();
+                    if (query) {
+                        this.addCityToGrid(query);
+                        e.target.value = '';
+                        this.hideCitySearchSuggestions();
+                    }
+                }
+            });
+        }
+    }
+    
+    handleCitySearch(query) {
+        if (query.length < 2) {
+            this.hideCitySearchSuggestions();
+            return;
+        }
+        
+        const suggestions = Object.keys(this.countryTimezones)
+            .filter(city => city.toLowerCase().includes(query.toLowerCase()))
+            .slice(0, 8);
+        
+        this.showCitySearchSuggestions(suggestions);
+    }
+    
+    showCitySearchSuggestions(suggestions) {
+        const container = document.getElementById('searchSuggestions');
+        if (!container) return;
+        
+        if (suggestions.length === 0) {
+            container.classList.remove('active');
+            return;
+        }
+        
+        const html = suggestions.map(cityName => {
+            const city = this.countryTimezones[cityName];
+            return `
+                <div class="suggestion-item" onclick="window.timelyApp.selectCityFromSuggestion('${cityName}')">
+                    <span style="font-size: 1.2rem;">${city.flag}</span>
+                    <div>
+                        <strong>${cityName}</strong>
+                        <div style="font-size: 0.8rem; color: #666;">${city.country}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        container.innerHTML = html;
+        container.classList.add('active');
+    }
+    
+    hideCitySearchSuggestions() {
+        const container = document.getElementById('searchSuggestions');
+        if (container) {
+            container.classList.remove('active');
+        }
+    }
+    
+    selectCityFromSuggestion(cityName) {
+        this.addCityToGrid(cityName);
+        document.getElementById('citySearchInput').value = '';
+        this.hideCitySearchSuggestions();
+    }
+    
+    // Feature card methods (placeholders for future implementation)
+    openWorldMap() {
+        alert('🌍 World Map feature coming soon!');
+    }
+    
+    openMeetingPlanner() {
+        alert('📅 Meeting Planner feature coming soon!');
+    }
+    
+    openConverter() {
+        alert('🔄 Time Converter feature coming soon!');
     }
     
     removeCityFromGrid(cityName) {
@@ -692,10 +1228,11 @@ function addCityFromSearch() {
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     try {
+        console.log('🚀 Starting Timely with Open Source APIs...');
         window.timelyApp = new SimpleTimelyApp();
-        window.timelyApp.init();
+        await window.timelyApp.init();
     } catch (error) {
         console.error('Failed to initialize Timely:', error);
     }

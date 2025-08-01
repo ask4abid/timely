@@ -21,57 +21,132 @@
     
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Clock Accuracy Notice (like time.is) -->
-        <div class="accuracy-notice" id="accuracyNotice">
-            Your clock is synchronized. Accuracy ±0.1 seconds.
-        </div>
-        
-        <!-- Primary Time Display -->
-        <div class="primary-time-container">
-            <div class="primary-location" id="primaryLocation">
-                Time in Your Location now:
+        <!-- Primary Time Display - Large and Prominent with Switch Capability -->
+        <div class="hero-time-section">
+            <div class="location-header">
+                <h1 class="location-title" id="locationTitle">Time in Your Location now</h1>
+                <div class="location-subtitle" id="locationSubtitle">Loading location...</div>
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="window.timelyApp.toggleLocationPicker()">
+                    <span class="switch-icon">🔄</span>
+                    Switch Location
+                </button>
             </div>
-            <div class="primary-time-display">
-                <div class="time-digits" id="primaryTime">00:00:00</div>
-                <div class="date-info" id="primaryDate">Loading...</div>
-                <div class="timezone-details" id="timezoneDetails">
-                    <span class="sun-info" id="sunInfo">☀️ Loading sun times...</span>
+            
+            <div class="giant-clock-display" id="giantClockDisplay">
+                <div class="main-time" id="primaryTime">00:00:00</div>
+                <div class="main-date" id="primaryDate">Loading...</div>
+                <div class="sun-times" id="sunTimes">
+                    <span class="sun-icon">☀️</span>
+                    <span class="sun-info" id="sunInfo">↑ 06:30 ↓ 18:45 (12h 15m)</span>
+                    <span class="more-info-link">- More info</span>
                 </div>
             </div>
         </div>
-        
-        <!-- Popular Cities (like time.is popular times) -->
-        <div class="popular-cities-container">
-            <div class="popular-cities" id="popularCities">
-                <!-- Popular cities will be loaded here -->
+
+        <!-- Location Picker Modal -->
+        <div class="location-picker-overlay" id="locationPickerOverlay">
+            <div class="location-picker-modal">
+                <div class="modal-header">
+                    <h3>Choose Your Primary Clock Location</h3>
+                    <button class="close-modal" onclick="window.timelyApp.toggleLocationPicker()">×</button>
+                </div>
+                <div class="location-search">
+                    <input type="text" id="locationSearchInput" placeholder="Search cities..." class="location-search-input">
+                </div>
+                <div class="location-grid" id="locationGrid">
+                    <!-- Will be populated with cities -->
+                </div>
             </div>
         </div>
-        
-        <!-- Simple Search -->
-        <div class="simple-search-container">
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="simple-search"
-                placeholder="Search for any city or timezone..."
-                autocomplete="off"
-            >
-            <button class="add-btn" onclick="addCityFromSearch()">Add</button>
+
+        <!-- Modern Tiles Section -->
+        <div class="tiles-section">
+            <div class="section-header">
+                <h2 class="section-title">World Clocks</h2>
+                <p class="section-subtitle">Explore time zones around the world</p>
+            </div>
+            
+            <!-- Quick Access Tiles -->
+            <div class="quick-tiles-grid">
+                <div class="quick-tile add-tile" onclick="window.timelyApp.openCitySearch()">
+                    <div class="tile-icon">+</div>
+                    <div class="tile-label">Add City</div>
+                </div>
+                <div class="quick-tile popular-tile" onclick="window.timelyApp.showPopularCities()">
+                    <div class="tile-icon">🌟</div>
+                    <div class="tile-label">Popular</div>
+                </div>
+                <div class="quick-tile business-tile" onclick="window.timelyApp.showBusinessHours()">
+                    <div class="tile-icon">💼</div>
+                    <div class="tile-label">Business Hours</div>
+                </div>
+                <div class="quick-tile timezone-tile" onclick="window.timelyApp.showTimezoneMap()">
+                    <div class="tile-icon">🗺️</div>
+                    <div class="tile-label">Time Zones</div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div class="dynamic-content" id="dynamicContent">
+                <!-- Popular Cities Grid (Default) -->
+                <div class="content-section active" id="popularSection">
+                    <div class="cities-grid" id="citiesGrid">
+                        <!-- Will be populated with city tiles -->
+                    </div>
+                </div>
+
+                <!-- Add City Section -->
+                <div class="content-section" id="addCitySection">
+                    <div class="search-container">
+                        <input type="text" id="citySearchInput" placeholder="Search for any city..." class="modern-search-input">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
+                    </div>
+                </div>
+
+                <!-- Business Hours Section -->
+                <div class="content-section" id="businessSection">
+                    <div class="business-grid" id="businessGrid">
+                        <!-- Will show business hours comparison -->
+                    </div>
+                </div>
+
+                <!-- Timezone Map Section -->
+                <div class="content-section" id="timezoneSection">
+                    <div class="timezone-overview" id="timezoneOverview">
+                        <!-- Will show timezone information -->
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <!-- World Cities Grid (expandable like time.is) -->
-        <div class="world-cities-grid" id="worldCitiesGrid">
-            <!-- Additional cities will be displayed here -->
-        </div>
-        
-        <!-- Footer Links (minimal like time.is) -->
+
+        <!-- Advanced Features Section -->
+        <div class="features-section">
+            <div class="feature-cards">
+                <div class="feature-card" onclick="window.timelyApp.openWorldMap()">
+                    <div class="feature-icon">🌍</div>
+                    <h3>World Map</h3>
+                    <p>Interactive time zone map</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openMeetingPlanner()">
+                    <div class="feature-icon">📅</div>
+                    <h3>Meeting Planner</h3>
+                    <p>Find best meeting times</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openConverter()">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Time Converter</h3>
+                    <p>Convert between time zones</p>
+                </div>
+            </div>
+        </div>        <!-- Clean Footer -->
         <div class="footer-links">
-            <span class="footer-quote">
-                "Time is the most valuable thing we have" - Timely
-            </span>
-            <div class="small-text">
-                Timely displays exact time for any location worldwide.
-                What time is it? 几点了？ ¿Qué hora es? Quelle heure est-il?
+            <div class="footer-content">
+                <span class="footer-brand">⏰ Timely - Open Source World Clock</span>
+                <div class="footer-tech">
+                    <span class="tech-item">📡 Real-time browser APIs</span>
+                    <span class="tech-item">🌍 IANA Time Zone Database</span>
+                    <span class="tech-item">⚡ No external dependencies</span>
+                </div>
             </div>
         </div>
     </main>
