@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">                    <button class="action-btn secondary" onclick="window.timelyApp.showCountryDetails()">
+                        <span class="btn-icon">🌍</span>
+                        Country Details
+                    </button> <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Exact time for any location worldwide">
     <title>TIMELY</title>
     <link rel="stylesheet" href="src/css/simple-styles.css">
@@ -14,7 +16,7 @@
         <div class="header-content">
             <h1 class="site-title">TIMELY</h1>
             <div class="header-nav">
-                <span class="search-link" onclick="document.getElementById('searchInput').focus()">search</span>
+                <span class="search-link" onclick="document.getElementById('citySearchInput').focus()">search</span>
             </div>
         </div>
     </header>
@@ -148,7 +150,7 @@
     <script>
         // Simple search functionality
         function addCityFromSearch() {
-            const input = document.getElementById('searchInput');
+            const input = document.getElementById('citySearchInput');
             const city = input.value.trim();
             if (city && window.timelyApp) {
                 window.timelyApp.addCityToGrid(city);
@@ -158,7 +160,7 @@
         
         // Enter key support for search
         document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
+            const searchInput = document.getElementById('citySearchInput');
             if (searchInput) {
                 searchInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
