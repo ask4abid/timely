@@ -250,6 +250,9 @@ class SimpleTimelyApp {
         try {
             console.log('🕐 Initializing Enhanced Timely with Open Source APIs...');
             
+            // Initialize theme from localStorage
+            this.initializeTheme();
+            
             // Auto-detect user location
             const location = await this.detectUserLocation();
             if (location.city !== 'Local Time') {
@@ -259,6 +262,9 @@ class SimpleTimelyApp {
             
             // Start primary clock
             this.updatePrimaryTime();
+            
+            // Initialize digital clock
+            this.updateDigitalClock();
             
             // Show popular cities
             this.renderPopularCities();
@@ -272,6 +278,7 @@ class SimpleTimelyApp {
             // Start update interval
             this.updateInterval = setInterval(() => {
                 this.updatePrimaryTime();
+                this.updateDigitalClock();
                 this.updatePopularCities();
                 this.updateWorldCities();
             }, 1000);
@@ -352,6 +359,81 @@ class SimpleTimelyApp {
                 dateElements[index].textContent = this.getDateForTimezone(city.timezone);
             }
         });
+    }
+    
+    // Digital Clock Methods
+    updateDigitalClock() {
+        try {
+            const displayTimezone = this.currentPrimaryTimezone || this.userTimezone;
+            const displayCity = this.currentPrimaryCity || this.getCityFromTimezone(this.userTimezone);
+            
+            const digitalTimeEl = document.getElementById('digitalTime');
+            const digitalDateEl = document.getElementById('digitalDate');
+            const digitalLocationEl = document.getElementById('digitalClockLocation');
+            const digitalTimezoneEl = document.getElementById('digitalTimezone');
+            
+            if (digitalTimeEl) {
+                const time = this.getTimeForTimezone(displayTimezone);
+                digitalTimeEl.textContent = time;
+            }
+            
+            if (digitalDateEl) {
+                const date = new Date().toLocaleDateString('en-US', {
+                    timeZone: displayTimezone,
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                digitalDateEl.textContent = date;
+            }
+            
+            if (digitalLocationEl) {
+                digitalLocationEl.textContent = displayCity;
+            }
+            
+            if (digitalTimezoneEl) {
+                const timezoneInfo = this.getTimezoneInfo(displayTimezone);
+                digitalTimezoneEl.textContent = timezoneInfo;
+            }
+        } catch (error) {
+            console.error('Failed to update digital clock:', error);
+        }
+    }
+    
+    // Theme Toggle Methods
+    initializeTheme() {
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('timely-theme') || 'light';
+        this.currentTheme = savedTheme;
+        
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            this.updateThemeIcon();
+        }
+    }
+    
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        
+        if (this.currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+        
+        // Save theme preference
+        localStorage.setItem('timely-theme', this.currentTheme);
+        
+        // Update theme icon
+        this.updateThemeIcon();
+    }
+    
+    updateThemeIcon() {
+        const themeIcon = document.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.textContent = this.currentTheme === 'dark' ? '☀️' : '🌙';
+        }
     }
     
     getWeekNumber(date) {
