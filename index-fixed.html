@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="view                    <button class="action-btn secondary" onclick="window.timelyApp.showCountryDetails()">
+                        <span class="btn-icon">🌍</span>
+                        Country Details
+                    </button>" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exact time for any location worldwide">
+    <title>TIMELY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/simple-styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+</head>
+<body>
+    <!-- Simple Header like time.is -->
+    <header class="simple-header">
+        <div class="header-content">
+            <h1 class="site-title">TIMELY</h1>
+            <div class="header-nav">
+                <span class="search-link" onclick="document.getElementById('citySearchInput').focus()">search</span>
+                <button class="theme-toggle" id="themeToggle" onclick="window.timelyApp.toggleTheme()">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Modern Digital Clock Component -->
+    <section class="digital-clock-section">
+        <div class="digital-clock-container">
+            <div class="digital-clock-header">
+                <h2 class="clock-title">Digital Clock</h2>
+                <div class="clock-location" id="digitalClockLocation">Your Location</div>
+            </div>
+            <div class="digital-time-display">
+                <div class="digital-time" id="digitalTime">00:00:00</div>
+                <div class="digital-date" id="digitalDate">Monday, January 1, 2024</div>
+                <div class="digital-timezone" id="digitalTimezone">UTC+0</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Primary Time Display - Large and Prominent with Switch Capability -->
+        <div class="hero-time-section">
+            <div class="location-header">
+                <h1 class="location-title" id="locationTitle">Time in Your Location now</h1>
+                <div class="location-subtitle" id="locationSubtitle">Loading location...</div>
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="window.timelyApp.toggleLocationPicker()">
+                    <span class="switch-icon">🔄</span>
+                    Switch Location
+                </button>
+            </div>
+            
+            <div class="giant-clock-display" id="giantClockDisplay">
+                <div class="main-time" id="primaryTime">00:00:00</div>
+                <div class="main-date" id="primaryDate">Loading...</div>
+                <div class="sun-times" id="sunTimes">
+                    <span class="sun-icon">☀️</span>
+                    <span class="sun-info" id="sunInfo">↑ 06:30 ↓ 18:45 (12h 15m)</span>
+                    <span class="more-info-link">- More info</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Picker Modal -->
+        <div class="location-picker-overlay" id="locationPickerOverlay">
+            <div class="location-picker-modal">
+                <div class="modal-header">
+                    <h3>Choose Your Primary Clock Location</h3>
+                    <button class="close-modal" onclick="window.timelyApp.toggleLocationPicker()">×</button>
+                </div>
+                <div class="location-search">
+                    <input type="text" id="locationSearchInput" placeholder="Search cities..." class="location-search-input">
+                </div>
+                <div class="location-grid" id="locationGrid">
+                    <!-- Will be populated with cities -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern World Clock Cards Section -->
+        <div class="world-clocks-section">
+            <div class="section-header">
+                <h2 class="section-title">World Clocks</h2>
+                <div class="section-actions">
+                    <button class="action-btn primary" onclick="window.timelyApp.openCitySearch()">
+                        <span class="btn-icon">+</span>
+                        Add City
+                    </button>
+                    <button class="action-btn secondary" onclick="window.timelyApp.showCountryDetails()">
+                        <span class="btn-icon">�</span>
+                        Country Details
+                    </button>
+                </div>
+            </div>
+            
+            <!-- World Clock Cards Grid -->
+            <div class="world-clock-cards" id="worldClockCards">
+                <!-- Will be populated with modern clock cards -->
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section" id="searchSection">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="citySearchInput" placeholder="Search for any city..." class="modern-search-input">
+                        <button class="search-btn" onclick="window.timelyApp.performSearch()">
+                            <span class="search-icon">🔍</span>
+                        </button>
+                    </div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Country Details Page -->
+        <div class="country-details-page" id="countryDetailsPage" style="display: none;">
+            <div class="page-header">
+                <button class="back-btn" onclick="window.timelyApp.hideCountryDetails()">
+                    <span class="back-icon">←</span>
+                    Back to Clocks
+                </button>
+                <h2 class="page-title" id="countryPageTitle">Country Details</h2>
+            </div>
+            
+            <div class="country-info-card" id="countryInfoCard">
+                <!-- Country information will be populated here -->
+            </div>
+            
+            <div class="cities-showcase" id="citiesShowcase">
+                <!-- Cities will be displayed in an artistic scattered layout -->
+            </div>
+        </div>
+
+        <!-- Advanced Features Section -->
+        <div class="features-section">
+            <div class="feature-cards">
+                <div class="feature-card" onclick="window.timelyApp.openWorldMap()">
+                    <div class="feature-icon">🌍</div>
+                    <h3>World Map</h3>
+                    <p>Interactive time zone map</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openMeetingPlanner()">
+                    <div class="feature-icon">📅</div>
+                    <h3>Meeting Planner</h3>
+                    <p>Find best meeting times</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openConverter()">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Time Converter</h3>
+                    <p>Convert between time zones</p>
+                </div>
+            </div>
+        </div>        <!-- Clean Footer -->
+        <div class="footer-links">
+            <div class="footer-content">
+                <span class="footer-brand">⏰ Timely - Open Source World Clock</span>
+                <div class="footer-tech">
+                    <span class="tech-item">📡 Real-time browser APIs</span>
+                    <span class="tech-item">🌍 IANA Time Zone Database</span>
+                    <span class="tech-item">⚡ No external dependencies</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Loading Script -->
+    <script>
+        // Simple search functionality
+        function addCityFromSearch() {
+            const input = document.getElementById('citySearchInput');
+            const city = input.value.trim();
+            if (city && window.timelyApp) {
+                window.timelyApp.addCityToGrid(city);
+                input.value = '';
+            }
+        }
+        
+        // Enter key support for search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('citySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        addCityFromSearch();
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Application Scripts -->
+    <script src="./enhanced-timely.js"></script>
+</body>
+</html>
