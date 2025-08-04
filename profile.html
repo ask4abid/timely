@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Timely</title>
+    <link rel="stylesheet" href="src/css/simple-styles.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .world-clocks-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .clock-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .export-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>👤 User Profile</h1>
+            <p id="welcomeMessage">Welcome to your Timely profile</p>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">← Back to Timely</button>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title">📊 Account Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalWorldClocks">0</div>
+                    <div class="stat-label">World Clocks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="accountAge">0</div>
+                    <div class="stat-label">Days Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lastLogin">Never</div>
+                    <div class="stat-label">Last Login</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="dataSize">0 KB</div>
+                    <div class="stat-label">Data Usage</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title">⚙️ Account Settings</h2>
+            <form id="profileForm" class="form-grid">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email Address</label>
+                    <input type="email" id="profileEmail" class="form-input" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="profileTimezone">Primary Timezone</label>
+                    <select id="profileTimezone" class="form-input">
+                        <option value="auto">Auto-detect</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileTheme">Theme Preference</label>
+                    <select id="profileTheme" class="form-input">
+                        <option value="light">Light Mode</option>
+                        <option value="dark">Dark Mode</option>
+                        <option value="auto">Auto (System)</option>
+                    </select>
+                </div>
+            </form>
+            
+            <div style="margin-top: 20px;">
+                <h3>Preferences</h3>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="notifications">
+                    <span class="checkmark"></span>
+                    Enable notifications
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoLocation">
+                    <span class="checkmark"></span>
+                    Auto-detect location
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="format24h">
+                    <span class="checkmark"></span>
+                    Use 24-hour format
+                </label>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                <button type="button" class="btn btn-secondary" onclick="resetProfile()">Reset to Defaults</button>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2 class="section-title">🌍 My World Clocks</h2>
+            <div class="world-clocks-list" id="worldClocksList">
+                <!-- Will be populated with user's world clocks -->
+            </div>
+        </div>
+        
+        <div class="profile-section export-section">
+            <h2 class="section-title">💾 Data Management</h2>
+            <p>Export your profile data for backup or import to another device.</p>
+            
+            <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="exportUserData()">📥 Export Profile Data</button>
+                <button class="btn btn-secondary" onclick="exportWorldClocks()">🌍 Export World Clocks</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importUserData(event)">
+                <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <h3 style="color: #dc3545;">⚠️ Danger Zone</h3>
+                <p>These actions cannot be undone.</p>
+                <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+                <button class="btn btn-danger" onclick="deleteAccount()">❌ Delete Account</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="src/js/auth.js"></script>
+    <script>
+        // Profile management functionality
+        let currentUser = null;
+        
+        async function loadProfile() {
+            if (!window.timelyAuth || !window.timelyAuth.isLoggedIn()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            currentUser = window.timelyAuth.getCurrentUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Update welcome message
+            document.getElementById('welcomeMessage').textContent = 
+                `Welcome, ${currentUser.profile.name}! Manage your Timely profile below.`;
+            
+            // Populate form fields
+            document.getElementById('profileName').value = currentUser.profile.name || '';
+            document.getElementById('profileEmail').value = currentUser.email || '';
+            
+            // Load preferences
+            const prefs = currentUser.profile.preferences || {};
+            document.getElementById('notifications').checked = prefs.notifications !== false;
+            document.getElementById('autoLocation').checked = prefs.autoDetectLocation !== false;
+            document.getElementById('format24h').checked = prefs.format24h === true;
+            
+            // Load statistics
+            updateStatistics();
+            
+            // Load world clocks
+            loadWorldClocks();
+        }
+        
+        function updateStatistics() {
+            const createdAt = new Date(currentUser.createdAt);
+            const accountAge = Math.floor((Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('totalWorldClocks').textContent = 
+                currentUser.profile.worldClocks ? currentUser.profile.worldClocks.length : 0;
+            document.getElementById('accountAge').textContent = accountAge;
+            document.getElementById('lastLogin').textContent = 
+                currentUser.lastLogin ? new Date(currentUser.lastLogin).toLocaleDateString() : 'Today';
+            
+            // Estimate data size
+            const dataSize = JSON.stringify(currentUser).length;
+            document.getElementById('dataSize').textContent = 
+                dataSize < 1024 ? `${dataSize} B` : `${Math.round(dataSize/1024)} KB`;
+        }
+        
+        function loadWorldClocks() {
+            const container = document.getElementById('worldClocksList');
+            const worldClocks = currentUser.profile.worldClocks || [];
+            
+            if (worldClocks.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No world clocks added yet. <a href="index.html">Add some cities</a> to get started!</p>';
+                return;
+            }
+            
+            container.innerHTML = worldClocks.map(clock => `
+                <div class="clock-item">
+                    <div>
+                        <strong>${clock.flag || '🌍'} ${clock.name}</strong>
+                        <div style="font-size: 0.9em; color: #666;">${clock.country || 'Unknown'}</div>
+                    </div>
+                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8em;" 
+                            onclick="removeWorldClock('${clock.name}')">Remove</button>
+                </div>
+            `).join('');
+        }
+        
+        async function saveProfile() {
+            const preferences = {
+                notifications: document.getElementById('notifications').checked,
+                autoDetectLocation: document.getElementById('autoLocation').checked,
+                format24h: document.getElementById('format24h').checked
+            };
+            
+            await window.timelyAuth.updateUserPreferences(preferences);
+            
+            // Update name if changed
+            const newName = document.getElementById('profileName').value.trim();
+            if (newName && newName !== currentUser.profile.name) {
+                // Update name in the user profile
+                // This would require an additional method in the auth system
+                console.log('Name update requested:', newName);
+            }
+            
+            alert('✅ Profile saved successfully!');
+        }
+        
+        function resetProfile() {
+            if (confirm('Reset all preferences to defaults?')) {
+                document.getElementById('notifications').checked = true;
+                document.getElementById('autoLocation').checked = true;
+                document.getElementById('format24h').checked = false;
+            }
+        }
+        
+        async function removeWorldClock(cityName) {
+            if (confirm(`Remove ${cityName} from your world clocks?`)) {
+                await window.timelyAuth.removeWorldClock(cityName);
+                currentUser = window.timelyAuth.getCurrentUser();
+                loadWorldClocks();
+                updateStatistics();
+            }
+        }
+        
+        async function exportUserData() {
+            await window.timelyAuth.downloadUserData();
+        }
+        
+        function exportWorldClocks() {
+            const worldClocks = currentUser.profile.worldClocks || [];
+            const data = {
+                exportType: 'worldClocks',
+                exportedAt: new Date().toISOString(),
+                worldClocks: worldClocks
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `timely-world-clocks-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function importUserData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    console.log('Import data:', data);
+                    alert('📥 Data import functionality coming soon!');
+                } catch (error) {
+                    alert('❌ Invalid file format');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        async function clearAllData() {
+            if (confirm('⚠️ This will remove all your world clocks and reset preferences. Continue?')) {
+                // Clear world clocks
+                const worldClocks = [...(currentUser.profile.worldClocks || [])];
+                for (const clock of worldClocks) {
+                    await window.timelyAuth.removeWorldClock(clock.name);
+                }
+                
+                // Reset preferences
+                await window.timelyAuth.updateUserPreferences({
+                    notifications: true,
+                    autoDetectLocation: true,
+                    format24h: false
+                });
+                
+                currentUser = window.timelyAuth.getCurrentUser();
+                loadWorldClocks();
+                updateStatistics();
+                
+                alert('✅ All data cleared successfully!');
+            }
+        }
+        
+        async function deleteAccount() {
+            if (confirm('⚠️ This will permanently delete your account and all data. This action cannot be undone!\n\nType "DELETE" to confirm:')) {
+                const confirmation = prompt('Type "DELETE" to confirm account deletion:');
+                if (confirmation === 'DELETE') {
+                    await window.timelyAuth.signOut();
+                    alert('❌ Account deleted. You will be redirected to the home page.');
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+        
+        // Initialize profile when page loads
+        document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+</html>

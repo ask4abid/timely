@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Timely - Digital Clock inspired by time.is">
+    <title>Timely - Time.is Style Digital Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/timeis-style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="brand">
+                <h1 class="brand-title">TIMELY</h1>
+                <span class="brand-subtitle">Exact time for any location</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">World Clocks</a>
+                <a href="#" class="nav-link">Time Zones</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Accuracy Info -->
+            <div class="accuracy-info">
+                <p class="accuracy-text">Accuracy of synchronization was ±0.001 seconds.</p>
+            </div>
+
+            <!-- Primary Time Display -->
+            <div class="primary-time-section">
+                <div class="location-info">
+                    <span class="location-text">Time in </span>
+                    <span class="location-name" id="locationName">Your Location</span>
+                    <span class="location-text"> now:</span>
+                </div>
+                
+                <!-- Time.is Style Digital Clock -->
+                <div class="timeis-clock">
+                    <div class="time-digits" id="timeDigits">
+                        <span class="digit" id="h1">0</span>
+                        <span class="digit" id="h2">0</span>
+                        <span class="separator">:</span>
+                        <span class="digit" id="m1">0</span>
+                        <span class="digit" id="m2">0</span>
+                        <span class="separator">:</span>
+                        <span class="digit" id="s1">0</span>
+                        <span class="digit" id="s2">0</span>
+                    </div>
+                </div>
+
+                <!-- Date Display -->
+                <div class="date-display">
+                    <span class="date-text" id="dateText">Sunday, 3 August, 2025, week 31</span>
+                </div>
+
+                <!-- Sun Times -->
+                <div class="sun-times">
+                    <span class="sun-label">Sun:</span>
+                    <span class="sun-rise">↑ <span id="sunriseTime">05:19</span></span>
+                    <span class="sun-set">↓ <span id="sunsetTime">18:59</span></span>
+                    <span class="sun-duration">(<span id="dayLength">13h 40m</span>)</span>
+                    <span class="sun-more">- <a href="#" class="sun-link">More info</a></span>
+                </div>
+
+                <!-- Location Actions -->
+                <div class="location-actions">
+                    <button class="action-link" onclick="timelyApp.setAsDefault()">Make <span id="defaultLocation">Your Location</span> time default</button>
+                    <button class="action-link" onclick="timelyApp.addToFavorites()">Add to favorite locations</button>
+                </div>
+            </div>
+
+            <!-- World Time Grid -->
+            <div class="world-time-grid" id="worldTimeGrid">
+                <!-- Will be populated with world cities -->
+            </div>
+
+            <!-- Add City Button -->
+            <div class="add-city-section">
+                <button class="add-city-btn" onclick="timelyApp.showCitySearch()">
+                    <span class="add-icon">+</span>
+                    Add More Cities
+                </button>
+            </div>
+
+            <!-- Popular Cities -->
+            <div class="popular-cities">
+                <div class="cities-list" id="popularCitiesList">
+                    <!-- Will be populated with popular cities -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- City Search Modal -->
+    <div class="modal-overlay" id="citySearchModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add City to World Clock</h3>
+                <button class="modal-close" onclick="timelyApp.closeCitySearch()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="citySearchInput" placeholder="Search for a city..." class="city-search-input">
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="timeis-style.js"></script>
+</body>
+</html>

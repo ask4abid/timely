@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exact time for any location worldwide">
+    <title>TIMELY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/simple-styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+    
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Application Configuration -->
+    <script src="config/app-config.js"></script>
+</head>
+<body>
+    <!-- Modern Header with Hamburger Menu -->
+    <header class="simple-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="src/assets/timely-logo.svg" alt="Timely" class="site-logo" 
+                     onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <h1 class="site-title" style="display: none;" 
+                    onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TIMELY</h1>
+            </div>
+            <div class="header-nav">
+                <div class="search-input-wrapper header-search">
+                    <input type="text" id="headerCitySearchInput" placeholder="Search cities..." class="header-search-input">
+                    <button class="search-btn header-search-btn" onclick="window.timelyApp.performHeaderSearch()">
+                        <span class="search-icon">🔍</span>
+                    </button>
+                </div>
+                <button class="theme-toggle" id="themeToggle" onclick="window.timelyApp.toggleTheme()">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="hamburger-menu" id="hamburgerMenu" onclick="window.timelyApp.toggleMenu()">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="menu-content">
+                <div class="auth-section">
+                    <button class="auth-btn signin-btn" onclick="window.timelyApp.showSignIn()">
+                        <span class="auth-icon">🔐</span>
+                        Sign In
+                    </button>
+                    <button class="auth-btn signup-btn" onclick="window.timelyApp.showSignUp()">
+                        <span class="auth-icon">📝</span>
+                        Sign Up
+                    </button>
+                </div>
+                <hr class="menu-divider">
+                <div class="menu-items">
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openWorldMap()">
+                        <span class="menu-icon">🌍</span>
+                        World Map
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openMeetingPlanner()">
+                        <span class="menu-icon">📅</span>
+                        Meeting Planner
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openConverter()">
+                        <span class="menu-icon">🔄</span>
+                        Time Converter
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openTimezones()">
+                        <span class="menu-icon">🕐</span>
+                        Time Zones
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openAlarms()">
+                        <span class="menu-icon">⏰</span>
+                        Alarms
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openSettings()">
+                        <span class="menu-icon">⚙️</span>
+                        Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Primary Time Display - Large and Prominent with Switch Capability -->
+        <div class="hero-time-section">
+            <div class="location-header">
+                <h1 class="location-title" id="locationTitle">Time in Your Location now</h1>
+                <div class="location-subtitle" id="locationSubtitle">Loading location...</div>
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="window.timelyApp.toggleLocationPicker()">
+                    <span class="switch-icon">
+                        <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="switchClockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="switchHandsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4299e1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Clock outer ring -->
+                            <circle cx="22" cy="22" r="18" 
+                                    fill="url(#switchClockGradient)" 
+                                    stroke="#667eea" 
+                                    stroke-width="1.5"/>
+                            <!-- Clock hour markers -->
+                            <g stroke="#718096" stroke-width="1" opacity="0.6">
+                                <line x1="22" y1="6" x2="22" y2="9"/>
+                                <line x1="38" y1="22" x2="35" y2="22"/>
+                                <line x1="22" y1="38" x2="22" y2="35"/>
+                                <line x1="6" y1="22" x2="9" y2="22"/>
+                            </g>
+                            <!-- Clock hands -->
+                            <g stroke="url(#switchHandsGradient)" stroke-width="1.5" stroke-linecap="round">
+                                <line x1="22" y1="22" x2="17" y2="16"/>
+                                <line x1="22" y1="22" x2="28" y2="14"/>
+                            </g>
+                            <!-- Center dot -->
+                            <circle cx="22" cy="22" r="1.5" fill="#667eea"/>
+                        </svg>
+                    </span>
+                    Switch Location
+                </button>
+            </div>
+            
+            <div class="giant-clock-display" id="giantClockDisplay">
+                <div class="clock-location-info" id="clockLocationInfo">
+                    <span class="location-flag" id="locationFlag">🌍</span>
+                    <span class="location-name" id="locationName">Local Time</span>
+                    <span class="location-country" id="locationCountry">Your Location</span>
+                </div>
+                <div class="main-time" id="primaryTime">00:00:00</div>
+                <div class="main-date" id="primaryDate">Loading...</div>
+                <div class="sun-times" id="sunTimes">
+                    <span class="sun-icon">☀️</span>
+                    <span class="sun-info" id="sunInfo">↑ 06:30 ↓ 18:45 (12h 15m)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Location Picker Modal -->
+        <div class="location-picker-overlay" id="locationPickerOverlay">
+            <div class="location-picker-modal">
+                <div class="modal-header">
+                    <div class="header-content">
+                        <h3>🌍 Switch Location</h3>
+                        <p class="modal-subtitle">Choose your primary time zone</p>
+                    </div>
+                    <button class="close-modal" onclick="window.timelyApp.toggleLocationPicker()">×</button>
+                </div>
+                
+                <div class="modal-body">
+                    <!-- Smart Search Section -->
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <input type="text" 
+                                   id="locationSearchInput" 
+                                   placeholder="🌍 Search worldwide locations..." 
+                                   class="location-search-input" 
+                                   autocomplete="off"
+                                   autofocus>
+                            <div class="search-icon">🔍</div>
+                        </div>
+                        <div class="search-suggestions" id="searchSuggestions" style="display: none;"></div>
+                    </div>
+                    
+                    <!-- Quick Access Actions -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn detect-btn" onclick="window.timelyApp.autoDetectLocation()">
+                            <span class="action-icon">📍</span>
+                            <span class="action-text">Detect My Location</span>
+                        </button>
+                        <button class="quick-action-btn recent-btn" onclick="window.timelyApp.showRecentLocations()">
+                            <span class="action-icon">🕒</span>
+                            <span class="action-text">Recent Locations</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Popular Cities Grid -->
+                    <div class="popular-section">
+                        <h4 class="section-title">Popular Cities</h4>
+                        <div class="popular-cities-grid" id="popularCitiesGrid">
+                            <!-- Will be populated with popular cities -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Sign In Modal -->
+        <div class="auth-modal-overlay" id="signInModal">
+            <div class="auth-modal">
+                <div class="modal-header">
+                    <h3>Welcome Back</h3>
+                    <p class="modal-subtitle">Sign in to your Timely account</p>
+                    <button class="close-modal" onclick="window.timelyApp.hideSignIn()">×</button>
+                </div>
+                <form class="auth-form" id="signInForm">
+                    <div class="form-group">
+                        <label for="signInEmail">Email Address</label>
+                        <input type="email" id="signInEmail" placeholder="Enter your email address" required>
+                        <div class="form-error">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signInPassword">Password</label>
+                        <input type="password" id="signInPassword" placeholder="Enter your password" required>
+                        <div class="form-error">Password is required</div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me for 30 days
+                        </label>
+                        <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Sign In</span>
+                    </button>
+                    <div class="auth-divider"></div>
+                    <button type="button" class="google-auth-btn" onclick="signInWithGoogle()">
+                        <div class="google-icon"></div>
+                        Continue with Google
+                    </button>
+                    <p class="auth-switch">
+                        New to Timely? 
+                        <a href="#" onclick="window.timelyApp.switchToSignUp()">Create an account</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Enhanced Sign Up Modal -->
+        <div class="auth-modal-overlay" id="signUpModal">
+            <div class="auth-modal">
+                <div class="modal-header">
+                    <h3>Create Account</h3>
+                    <p class="modal-subtitle">Join thousands of users worldwide</p>
+                    <button class="close-modal" onclick="window.timelyApp.hideSignUp()">×</button>
+                </div>
+                <form class="auth-form" id="signUpForm">
+                    <div class="form-group">
+                        <label for="signUpName">Full Name</label>
+                        <input type="text" id="signUpName" placeholder="Enter your full name" required>
+                        <div class="form-error">Full name is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpEmail">Email Address</label>
+                        <input type="email" id="signUpEmail" placeholder="Enter your email address" required>
+                        <div class="form-error">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpPassword">Password</label>
+                        <input type="password" id="signUpPassword" placeholder="Create a strong password (min 8 characters)" required>
+                        <div class="form-error">Password must be at least 8 characters long</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        <div class="form-error">Passwords do not match</div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required>
+                            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Create Account</span>
+                    </button>
+                    <div class="auth-divider"></div>
+                    <button type="button" class="google-auth-btn" onclick="signUpWithGoogle()">
+                        <div class="google-icon"></div>
+                        Continue with Google
+                    </button>
+                    <p class="auth-switch">
+                        Already have an account? 
+                        <a href="#" onclick="window.timelyApp.switchToSignIn()">Sign in instead</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Professional World Clocks Section -->
+        <div class="world-clocks-section">
+            <!-- Unified Control Panel -->
+            <div class="unified-control-panel">
+                <div class="panel-left">
+                    <div class="section-info">
+                        <h2 class="section-title">⭐ My World Clocks</h2>
+                        <div class="clock-stats">
+                            <span id="totalClocksCount">0</span> locations
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-right">
+                    <div class="control-group">
+                        <!-- View Mode Toggle -->
+                        <div class="view-modes">
+                            <button class="control-btn active" data-view="table" onclick="window.timelyApp.setViewMode('table')" title="Table View">
+                                📋
+                            </button>
+                            <button class="control-btn" data-view="compact" onclick="window.timelyApp.setViewMode('compact')" title="Compact View">
+                                📱
+                            </button>
+                            <button class="control-btn" data-view="clocks" onclick="window.timelyApp.setViewMode('clocks')" title="Clock View">
+                                🕐
+                            </button>
+                        </div>
+                        
+                        <!-- Sort Options -->
+                        <div class="sort-controls">
+                            <select class="sort-select" onchange="window.timelyApp.sortClocks(this.value)">
+                                <option value="city">Sort by City</option>
+                                <option value="country">Sort by Country</option>
+                                <option value="time">Sort by Time</option>
+                                <option value="time-reverse">Sort by Time (Reverse)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Primary Actions -->
+                        <button class="primary-btn" onclick="window.timelyApp.toggleLocationPicker()">
+                            <span class="btn-icon">+</span>
+                            Add City
+                        </button>
+                        
+                        <!-- Secondary Actions -->
+                        <div class="secondary-actions">
+                            <button class="icon-btn" onclick="window.timelyApp.syncAllClocks()" title="Refresh All">
+                                🔄
+                            </button>
+                            <button class="icon-btn" onclick="window.timelyApp.shareWorldClock()" title="Share">
+                                🔗
+                            </button>
+                            <button class="icon-btn" onclick="window.timelyApp.showHelp()" title="Help">
+                                ❓
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                    
+                    <div class="action-buttons">
+                        <button class="modern-action-btn add-btn" 
+                                onclick="window.timelyApp.openCitySearch()">
+                            <div class="btn-content">
+                                <span class="btn-icon">🌍</span>
+                                <div class="btn-text-group">
+                                    <span class="btn-primary-text">Add Location</span>
+                                    <span class="btn-secondary-text">Find cities worldwide</span>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button class="modern-action-btn export-btn" 
+                                onclick="window.timelyApp.exportFavourites()"
+                                title="Export your favourite locations">
+                            <div class="btn-content">
+                                <span class="btn-icon">💾</span>
+                                <div class="btn-text-group">
+                                    <span class="btn-primary-text">Export</span>
+                                    <span class="btn-secondary-text">Save your data</span>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button class="modern-action-btn sync-btn" 
+                                onclick="window.timelyApp.syncAllClocks()"
+                                title="Refresh all world clocks">
+                            <div class="btn-content">
+                                <span class="btn-icon">�</span>
+                                <div class="btn-text-group">
+                                    <span class="btn-primary-text">Sync</span>
+                                    <span class="btn-secondary-text">Update times</span>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions Bar -->
+            <div class="quick-actions-bar">
+                <div class="filter-chips">
+                    <button class="filter-chip active" data-filter="all" 
+                            onclick="window.timelyApp.filterClocks('all')">
+                        <span class="chip-icon">🌍</span>
+                        All Locations
+                    </button>
+                    <button class="filter-chip" data-filter="business" 
+                            onclick="window.timelyApp.filterClocks('business')">
+                        <span class="chip-icon">💼</span>
+                        Business Hours
+                    </button>
+                    <button class="filter-chip" data-filter="favorites" 
+                            onclick="window.timelyApp.filterClocks('favorites')">
+                        <span class="chip-icon">❤️</span>
+                        Favorites
+                    </button>
+                </div>
+                
+                <div class="view-options">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid" 
+                                onclick="window.timelyApp.setViewMode('grid')"
+                                title="Grid View">
+                            <span class="view-icon">⊞</span>
+                        </button>
+                        <button class="view-btn" data-view="list" 
+                                onclick="window.timelyApp.setViewMode('list')"
+                                title="List View">
+                            <span class="view-icon">☰</span>
+                        </button>
+                        <button class="view-btn" data-view="compact" 
+                                onclick="window.timelyApp.setViewMode('compact')"
+                                title="Compact View">
+                            <span class="view-icon">▦</span>
+                        </button>
+                    </div>
+                    
+                    <div class="sort-dropdown">
+                        <button class="sort-btn" onclick="window.timelyApp.toggleSortMenu()">
+                            <span class="sort-icon">↕️</span>
+                            <span class="sort-text">Sort</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="sort-menu" id="sortMenu">
+                            <div class="sort-option" onclick="window.timelyApp.sortClocks('name')">
+                                <span class="option-icon">🔤</span>
+                                By Name
+                            </div>
+                            <div class="sort-option" onclick="window.timelyApp.sortClocks('timezone')">
+                                <span class="option-icon">🕐</span>
+                                By Time Zone
+                            </div>
+                            <div class="sort-option" onclick="window.timelyApp.sortClocks('added')">
+                                <span class="option-icon">📅</span>
+                                Recently Added
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- World Clock Cards Container -->
+            <div class="professional-clocks-container" id="worldClocksContainer">
+                <div class="world-clock-cards" id="worldClockCards">
+                    <!-- Will be populated with professional clock cards -->
+                </div>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyClockState" style="display: none;">
+                    <div class="empty-icon">🌍</div>
+                    <h3 class="empty-title">No World Clocks Added Yet</h3>
+                    <p class="empty-description">
+                        Start tracking time across different locations by adding your first world clock.
+                        Perfect for remote work, travel planning, or staying connected with global teams.
+                    </p>
+                    <button class="add-first-clock-btn" onclick="window.timelyApp.openCitySearch()">
+                        <span class="btn-icon">➕</span>
+                        Add Your First Clock
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Features Section -->
+        <div class="features-section">
+            <div class="feature-cards">
+                <div class="feature-card" onclick="window.timelyApp.openWorldMap()">
+                    <div class="feature-icon">🌍</div>
+                    <h3>World Map</h3>
+                    <p>Interactive time zone map</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openMeetingPlanner()">
+                    <div class="feature-icon">📅</div>
+                    <h3>Meeting Planner</h3>
+                    <p>Find best meeting times</p>
+                </div>
+                <div class="feature-card" onclick="window.timelyApp.openConverter()">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Time Converter</h3>
+                    <p>Convert between time zones</p>
+                </div>
+            </div>
+        </div>        <!-- Clean Footer -->
+        <div class="footer-links">
+            <div class="footer-content">
+                <span class="footer-brand">⏰ Timely - Open Source World Clock</span>
+                <div class="footer-tech">
+                    <span class="tech-item">📡 Real-time browser APIs</span>
+                    <span class="tech-item">🌍 IANA Time Zone Database</span>
+                    <span class="tech-item">⚡ No external dependencies</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Script -->
+    <script>
+        // Simple search functionality
+        function addCityFromSearch() {
+            const input = document.getElementById('citySearchInput');
+            const city = input.value.trim();
+            if (city && window.timelyApp) {
+                window.timelyApp.addCityToGrid(city);
+                input.value = '';
+            }
+        }
+        
+        // Enter key support for search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('citySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        addCityFromSearch();
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Application Scripts -->
+    <script src="./src/js/utc-system.js"></script>
+    <script src="./src/js/optimized-auth.js"></script>
+    <script src="./src/js/auth.js"></script>
+    <script src="./enhanced-timely.js"></script>
+    
+    <!-- Initialize the app -->
+    <script>
+        // Initialize the Enhanced Timely App
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing Enhanced Timely App...');
+            window.timelyApp = new SimpleTimelyApp();
+            window.timelyApp.init().then(() => {
+                console.log('✅ Enhanced Timely App initialized successfully!');
+            }).catch(error => {
+                console.error('❌ Failed to initialize app:', error);
+            });
+        });
+    </script>
+</body>
+</html>

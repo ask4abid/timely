@@ -36,7 +36,7 @@ export const CONFIG = {
     // UI Configuration
     UI: {
         DEFAULT_TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        DEFAULT_COUNTRY: 'pakistan',
+        DEFAULT_COUNTRY: null, // Will be set dynamically based on user location/selection
         CLOCK_UPDATE_INTERVAL: 1000, // 1 second
         TIMEZONE_UPDATE_INTERVAL: 60000, // 1 minute
         ANIMATION_DURATION: 300,
@@ -133,7 +133,7 @@ export const CONFIG = {
     }
 };
 
-// Environment-specific overrides
+// Environment-specific overrides and dynamic configuration
 if (typeof window !== 'undefined') {
     // Browser environment
     CONFIG.DEV.DEBUG_MODE = window.location.hostname === 'localhost' || 
@@ -142,19 +142,141 @@ if (typeof window !== 'undefined') {
     // Auto-detect user's timezone
     try {
         CONFIG.UI.DEFAULT_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
+        // Auto-detect user's country based on timezone
+        CONFIG.UI.DEFAULT_COUNTRY = detectCountryFromTimezone(CONFIG.UI.DEFAULT_TIMEZONE);
     } catch (e) {
         CONFIG.UI.DEFAULT_TIMEZONE = 'UTC';
+        CONFIG.UI.DEFAULT_COUNTRY = 'unknown';
     }
 }
 
-// Freeze the configuration to prevent accidental modifications
-Object.freeze(CONFIG);
+/**
+ * Detect country from timezone
+ * @param {string} timezone - IANA timezone string
+ * @returns {string} Country name or code
+ */
+function detectCountryFromTimezone(timezone) {
+    const timezoneCountryMap = {
+        // Asia/Pacific
+        'Asia/Karachi': 'pakistan',
+        'Asia/Lahore': 'pakistan', 
+        'Asia/Islamabad': 'pakistan',
+        'Asia/Kolkata': 'india',
+        'Asia/Delhi': 'india',
+        'Asia/Mumbai': 'india',
+        'Asia/Dubai': 'uae',
+        'Asia/Riyadh': 'saudi-arabia',
+        'Asia/Tokyo': 'japan',
+        'Asia/Shanghai': 'china',
+        'Asia/Beijing': 'china',
+        'Asia/Singapore': 'singapore',
+        'Asia/Bangkok': 'thailand',
+        'Asia/Seoul': 'south-korea',
+        'Asia/Jakarta': 'indonesia',
+        'Asia/Manila': 'philippines',
+        'Asia/Dhaka': 'bangladesh',
+        'Asia/Colombo': 'sri-lanka',
+        
+        // Europe
+        'Europe/London': 'united-kingdom',
+        'Europe/Paris': 'france',
+        'Europe/Berlin': 'germany',
+        'Europe/Madrid': 'spain',
+        'Europe/Rome': 'italy',
+        'Europe/Amsterdam': 'netherlands',
+        'Europe/Brussels': 'belgium',
+        'Europe/Vienna': 'austria',
+        'Europe/Zurich': 'switzerland',
+        'Europe/Stockholm': 'sweden',
+        'Europe/Oslo': 'norway',
+        'Europe/Copenhagen': 'denmark',
+        'Europe/Helsinki': 'finland',
+        'Europe/Warsaw': 'poland',
+        'Europe/Prague': 'czech-republic',
+        'Europe/Budapest': 'hungary',
+        'Europe/Bucharest': 'romania',
+        'Europe/Sofia': 'bulgaria',
+        'Europe/Athens': 'greece',
+        'Europe/Lisbon': 'portugal',
+        'Europe/Dublin': 'ireland',
+        'Europe/Moscow': 'russia',
+        
+        // Americas
+        'America/New_York': 'united-states',
+        'America/Chicago': 'united-states',
+        'America/Denver': 'united-states',
+        'America/Los_Angeles': 'united-states',
+        'America/Phoenix': 'united-states',
+        'America/Toronto': 'canada',
+        'America/Vancouver': 'canada',
+        'America/Montreal': 'canada',
+        'America/Mexico_City': 'mexico',
+        'America/Sao_Paulo': 'brazil',
+        'America/Buenos_Aires': 'argentina',
+        'America/Santiago': 'chile',
+        'America/Lima': 'peru',
+        'America/Bogota': 'colombia',
+        'America/Caracas': 'venezuela',
+        
+        // Africa
+        'Africa/Cairo': 'egypt',
+        'Africa/Lagos': 'nigeria',
+        'Africa/Johannesburg': 'south-africa',
+        'Africa/Nairobi': 'kenya',
+        'Africa/Casablanca': 'morocco',
+        'Africa/Algiers': 'algeria',
+        'Africa/Tunis': 'tunisia',
+        
+        // Australia/Oceania
+        'Australia/Sydney': 'australia',
+        'Australia/Melbourne': 'australia',
+        'Australia/Perth': 'australia',
+        'Australia/Brisbane': 'australia',
+        'Australia/Adelaide': 'australia',
+        'Pacific/Auckland': 'new-zealand',
+        'Pacific/Fiji': 'fiji',
+        'Pacific/Honolulu': 'united-states'
+    };
+    
+    return timezoneCountryMap[timezone] || 'unknown';
+}
 
-// Environment-specific overrides
-if (typeof window !== 'undefined') {
-    // Browser environment
-    CONFIG.DEV.DEBUG_MODE = window.location.hostname === 'localhost' || 
-                           window.location.hostname === '127.0.0.1';
+/**
+ * Update default country based on user selection
+ * @param {string} country - Country name or code
+ */
+CONFIG.setDefaultCountry = function(country) {
+    if (!Object.isFrozen(this)) {
+        this.UI.DEFAULT_COUNTRY = country.toLowerCase();
+        
+        // Save to localStorage for persistence
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('timely-default-country', country.toLowerCase());
+        }
+    }
+};
+
+/**
+ * Get current default country (check localStorage first)
+ * @returns {string} Current default country
+ */
+CONFIG.getDefaultCountry = function() {
+    if (typeof localStorage !== 'undefined') {
+        const savedCountry = localStorage.getItem('timely-default-country');
+        if (savedCountry) {
+            return savedCountry;
+        }
+    }
+    return this.UI.DEFAULT_COUNTRY || 'unknown';
+};
+
+// Load saved country preference
+if (typeof localStorage !== 'undefined') {
+    const savedCountry = localStorage.getItem('timely-default-country');
+    if (savedCountry) {
+        CONFIG.UI.DEFAULT_COUNTRY = savedCountry;
+    }
 }
 
 // Freeze the configuration to prevent accidental modifications

@@ -2,68 +2,823 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="view                    <button class="action-btn secondary" onclick="window.timelyApp.showCountryDetails()">
-                        <span class="btn-icon">🌍</span>
-                        Country Details
-                    </button>" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Exact time for any location worldwide">
-    <title>TIMELY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Giant world clock display for any location">
+    <title>TIMELY - Giant Clock Display</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="src/css/simple-styles.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+    
+    <!-- City Cards Custom Styles -->
+    <style>
+        /* City Cards Grid */
+        .cities-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        /* Individual City Card */
+        .city-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .city-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+        
+        .city-card:active {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e6fffa 0%, #f0fff4 100%);
+            border-color: #38b2ac;
+        }
+        
+        /* Selection feedback */
+        .city-card.selected {
+            background: linear-gradient(135deg, #e6fffa 0%, #f0fff4 100%);
+            border-color: #38b2ac;
+            box-shadow: 0 8px 25px rgba(56, 178, 172, 0.3);
+        }
+        
+        /* Card Header */
+        .city-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .city-flag {
+            font-size: 24px;
+            display: inline-block;
+        }
+        
+        .city-time {
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 14px;
+            color: #4299e1;
+            background: rgba(66, 153, 225, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(66, 153, 225, 0.2);
+        }
+        
+        /* Card Body */
+        .city-card-body {
+            margin-bottom: 12px;
+        }
+        
+        .city-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+            margin: 0 0 4px 0;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .city-country {
+            font-size: 12px;
+            color: #718096;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        /* Card Footer */
+        .city-card-footer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timezone-info {
+            font-size: 11px;
+            color: #a0aec0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-favorite-btn {
+            background: linear-gradient(45deg, #f59e0b, #f97316);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 4px rgba(245, 158, 11, 0.3);
+        }
+
+        .quick-favorite-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+
+        .quick-favorite-btn:active {
+            transform: translateY(0);
+        }
+
+        .quick-favorite-btn.added {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            animation: favoriteAdded 0.5s ease;
+        }
+
+        @keyframes favoriteAdded {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Continent Section Styling */
+        .continent-section {
+            margin-bottom: 32px;
+        }
+        
+        .continent-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0 0 16px 0;
+            font-family: 'Rajdhani', sans-serif;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .cities-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 12px;
+            }
+            
+            .city-card {
+                padding: 12px;
+            }
+            
+            .city-flag {
+                font-size: 20px;
+            }
+            
+            .city-time {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+            
+            .city-name {
+                font-size: 14px;
+            }
+        }
+        
+        /* Dark mode support (if needed later) */
+        @media (prefers-color-scheme: dark) {
+            .city-card {
+                background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+                border-color: #4a5568;
+            }
+            
+            .city-card:hover {
+                border-color: #667eea;
+            }
+            
+            .city-name {
+                color: #e2e8f0;
+            }
+            
+            .city-country {
+                color: #a0aec0;
+            }
+            
+            .city-card-footer {
+                border-top-color: #4a5568;
+            }
+            
+            .continent-title {
+                color: #e2e8f0;
+                border-bottom-color: #4a5568;
+            }
+        }
+
+        /* Giant Clock Location Display Styles */
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .location-flag {
+            font-size: 2.8rem;
+            display: inline-block;
+            margin-right: 4px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            animation: gentle-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .location-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .location-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .location-country {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .live-time-label {
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1.05em;
+            text-shadow: 0 1px 2px rgba(239, 68, 68, 0.3);
+            animation: live-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes live-pulse {
+            0%, 100% { 
+                color: #ef4444;
+                text-shadow: 0 1px 2px rgba(239, 68, 68, 0.3);
+            }
+            50% { 
+                color: #dc2626;
+                text-shadow: 0 2px 4px rgba(239, 68, 68, 0.5);
+            }
+        }
+
+        /* Dark mode support for location display */
+        @media (prefers-color-scheme: dark) {
+            .location-name {
+                color: #f1f5f9;
+            }
+            
+            .location-country {
+                color: #cbd5e1;
+            }
+            
+            .live-time-label {
+                color: #f87171;
+                text-shadow: 0 1px 2px rgba(248, 113, 113, 0.4);
+            }
+            
+            @keyframes live-pulse {
+                0%, 100% { 
+                    color: #f87171;
+                    text-shadow: 0 1px 2px rgba(248, 113, 113, 0.4);
+                }
+                50% { 
+                    color: #ef4444;
+                    text-shadow: 0 2px 4px rgba(248, 113, 113, 0.6);
+                }
+            }
+        }
+        
+        /* Search Section Bright Styling */
+        .search-container {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff9ff3 100%);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .city-search-input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: 3px solid #ffffff;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3748;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .city-search-input:focus {
+            outline: none;
+            border-color: #f093fb;
+            box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.3), 0 8px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .city-search-input::placeholder {
+            color: #718096;
+            font-weight: 500;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #ff6b6b;
+        }
+        
+        /* Search Results Styling */
+        .search-results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ff6b6b;
+        }
+        
+        .results-header h5 {
+            margin: 0;
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .results-count {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            border-color: #ff6b6b;
+            background: rgba(255, 255, 255, 1);
+            transform: translateX(4px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+        }
+        
+        .city-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .city-flag {
+            font-size: 24px;
+        }
+        
+        .city-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .city-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+        
+        .city-country {
+            font-size: 12px;
+            color: #718096;
+            margin: 0;
+        }
+        
+        .add-to-favorites-btn {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+        
+        .add-to-favorites-btn:hover {
+            background: linear-gradient(45deg, #059669, #10b981);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        /* Popular Cities Section Styles */
+        .popular-section {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(80, 200, 120, 0.1) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .popular-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .popular-section::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .popular-section::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4a90e2, #50c878);
+            border-radius: 10px;
+        }
+
+        .popular-section::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #357abd, #3da05e);
+        }
+
+        .popular-cities-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+            padding: 10px 5px;
+        }
+
+        .continent-section {
+            margin-bottom: 25px;
+        }
+
+        .continent-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .continent-title {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 18px 0;
+            font-family: 'Rajdhani', sans-serif;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        /* Enhanced City Cards Grid with Better Spacing */
+        .cities-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 16px 0;
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .popular-section {
+                padding: 20px;
+                max-height: 400px;
+            }
+            
+            .cities-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 16px;
+            }
+            
+            .continent-section {
+                margin-bottom: 20px;
+            }
+            
+            .continent-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Favorite Clocks Section Styles */
+        .favorite-clocks-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border-radius: 24px;
+            padding: 32px;
+            margin: 40px 0;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-header .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0;
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header .section-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin: 4px 0 0 0;
+            font-weight: 500;
+        }
+
+        .manage-favorites-btn {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .manage-favorites-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-icon {
+            font-size: 16px;
+        }
+
+        /* Favorite Clocks Grid */
+        .favorite-clocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        /* Individual Favorite Clock Card */
+        .favorite-clock-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .favorite-clock-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .favorite-clock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .favorite-city-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .favorite-city-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .favorite-city-country {
+            font-size: 13px;
+            color: #64748b;
+            margin: 2px 0 0 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .favorite-city-flag {
+            font-size: 18px;
+        }
+
+        .remove-favorite-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #dc2626;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .remove-favorite-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: scale(1.1);
+        }
+
+        .favorite-clock-time {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1e293b;
+            margin: 12px 0 8px 0;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: -1px;
+        }
+
+        .favorite-clock-date {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0 0 12px 0;
+            font-weight: 500;
+        }
+
+        .favorite-timezone-info {
+            font-size: 12px;
+            color: #94a3b8;
+            background: rgba(99, 102, 241, 0.05);
+            padding: 6px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* Responsive Design for Favorite Clocks */
+        @media (max-width: 768px) {
+            .favorite-clocks-section {
+                padding: 24px 20px;
+                margin: 30px 0;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .section-header .section-title {
+                font-size: 24px;
+            }
+
+            .favorite-clocks-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .favorite-clock-card {
+                padding: 20px;
+            }
+
+            .favorite-clock-time {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Simple Header like time.is -->
-    <header class="simple-header">
-        <div class="header-content">
-            <h1 class="site-title">TIMELY</h1>
-            <div class="header-nav">
-                <span class="search-link" onclick="document.getElementById('citySearchInput').focus()">search</span>
-                <button class="theme-toggle" id="themeToggle" onclick="window.timelyApp.toggleTheme()">
-                    <span class="theme-icon">🌙</span>
-                </button>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Modern Digital Clock Component -->
-    <section class="digital-clock-section">
-        <div class="digital-clock-container">
-            <div class="digital-clock-header">
-                <h2 class="clock-title">Digital Clock</h2>
-                <div class="clock-location" id="digitalClockLocation">Your Location</div>
-            </div>
-            <div class="digital-time-display">
-                <div class="digital-time" id="digitalTime">00:00:00</div>
-                <div class="digital-date" id="digitalDate">Monday, January 1, 2024</div>
-                <div class="digital-timezone" id="digitalTimezone">UTC+0</div>
-            </div>
-        </div>
-    </section>
-    
     <!-- Main Content -->
     <main class="main-content">
         <!-- Primary Time Display - Large and Prominent with Switch Capability -->
         <div class="hero-time-section">
             <div class="location-header">
-                <h1 class="location-title" id="locationTitle">Time in Your Location now</h1>
-                <div class="location-subtitle" id="locationSubtitle">Loading location...</div>
-                <button class="switch-location-btn" id="switchLocationBtn" onclick="window.timelyApp.toggleLocationPicker()">
-                    <span class="switch-icon">🔄</span>
-                    Switch Location
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="toggleLocationPicker()">
+                    <span class="switch-icon">
+                        <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="switchClockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="switchHandsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4299e1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="22" cy="22" r="18" 
+                                    fill="url(#switchClockGradient)" 
+                                    stroke="#667eea" 
+                                    stroke-width="1.5"/>
+                            <g stroke="#718096" stroke-width="1" opacity="0.6">
+                                <line x1="22" y1="6" x2="22" y2="9"/>
+                                <line x1="38" y1="22" x2="38" y2="22"/>
+                                <line x1="22" y1="38" x2="22" y2="35"/>
+                                <line x1="6" y1="22" x2="9" y2="22"/>
+                            </g>
+                            <g stroke="url(#switchHandsGradient)" stroke-width="1.5" stroke-linecap="round">
+                                <line x1="22" y1="22" x2="17" y2="16"/>
+                                <line x1="22" y1="22" x2="28" y2="14"/>
+                            </g>
+                            <circle cx="22" cy="22" r="1.5" fill="#667eea"/>
+                        </svg>
+                    </span>
+                    Change Location
                 </button>
             </div>
-            
             <div class="giant-clock-display" id="giantClockDisplay">
+                <div class="clock-location-info" id="clockLocationInfo">
+                    <div class="location-header">
+                        <span class="location-flag" id="locationFlag">🌍</span>
+                        <div class="location-details">
+                            <span class="location-name" id="locationName">Local Time</span>
+                            <span class="location-country" id="locationCountry">Your Location</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="main-time" id="primaryTime">00:00:00</div>
                 <div class="main-date" id="primaryDate">Loading...</div>
                 <div class="sun-times" id="sunTimes">
                     <span class="sun-icon">☀️</span>
                     <span class="sun-info" id="sunInfo">↑ 06:30 ↓ 18:45 (12h 15m)</span>
-                    <span class="more-info-link">- More info</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Favorite Clocks Section -->
+        <div class="favorite-clocks-section" id="favoriteClockSection" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">⭐ My Favorite Clocks</h2>
+                <p class="section-subtitle">Keep track of multiple time zones at once</p>
+                <button class="manage-favorites-btn" onclick="toggleLocationPicker()">
+                    <span class="btn-icon">➕</span>
+                    Add More Cities
+                </button>
+            </div>
+            <div class="favorite-clocks-grid" id="favoriteClockGrid">
+                <!-- Favorite clocks will be dynamically added here -->
             </div>
         </div>
 
@@ -71,129 +826,1291 @@
         <div class="location-picker-overlay" id="locationPickerOverlay">
             <div class="location-picker-modal">
                 <div class="modal-header">
-                    <h3>Choose Your Primary Clock Location</h3>
-                    <button class="close-modal" onclick="window.timelyApp.toggleLocationPicker()">×</button>
+                    <div class="header-content">
+                        <div class="text-backdrop">
+                            <h3 class="modal-heading">🌍 Change Location</h3>
+                            <p class="modal-subtitle">Search and select any city worldwide</p>
+                        </div>
+                    </div>
+                    <button class="close-modal" onclick="toggleLocationPicker()">×</button>
                 </div>
-                <div class="location-search">
-                    <input type="text" id="locationSearchInput" placeholder="Search cities..." class="location-search-input">
-                </div>
-                <div class="location-grid" id="locationGrid">
-                    <!-- Will be populated with cities -->
-                </div>
-            </div>
-        </div>
+                <div class="modal-body">
+                    <!-- Search Section -->
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <input type="text" 
+                                   id="citySearchInput" 
+                                   placeholder="🔍 Search cities worldwide (e.g., New York, London, Tokyo)..." 
+                                   class="city-search-input" 
+                                   autocomplete="off"
+                                   oninput="searchCities(this.value)"
+                                   autofocus>
+                            <div class="search-icon">🔍</div>
+                        </div>
+                        <!-- Search Results -->
+                        <div class="search-results" id="searchResults" style="display: none;">
+                            <div class="results-header">
+                                <h5>Search Results</h5>
+                                <span class="results-count" id="resultsCount">0 cities found</span>
+                            </div>
+                            <div class="search-results-list" id="searchResultsList">
+                                <!-- Will be populated with search results -->
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Modern World Clock Cards Section -->
-        <div class="world-clocks-section">
-            <div class="section-header">
-                <h2 class="section-title">World Clocks</h2>
-                <div class="section-actions">
-                    <button class="action-btn primary" onclick="window.timelyApp.openCitySearch()">
-                        <span class="btn-icon">+</span>
-                        Add City
-                    </button>
-                    <button class="action-btn secondary" onclick="window.timelyApp.showCountryDetails()">
-                        <span class="btn-icon">�</span>
-                        Country Details
-                    </button>
-                </div>
-            </div>
-            
-            <!-- World Clock Cards Grid -->
-            <div class="world-clock-cards" id="worldClockCards">
-                <!-- Will be populated with modern clock cards -->
-            </div>
-
-            <!-- Search Section -->
-            <div class="search-section" id="searchSection">
-                <div class="search-container">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="citySearchInput" placeholder="Search for any city..." class="modern-search-input">
-                        <button class="search-btn" onclick="window.timelyApp.performSearch()">
-                            <span class="search-icon">🔍</span>
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn detect-btn" onclick="detectMyLocation()">
+                            <span class="action-icon">📍</span>
+                            <span class="action-text">Detect My Location</span>
                         </button>
                     </div>
-                    <div class="search-suggestions" id="searchSuggestions"></div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Country Details Page -->
-        <div class="country-details-page" id="countryDetailsPage" style="display: none;">
-            <div class="page-header">
-                <button class="back-btn" onclick="window.timelyApp.hideCountryDetails()">
-                    <span class="back-icon">←</span>
-                    Back to Clocks
-                </button>
-                <h2 class="page-title" id="countryPageTitle">Country Details</h2>
-            </div>
-            
-            <div class="country-info-card" id="countryInfoCard">
-                <!-- Country information will be populated here -->
-            </div>
-            
-            <div class="cities-showcase" id="citiesShowcase">
-                <!-- Cities will be displayed in an artistic scattered layout -->
-            </div>
-        </div>
-
-        <!-- Advanced Features Section -->
-        <div class="features-section">
-            <div class="feature-cards">
-                <div class="feature-card" onclick="window.timelyApp.openWorldMap()">
-                    <div class="feature-icon">🌍</div>
-                    <h3>World Map</h3>
-                    <p>Interactive time zone map</p>
-                </div>
-                <div class="feature-card" onclick="window.timelyApp.openMeetingPlanner()">
-                    <div class="feature-icon">📅</div>
-                    <h3>Meeting Planner</h3>
-                    <p>Find best meeting times</p>
-                </div>
-                <div class="feature-card" onclick="window.timelyApp.openConverter()">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Time Converter</h3>
-                    <p>Convert between time zones</p>
-                </div>
-            </div>
-        </div>        <!-- Clean Footer -->
-        <div class="footer-links">
-            <div class="footer-content">
-                <span class="footer-brand">⏰ Timely - Open Source World Clock</span>
-                <div class="footer-tech">
-                    <span class="tech-item">📡 Real-time browser APIs</span>
-                    <span class="tech-item">🌍 IANA Time Zone Database</span>
-                    <span class="tech-item">⚡ No external dependencies</span>
+                    <!-- Popular Cities Grid -->
+                    <div class="popular-section">
+                        <h4 class="section-title">🌍 Popular Cities Worldwide</h4>
+                        <div class="popular-cities-grid" id="popularCitiesGrid">
+                            
+                            <!-- North America -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌎 North America</h5>
+                                <div class="cities-cards-grid">
+                                    <div class="city-card" onclick="selectLocation('New York', 'America/New_York', '🇺🇸')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇺🇸</span>
+                                            <span class="city-time" id="time-newyork">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">New York</h6>
+                                            <p class="city-country">United States</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">EST/EDT</small>
+                                            <button class="quick-favorite-btn" 
+                                                    onclick="addCityToFavorites(event, 'New York', 'America/New_York', '🇺🇸', 'United States')"
+                                                    title="Add to favorites">
+                                                ⭐
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Los Angeles', 'America/Los_Angeles', '🇺🇸')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇺🇸</span>
+                                            <span class="city-time" id="time-losangeles">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Los Angeles</h6>
+                                            <p class="city-country">United States</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">PST/PDT</small>
+                                            <button class="quick-favorite-btn" 
+                                                    onclick="addCityToFavorites(event, 'Los Angeles', 'America/Los_Angeles', '🇺🇸', 'United States')"
+                                                    title="Add to favorites">
+                                                ⭐
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Toronto', 'America/Toronto', '🇨🇦')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇨🇦</span>
+                                            <span class="city-time" id="time-toronto">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Toronto</h6>
+                                            <p class="city-country">Canada</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">EST/EDT</small>
+                                            <button class="quick-favorite-btn" 
+                                                    onclick="addCityToFavorites(event, 'Toronto', 'America/Toronto', '🇨🇦', 'Canada')"
+                                                    title="Add to favorites">
+                                                ⭐
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Europe -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌍 Europe</h5>
+                                <div class="cities-cards-grid">
+                                    <div class="city-card" onclick="selectLocation('London', 'Europe/London', '🇬🇧')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇬🇧</span>
+                                            <span class="city-time" id="time-london">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">London</h6>
+                                            <p class="city-country">United Kingdom</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">GMT/BST</small>
+                                            <button class="quick-favorite-btn" 
+                                                    onclick="addCityToFavorites(event, 'London', 'Europe/London', '🇬🇧', 'United Kingdom')"
+                                                    title="Add to favorites">
+                                                ⭐
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Paris', 'Europe/Paris', '🇫🇷')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇫🇷</span>
+                                            <span class="city-time" id="time-paris">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Paris</h6>
+                                            <p class="city-country">France</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">CET/CEST</small>
+                                            <button class="quick-favorite-btn" 
+                                                    onclick="addCityToFavorites(event, 'Paris', 'Europe/Paris', '🇫🇷', 'France')"
+                                                    title="Add to favorites">
+                                                ⭐
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Berlin', 'Europe/Berlin', '🇩🇪')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇩🇪</span>
+                                            <span class="city-time" id="time-berlin">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Berlin</h6>
+                                            <p class="city-country">Germany</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">CET/CEST</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Asia -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌏 Asia</h5>
+                                <div class="cities-cards-grid">
+                                    <div class="city-card" onclick="selectLocation('Tokyo', 'Asia/Tokyo', '🇯🇵')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇯🇵</span>
+                                            <span class="city-time" id="time-tokyo">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Tokyo</h6>
+                                            <p class="city-country">Japan</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">JST</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Shanghai', 'Asia/Shanghai', '🇨🇳')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇨🇳</span>
+                                            <span class="city-time" id="time-shanghai">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Shanghai</h6>
+                                            <p class="city-country">China</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">CST</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Dubai', 'Asia/Dubai', '🇦🇪')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇦🇪</span>
+                                            <span class="city-time" id="time-dubai">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Dubai</h6>
+                                            <p class="city-country">UAE</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">GST</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Oceania -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌏 Oceania</h5>
+                                <div class="cities-cards-grid">
+                                    <div class="city-card" onclick="selectLocation('Sydney', 'Australia/Sydney', '🇦🇺')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇦🇺</span>
+                                            <span class="city-time" id="time-sydney">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Sydney</h6>
+                                            <p class="city-country">Australia</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">AEDT/AEST</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="city-card" onclick="selectLocation('Auckland', 'Pacific/Auckland', '🇳🇿')">
+                                        <div class="city-card-header">
+                                            <span class="city-flag">🇳🇿</span>
+                                            <span class="city-time" id="time-auckland">--:--</span>
+                                        </div>
+                                        <div class="city-card-body">
+                                            <h6 class="city-name">Auckland</h6>
+                                            <p class="city-country">New Zealand</p>
+                                        </div>
+                                        <div class="city-card-footer">
+                                            <small class="timezone-info">NZDT/NZST</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-    <!-- Loading Script -->
+
+    <!-- Core JavaScript -->
     <script>
-        // Simple search functionality
-        function addCityFromSearch() {
-            const input = document.getElementById('citySearchInput');
-            const city = input.value.trim();
-            if (city && window.timelyApp) {
-                window.timelyApp.addCityToGrid(city);
-                input.value = '';
+        // Global cities database for search (Comprehensive Worldwide Coverage)
+        const globalCitiesDatabase = [
+            // North America - United States (Expanded)
+            { name: 'New York', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Chicago', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Miami', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'San Francisco', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Boston', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Washington DC', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Atlanta', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Dallas', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Houston', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Seattle', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Las Vegas', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Phoenix', timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
+            { name: 'Denver', timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
+            
+            // Additional US Cities
+            { name: 'Philadelphia', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'San Antonio', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'San Diego', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'San Jose', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Austin', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Jacksonville', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Fort Worth', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Columbus', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Charlotte', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Indianapolis', timezone: 'America/Indiana/Indianapolis', flag: '🇺🇸', country: 'United States' },
+            { name: 'Nashville', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Detroit', timezone: 'America/Detroit', flag: '🇺🇸', country: 'United States' },
+            { name: 'Memphis', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Portland', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Oklahoma City', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Louisville', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Baltimore', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Milwaukee', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Albuquerque', timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
+            { name: 'Tucson', timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
+            { name: 'Fresno', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Sacramento', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Mesa', timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
+            { name: 'Kansas City', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Colorado Springs', timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
+            { name: 'Raleigh', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Tampa', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'New Orleans', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Cincinnati', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            
+            // North America - Canada (Expanded)
+            { name: 'Toronto', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Vancouver', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Montreal', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Calgary', timezone: 'America/Edmonton', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Ottawa', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Edmonton', timezone: 'America/Edmonton', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Mississauga', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Winnipeg', timezone: 'America/Winnipeg', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Quebec City', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Hamilton', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Brampton', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Surrey', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Laval', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Halifax', timezone: 'America/Halifax', flag: '🇨🇦', country: 'Canada' },
+            { name: 'London', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Markham', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Vaughan', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Gatineau', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Saskatoon', timezone: 'America/Regina', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Longueuil', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Burnaby', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Regina', timezone: 'America/Regina', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Richmond', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Richmond Hill', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Oakville', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Burlington', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Greater Sudbury', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Sherbrooke', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Oshawa', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Saguenay', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            
+            // North America - Mexico (Expanded)
+            { name: 'Mexico City', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Guadalajara', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Cancun', timezone: 'America/Cancun', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Monterrey', timezone: 'America/Monterrey', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Puebla', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Tijuana', timezone: 'America/Tijuana', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'León', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Juárez', timezone: 'America/Ojinaga', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Torreón', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Querétaro', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'San Luis Potosí', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Mérida', timezone: 'America/Merida', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Mexicali', timezone: 'America/Tijuana', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Aguascalientes', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Acapulco', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Cuernavaca', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Saltillo', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Xalapa', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Tampico', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Toluca', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            
+            // Europe - United Kingdom (Expanded)
+            { name: 'London', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Manchester', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Edinburgh', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Birmingham', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Liverpool', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Leeds', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Glasgow', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Sheffield', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Bradford', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Newcastle', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Leicester', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Nottingham', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Bristol', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Cardiff', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Belfast', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Hull', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Plymouth', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Stoke-on-Trent', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Wolverhampton', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Derby', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Swansea', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Southampton', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Salford', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Aberdeen', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Westminster', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Portsmouth', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'York', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Peterborough', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Dundee', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Lancaster', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            
+            // Europe - France
+            { name: 'Paris', timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            { name: 'Marseille', timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            { name: 'Lyon', timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            { name: 'Nice', timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            
+            // Europe - Germany
+            { name: 'Berlin', timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            { name: 'Munich', timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            { name: 'Hamburg', timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            { name: 'Frankfurt', timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            
+            // Europe - Other Countries
+            { name: 'Rome', timezone: 'Europe/Rome', flag: '🇮🇹', country: 'Italy' },
+            { name: 'Milan', timezone: 'Europe/Rome', flag: '🇮🇹', country: 'Italy' },
+            { name: 'Madrid', timezone: 'Europe/Madrid', flag: '🇪🇸', country: 'Spain' },
+            { name: 'Barcelona', timezone: 'Europe/Madrid', flag: '🇪🇸', country: 'Spain' },
+            { name: 'Amsterdam', timezone: 'Europe/Amsterdam', flag: '🇳🇱', country: 'Netherlands' },
+            { name: 'Stockholm', timezone: 'Europe/Stockholm', flag: '🇸🇪', country: 'Sweden' },
+            { name: 'Oslo', timezone: 'Europe/Oslo', flag: '🇳🇴', country: 'Norway' },
+            { name: 'Copenhagen', timezone: 'Europe/Copenhagen', flag: '🇩🇰', country: 'Denmark' },
+            { name: 'Helsinki', timezone: 'Europe/Helsinki', flag: '🇫🇮', country: 'Finland' },
+            { name: 'Vienna', timezone: 'Europe/Vienna', flag: '🇦🇹', country: 'Austria' },
+            { name: 'Zurich', timezone: 'Europe/Zurich', flag: '🇨🇭', country: 'Switzerland' },
+            { name: 'Brussels', timezone: 'Europe/Brussels', flag: '🇧🇪', country: 'Belgium' },
+            { name: 'Dublin', timezone: 'Europe/Dublin', flag: '🇮🇪', country: 'Ireland' },
+            { name: 'Lisbon', timezone: 'Europe/Lisbon', flag: '🇵🇹', country: 'Portugal' },
+            { name: 'Prague', timezone: 'Europe/Prague', flag: '🇨🇿', country: 'Czech Republic' },
+            { name: 'Warsaw', timezone: 'Europe/Warsaw', flag: '🇵🇱', country: 'Poland' },
+            { name: 'Budapest', timezone: 'Europe/Budapest', flag: '🇭🇺', country: 'Hungary' },
+            { name: 'Moscow', timezone: 'Europe/Moscow', flag: '🇷🇺', country: 'Russia' },
+            { name: 'Kiev', timezone: 'Europe/Kiev', flag: '🇺🇦', country: 'Ukraine' },
+            { name: 'Istanbul', timezone: 'Europe/Istanbul', flag: '🇹🇷', country: 'Turkey' },
+            { name: 'Athens', timezone: 'Europe/Athens', flag: '🇬🇷', country: 'Greece' },
+            
+            // Asia - East Asia
+            { name: 'Tokyo', timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
+            { name: 'Osaka', timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
+            { name: 'Kyoto', timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
+            { name: 'Shanghai', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Beijing', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Guangzhou', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Shenzhen', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Hong Kong', timezone: 'Asia/Hong_Kong', flag: '🇭🇰', country: 'Hong Kong' },
+            { name: 'Seoul', timezone: 'Asia/Seoul', flag: '🇰🇷', country: 'South Korea' },
+            { name: 'Busan', timezone: 'Asia/Seoul', flag: '🇰🇷', country: 'South Korea' },
+            { name: 'Taipei', timezone: 'Asia/Taipei', flag: '🇹🇼', country: 'Taiwan' },
+            
+            // Asia - Southeast Asia
+            { name: 'Singapore', timezone: 'Asia/Singapore', flag: '🇸🇬', country: 'Singapore' },
+            { name: 'Bangkok', timezone: 'Asia/Bangkok', flag: '🇹🇭', country: 'Thailand' },
+            { name: 'Manila', timezone: 'Asia/Manila', flag: '🇵🇭', country: 'Philippines' },
+            { name: 'Jakarta', timezone: 'Asia/Jakarta', flag: '🇮🇩', country: 'Indonesia' },
+            { name: 'Kuala Lumpur', timezone: 'Asia/Kuala_Lumpur', flag: '🇲🇾', country: 'Malaysia' },
+            { name: 'Ho Chi Minh City', timezone: 'Asia/Ho_Chi_Minh', flag: '��', country: 'Vietnam' },
+            { name: 'Hanoi', timezone: 'Asia/Ho_Chi_Minh', flag: '🇻🇳', country: 'Vietnam' },
+            
+            // Asia - South Asia
+            { name: 'Mumbai', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Delhi', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Bangalore', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Chennai', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Hyderabad', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Pune', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Karachi', timezone: 'Asia/Karachi', flag: '🇵🇰', country: 'Pakistan' },
+            { name: 'Lahore', timezone: 'Asia/Karachi', flag: '🇵🇰', country: 'Pakistan' },
+            { name: 'Dhaka', timezone: 'Asia/Dhaka', flag: '��', country: 'Bangladesh' },
+            { name: 'Colombo', timezone: 'Asia/Colombo', flag: '🇱🇰', country: 'Sri Lanka' },
+            
+            // Asia - Middle East
+            { name: 'Dubai', timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
+            { name: 'Abu Dhabi', timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
+            { name: 'Doha', timezone: 'Asia/Qatar', flag: '🇶🇦', country: 'Qatar' },
+            { name: 'Kuwait City', timezone: 'Asia/Kuwait', flag: '🇰🇼', country: 'Kuwait' },
+            { name: 'Riyadh', timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
+            { name: 'Jeddah', timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
+            { name: 'Tehran', timezone: 'Asia/Tehran', flag: '🇮🇷', country: 'Iran' },
+            { name: 'Baghdad', timezone: 'Asia/Baghdad', flag: '🇮🇶', country: 'Iraq' },
+            { name: 'Tel Aviv', timezone: 'Asia/Jerusalem', flag: '🇮🇱', country: 'Israel' },
+            { name: 'Jerusalem', timezone: 'Asia/Jerusalem', flag: '🇮🇱', country: 'Israel' },
+            
+            // Africa
+            { name: 'Cairo', timezone: 'Africa/Cairo', flag: '🇪🇬', country: 'Egypt' },
+            { name: 'Lagos', timezone: 'Africa/Lagos', flag: '🇳🇬', country: 'Nigeria' },
+            { name: 'Cape Town', timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
+            { name: 'Johannesburg', timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
+            { name: 'Nairobi', timezone: 'Africa/Nairobi', flag: '🇰🇪', country: 'Kenya' },
+            { name: 'Casablanca', timezone: 'Africa/Casablanca', flag: '🇲🇦', country: 'Morocco' },
+            { name: 'Tunis', timezone: 'Africa/Tunis', flag: '🇹🇳', country: 'Tunisia' },
+            { name: 'Algiers', timezone: 'Africa/Algiers', flag: '🇩🇿', country: 'Algeria' },
+            { name: 'Accra', timezone: 'Africa/Accra', flag: '🇬🇭', country: 'Ghana' },
+            { name: 'Addis Ababa', timezone: 'Africa/Addis_Ababa', flag: '🇪🇹', country: 'Ethiopia' },
+            
+            // Oceania
+            { name: 'Sydney', timezone: 'Australia/Sydney', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Melbourne', timezone: 'Australia/Melbourne', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Brisbane', timezone: 'Australia/Brisbane', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Perth', timezone: 'Australia/Perth', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Adelaide', timezone: 'Australia/Adelaide', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Auckland', timezone: 'Pacific/Auckland', flag: '🇳🇿', country: 'New Zealand' },
+            { name: 'Wellington', timezone: 'Pacific/Auckland', flag: '🇳🇿', country: 'New Zealand' },
+            { name: 'Christchurch', timezone: 'Pacific/Auckland', flag: '��', country: 'New Zealand' },
+            { name: 'Fiji', timezone: 'Pacific/Fiji', flag: '🇫🇯', country: 'Fiji' },
+            
+            // South America
+            { name: 'São Paulo', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Rio de Janeiro', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Brasília', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Salvador', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', flag: '🇦🇷', country: 'Argentina' },
+            { name: 'Córdoba', timezone: 'America/Argentina/Cordoba', flag: '🇦🇷', country: 'Argentina' },
+            { name: 'Lima', timezone: 'America/Lima', flag: '🇵🇪', country: 'Peru' },
+            { name: 'Santiago', timezone: 'America/Santiago', flag: '🇨🇱', country: 'Chile' },
+            { name: 'Bogotá', timezone: 'America/Bogota', flag: '🇨🇴', country: 'Colombia' },
+            { name: 'Caracas', timezone: 'America/Caracas', flag: '🇻🇪', country: 'Venezuela' },
+            { name: 'Quito', timezone: 'America/Guayaquil', flag: '🇪🇨', country: 'Ecuador' },
+            { name: 'La Paz', timezone: 'America/La_Paz', flag: '🇧🇴', country: 'Bolivia' },
+            { name: 'Montevideo', timezone: 'America/Montevideo', flag: '🇺🇾', country: 'Uruguay' },
+            { name: 'Asunción', timezone: 'America/Asuncion', flag: '🇵🇾', country: 'Paraguay' },
+            
+            // Central America & Caribbean
+            { name: 'Havana', timezone: 'America/Havana', flag: '🇨🇺', country: 'Cuba' },
+            { name: 'Kingston', timezone: 'America/Jamaica', flag: '🇯🇲', country: 'Jamaica' },
+            { name: 'Santo Domingo', timezone: 'America/Santo_Domingo', flag: '🇩🇴', country: 'Dominican Republic' },
+            { name: 'San José', timezone: 'America/Costa_Rica', flag: '🇨🇷', country: 'Costa Rica' },
+            { name: 'Panama City', timezone: 'America/Panama', flag: '🇵🇦', country: 'Panama' },
+            { name: 'Guatemala City', timezone: 'America/Guatemala', flag: '🇬🇹', country: 'Guatemala' }
+        ];
+
+        // Global state management
+        window.timelyAppState = {
+            currentLocationData: null,
+            clockInterval: null,
+            isClockRunning: false,
+            isModalOpen: false,
+            favoriteClocks: JSON.parse(localStorage.getItem('favoriteClocks') || '[]'),
+            favoriteClockIntervals: {}
+        };
+
+        // Search functionality
+        function searchCities(query) {
+            const searchResults = document.getElementById('searchResults');
+            const searchResultsList = document.getElementById('searchResultsList');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            if (!query || query.trim().length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            const filteredCities = globalCitiesDatabase.filter(city => 
+                city.name.toLowerCase().includes(query.toLowerCase()) ||
+                city.country.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (filteredCities.length > 0) {
+                searchResults.style.display = 'block';
+                resultsCount.textContent = `${filteredCities.length} cities found`;
+                searchResultsList.innerHTML = filteredCities.map(city => `
+                    <div class="search-result-item">
+                        <div class="city-info">
+                            <span class="city-flag">${city.flag}</span>
+                            <div class="city-details">
+                                <span class="city-name">${city.name}</span>
+                                <span class="city-country">${city.country}</span>
+                            </div>
+                        </div>
+                        <button class="add-to-favorites-btn" 
+                                onclick="addToFavorites('${city.name}', '${city.timezone}', '${city.flag}', '${city.country}')"
+                                title="Add ${city.name} to favorites">
+                            ⭐ Add to Favorites
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                searchResults.style.display = 'block';
+                resultsCount.textContent = 'No cities found';
+                searchResultsList.innerHTML = '<div class="no-results">No cities match your search. Try a different term.</div>';
+            }
+        }
+
+        // Location Detection
+        async function detectMyLocation() {
+            const detectBtn = document.querySelector('.detect-btn');
+            const originalText = detectBtn.innerHTML;
+            
+            detectBtn.innerHTML = '<span class="action-icon">⏳</span><span class="action-text">Detecting...</span>';
+            detectBtn.disabled = true;
+            
+            try {
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocation is not supported by this browser');
+                }
+                
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 600000
+                    });
+                });
+                
+                const { latitude, longitude } = position.coords;
+                const locationData = await reverseGeocode(latitude, longitude);
+                
+                if (locationData) {
+                    selectLocation(locationData.city, locationData.timezone, locationData.flag, locationData.country);
+                    showNotification(`📍 Location detected: ${locationData.city}`, 'success');
+                } else {
+                    throw new Error('Could not determine your city');
+                }
+            } catch (error) {
+                console.error('Location detection error:', error);
+                showNotification('Location detection failed. Please select manually.', 'error');
+            } finally {
+                detectBtn.innerHTML = originalText;
+                detectBtn.disabled = false;
+            }
+        }
+
+        // Reverse geocoding
+        async function reverseGeocode(lat, lon) {
+            try {
+                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+                if (!response.ok) throw new Error('Geocoding service unavailable');
+                
+                const data = await response.json();
+                const city = data.city || data.locality || data.principalSubdivision;
+                const country = data.countryName;
+                const countryCode = data.countryCode;
+                
+                if (!city) throw new Error('City not found');
+                
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const flag = getCountryFlag(countryCode);
+                
+                return { city, country, timezone, flag, coordinates: { lat, lon } };
+            } catch (error) {
+                console.error('Reverse geocoding failed:', error);
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const parts = timezone.split('/');
+                const city = parts[parts.length - 1].replace(/_/g, ' ');
+                return { city, country: 'Your Location', timezone, flag: '🌍', coordinates: { lat, lon } };
+            }
+        }
+
+        // Get country flag
+        function getCountryFlag(countryCode) {
+            if (!countryCode || countryCode.length !== 2) return '🌍';
+            const flagMap = {
+                // North America
+                'US': '🇺🇸', 'CA': '🇨🇦', 'MX': '🇲🇽',
+                // Europe
+                'GB': '🇬🇧', 'FR': '🇫🇷', 'DE': '🇩🇪', 'IT': '🇮🇹', 'ES': '🇪🇸', 
+                'NL': '🇳🇱', 'SE': '🇸🇪', 'NO': '🇳🇴', 'DK': '🇩🇰', 'FI': '��🇮',
+                'AT': '��🇹', 'CH': '🇨🇭', 'BE': '��🇪', 'IE': '�🇪', 'PT': '🇵🇹',
+                'CZ': '🇨🇿', 'PL': '�🇱', 'HU': '��', 'RU': '🇷🇺', 'UA': '🇺🇦',
+                'TR': '🇹🇷', 'GR': '🇬🇷',
+                // Asia
+                'JP': '🇯🇵', 'CN': '🇨🇳', 'KR': '🇰🇷', 'SG': '🇸🇬', 'HK': '🇭🇰',
+                'TW': '🇹🇼', 'IN': '🇮🇳', 'TH': '🇹🇭', 'PH': '🇵🇭', 'ID': '🇮🇩',
+                'MY': '🇲🇾', 'VN': '🇻🇳', 'PK': '🇵🇰', 'BD': '🇧🇩', 'LK': '🇱🇰',
+                'AE': '🇦🇪', 'QA': '🇶🇦', 'KW': '🇰🇼', 'SA': '🇸🇦', 'IR': '🇮🇷',
+                'IQ': '🇮🇶', 'IL': '🇮🇱',
+                // Africa
+                'EG': '🇪🇬', 'NG': '🇳🇬', 'ZA': '🇿🇦', 'KE': '�🇪', 'MA': '🇲�🇦',
+                'TN': '🇹🇳', 'DZ': '🇩�', 'GH': '🇬🇭', 'ET': '�🇪🇹',
+                // Oceania
+                'AU': '🇦🇺', 'NZ': '🇳🇿', 'FJ': '🇫🇯',
+                // South America
+                'BR': '🇧🇷', 'AR': '🇦🇷', 'PE': '🇵🇪', 'CL': '🇨🇱', 'CO': '🇨🇴',
+                'VE': '🇻🇪', 'EC': '🇪🇨', 'BO': '🇧🇴', 'UY': '🇺🇾', 'PY': '🇵🇾',
+                // Central America & Caribbean
+                'CU': '🇨🇺', 'JM': '🇯🇲', 'DO': '🇩🇴', 'CR': '🇨🇷', 'PA': '🇵🇦', 'GT': '🇬🇹'
+            };
+            return flagMap[countryCode.toUpperCase()] || '🌍';
+        }
+
+        // Get flag based on timezone
+        function getTimezoneFlag(timezone) {
+            const timezoneToFlag = {
+                // North America
+                'America/New_York': '🇺🇸', 'America/Chicago': '🇺🇸', 'America/Denver': '🇺🇸', 'America/Los_Angeles': '🇺🇸',
+                'America/Phoenix': '🇺🇸', 'America/Anchorage': '🇺🇸', 'Pacific/Honolulu': '🇺🇸',
+                'America/Toronto': '🇨🇦', 'America/Vancouver': '🇨🇦', 'America/Edmonton': '🇨🇦', 'America/Halifax': '🇨🇦',
+                'America/Mexico_City': '🇲🇽', 'America/Cancun': '🇲🇽', 'America/Tijuana': '🇲🇽',
+                
+                // Europe
+                'Europe/London': '🇬🇧', 'Europe/Dublin': '🇮🇪', 'Europe/Paris': '🇫🇷', 'Europe/Berlin': '🇩🇪',
+                'Europe/Rome': '🇮🇹', 'Europe/Madrid': '🇪🇸', 'Europe/Amsterdam': '🇳🇱', 'Europe/Stockholm': '🇸🇪',
+                'Europe/Oslo': '🇳🇴', 'Europe/Copenhagen': '🇩🇰', 'Europe/Helsinki': '🇫🇮', 'Europe/Vienna': '🇦🇹',
+                'Europe/Zurich': '🇨🇭', 'Europe/Brussels': '🇧🇪', 'Europe/Lisbon': '🇵🇹', 'Europe/Prague': '🇨🇿',
+                'Europe/Warsaw': '🇵🇱', 'Europe/Budapest': '🇭🇺', 'Europe/Moscow': '🇷🇺', 'Europe/Kiev': '🇺🇦',
+                'Europe/Istanbul': '🇹🇷', 'Europe/Athens': '🇬🇷',
+                
+                // Asia
+                'Asia/Tokyo': '🇯🇵', 'Asia/Shanghai': '🇨🇳', 'Asia/Seoul': '🇰🇷', 'Asia/Singapore': '🇸🇬',
+                'Asia/Hong_Kong': '🇭🇰', 'Asia/Taipei': '🇹🇼', 'Asia/Kolkata': '🇮🇳', 'Asia/Bangkok': '🇹🇭',
+                'Asia/Manila': '🇵🇭', 'Asia/Jakarta': '🇮🇩', 'Asia/Kuala_Lumpur': '🇲🇾', 'Asia/Ho_Chi_Minh': '🇻🇳',
+                'Asia/Karachi': '🇵🇰', 'Asia/Dhaka': '🇧🇩', 'Asia/Colombo': '🇱🇰', 'Asia/Dubai': '🇦🇪',
+                'Asia/Qatar': '🇶🇦', 'Asia/Kuwait': '🇰🇼', 'Asia/Riyadh': '🇸🇦', 'Asia/Tehran': '🇮🇷',
+                'Asia/Baghdad': '🇮🇶', 'Asia/Jerusalem': '🇮🇱',
+                
+                // Africa
+                'Africa/Cairo': '🇪🇬', 'Africa/Lagos': '🇳🇬', 'Africa/Johannesburg': '🇿🇦', 'Africa/Nairobi': '🇰🇪',
+                'Africa/Casablanca': '🇲🇦', 'Africa/Tunis': '🇹🇳', 'Africa/Algiers': '🇩🇿', 'Africa/Accra': '🇬🇭',
+                'Africa/Addis_Ababa': '🇪🇹',
+                
+                // Oceania
+                'Australia/Sydney': '🇦🇺', 'Australia/Melbourne': '🇦🇺', 'Australia/Brisbane': '🇦🇺',
+                'Australia/Perth': '🇦🇺', 'Australia/Adelaide': '🇦🇺', 'Pacific/Auckland': '🇳🇿',
+                'Pacific/Fiji': '🇫🇯',
+                
+                // South America
+                'America/Sao_Paulo': '🇧🇷', 'America/Argentina/Buenos_Aires': '🇦🇷', 'America/Lima': '🇵🇪',
+                'America/Santiago': '🇨🇱', 'America/Bogota': '🇨🇴', 'America/Caracas': '🇻🇪',
+                'America/Guayaquil': '🇪🇨', 'America/La_Paz': '🇧🇴', 'America/Montevideo': '🇺🇾',
+                'America/Asuncion': '🇵🇾',
+                
+                // Central America & Caribbean
+                'America/Havana': '🇨🇺', 'America/Jamaica': '🇯🇲', 'America/Santo_Domingo': '🇩🇴',
+                'America/Costa_Rica': '🇨🇷', 'America/Panama': '🇵🇦', 'America/Guatemala': '🇬🇹'
+            };
+            
+            return timezoneToFlag[timezone] || '🌍';
+        }
+
+        // Select location and update display
+        function selectLocation(cityName, timezone, flag, country = null) {
+            // Add visual feedback to clicked card
+            const cardElements = document.querySelectorAll('.city-card');
+            cardElements.forEach(card => {
+                if (card.onclick && card.onclick.toString().includes(cityName)) {
+                    card.classList.add('selected');
+                    setTimeout(() => card.classList.remove('selected'), 800);
+                }
+            });
+            
+            // Create location object
+            const locationData = {
+                city: cityName,
+                timezone: timezone,
+                flag: flag,
+                country: country || getCountryFromTimezone(timezone) || 'Selected Location'
+            };
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('selectedLocation', JSON.stringify(locationData));
+                console.log('Location saved to localStorage:', locationData);
+            } catch (error) {
+                console.log('localStorage not available:', error);
+            }
+            
+            // Close modal
+            toggleLocationPicker();
+            
+            // Update display
+            updateLocationDisplay(locationData);
+            
+            // Start clock updates
+            window.timelyAppState.currentLocationData = locationData;
+            startClockUpdates(locationData);
+            
+            // Show notification
+            showNotification(`${flag} ${cityName} time selected!`, 'success');
+        }
+
+        // Get country from timezone
+        function getCountryFromTimezone(timezone) {
+            const timezoneMap = {
+                'America/New_York': 'United States',
+                'America/Los_Angeles': 'United States',
+                'America/Chicago': 'United States',
+                'America/Toronto': 'Canada',
+                'America/Vancouver': 'Canada',
+                'Europe/London': 'United Kingdom',
+                'Europe/Paris': 'France',
+                'Europe/Berlin': 'Germany',
+                'Europe/Rome': 'Italy',
+                'Asia/Tokyo': 'Japan',
+                'Asia/Shanghai': 'China',
+                'Asia/Seoul': 'South Korea',
+                'Asia/Dubai': 'UAE',
+                'Australia/Sydney': 'Australia'
+            };
+            return timezoneMap[timezone] || 'Selected Location';
+        }
+
+        // Update location display
+        function updateLocationDisplay(locationData) {
+            const locationFlag = document.getElementById('locationFlag');
+            const locationName = document.getElementById('locationName');
+            const locationCountry = document.getElementById('locationCountry');
+            
+            if (locationFlag) locationFlag.textContent = locationData.flag;
+            if (locationName) locationName.textContent = locationData.city;
+            if (locationCountry) {
+                locationCountry.innerHTML = `${locationData.country} • <span class="live-time-label">🔴 Live Time</span>`;
+            }
+        }
+
+        // Start clock updates
+        function startClockUpdates(locationData) {
+            // Clear any existing interval
+            if (window.timelyAppState.clockInterval) {
+                clearInterval(window.timelyAppState.clockInterval);
+            }
+            
+            const primaryTime = document.getElementById('primaryTime');
+            const primaryDate = document.getElementById('primaryDate');
+            const sunInfo = document.getElementById('sunInfo');
+            
+            function updateClock() {
+                try {
+                    const now = new Date();
+                    
+                    // Update time
+                    if (primaryTime) {
+                        const timeString = now.toLocaleTimeString('en-US', {
+                            timeZone: locationData.timezone,
+                            hour12: false,
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                        primaryTime.textContent = timeString;
+                    }
+                    
+                    // Update date
+                    if (primaryDate) {
+                        const dateString = now.toLocaleDateString('en-US', {
+                            timeZone: locationData.timezone,
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        primaryDate.textContent = dateString;
+                    }
+                    
+                    // Update sun times (simplified)
+                    if (sunInfo && locationData.coordinates) {
+                        const sunTimes = calculateSunTimes(locationData.coordinates.lat, locationData.coordinates.lon, now);
+                        sunInfo.textContent = `↑ ${sunTimes.sunrise} ↓ ${sunTimes.sunset} (${sunTimes.dayLength})`;
+                    }
+                } catch (error) {
+                    console.error('Clock update error:', error);
+                }
+            }
+            
+            // Update immediately and then every second
+            updateClock();
+            window.timelyAppState.clockInterval = setInterval(updateClock, 1000);
+            window.timelyAppState.isClockRunning = true;
+        }
+
+        // Calculate sun times (simplified)
+        function calculateSunTimes(lat, lon, date) {
+            try {
+                const now = new Date(date);
+                const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+                const latRad = lat * Math.PI / 180;
+                const declination = 23.45 * Math.PI / 180 * Math.sin(2 * Math.PI * (284 + dayOfYear) / 365);
+                const hourAngle = Math.acos(-Math.tan(latRad) * Math.tan(declination));
+                const solarNoon = 12 - (lon / 15);
+                const sunriseHour = solarNoon - (hourAngle * 12 / Math.PI);
+                const sunsetHour = solarNoon + (hourAngle * 12 / Math.PI);
+                
+                const sunrise = formatHour(sunriseHour);
+                const sunset = formatHour(sunsetHour);
+                const dayLengthHours = sunsetHour - sunriseHour;
+                const dayLength = `${Math.floor(dayLengthHours)}h ${Math.floor((dayLengthHours % 1) * 60)}m`;
+                
+                return { sunrise, sunset, dayLength };
+            } catch (error) {
+                return { sunrise: '06:30', sunset: '18:45', dayLength: '12h 15m' };
+            }
+        }
+
+        // Format hour as HH:MM
+        function formatHour(hour) {
+            const h = Math.floor(hour);
+            const m = Math.floor((hour % 1) * 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+
+        // Toggle location picker modal
+        function toggleLocationPicker() {
+            const modal = document.getElementById('locationPickerOverlay');
+            const searchInput = document.getElementById('citySearchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                window.timelyAppState.isModalOpen = false;
+                // Clear search
+                if (searchInput) searchInput.value = '';
+                if (searchResults) searchResults.style.display = 'none';
+            } else {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                window.timelyAppState.isModalOpen = true;
+                // Focus search input
+                setTimeout(() => {
+                    if (searchInput) searchInput.focus();
+                }, 100);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        // Initialize application
+        function initializeApp() {
+            // Load saved location
+            let savedLocation = null;
+            try {
+                const savedLocationData = localStorage.getItem('selectedLocation');
+                if (savedLocationData) {
+                    savedLocation = JSON.parse(savedLocationData);
+                }
+            } catch (error) {
+                console.log('Could not load saved location:', error);
+            }
+            
+            if (savedLocation && savedLocation.city && savedLocation.timezone) {
+                console.log('Loading saved location:', savedLocation.city);
+                updateLocationDisplay(savedLocation);
+                window.timelyAppState.currentLocationData = savedLocation;
+                startClockUpdates(savedLocation);
+            } else {
+                // Start with local timezone
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const parts = timezone.split('/');
+                const city = parts[parts.length - 1].replace(/_/g, ' ');
+                
+                // Try to get a better flag based on common timezone patterns
+                const flag = getTimezoneFlag(timezone);
+                
+                const defaultLocation = {
+                    city: city,
+                    country: 'Your Local Time',
+                    timezone: timezone,
+                    flag: flag
+                };
+                
+                updateLocationDisplay(defaultLocation);
+                window.timelyAppState.currentLocationData = defaultLocation;
+                startClockUpdates(defaultLocation);
+            }
+        }
+
+        // Update city card times
+        function updateCityCardTimes() {
+            const cityCards = [
+                { id: 'time-newyork', timezone: 'America/New_York' },
+                { id: 'time-losangeles', timezone: 'America/Los_Angeles' },
+                { id: 'time-toronto', timezone: 'America/Toronto' },
+                { id: 'time-london', timezone: 'Europe/London' },
+                { id: 'time-paris', timezone: 'Europe/Paris' },
+                { id: 'time-berlin', timezone: 'Europe/Berlin' },
+                { id: 'time-tokyo', timezone: 'Asia/Tokyo' },
+                { id: 'time-shanghai', timezone: 'Asia/Shanghai' },
+                { id: 'time-dubai', timezone: 'Asia/Dubai' },
+                { id: 'time-sydney', timezone: 'Australia/Sydney' },
+                { id: 'time-auckland', timezone: 'Pacific/Auckland' }
+            ];
+
+            const now = new Date();
+            
+            cityCards.forEach(card => {
+                const element = document.getElementById(card.id);
+                if (element) {
+                    try {
+                        const timeString = now.toLocaleTimeString('en-US', {
+                            timeZone: card.timezone,
+                            hour12: false,
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        element.textContent = timeString;
+                    } catch (error) {
+                        element.textContent = '--:--';
+                    }
+                }
+            });
+        }
+
+        // Start city card time updates
+        function startCityCardUpdates() {
+            // Update immediately
+            updateCityCardTimes();
+            
+            // Update every minute (since we only show hours:minutes)
+            setInterval(updateCityCardTimes, 60000);
+        }
+
+        // ===== FAVORITE CLOCKS FUNCTIONALITY =====
+        
+        // Universal function to add any city to favorites from city cards
+        function addCityToFavorites(event, cityName, timezone, flag, country) {
+            event.stopPropagation(); // Prevent card click
+            
+            const success = addToFavorites(cityName, timezone, flag, country);
+            
+            // Add visual feedback
+            if (success) {
+                const btn = event.target;
+                btn.classList.add('added');
+                setTimeout(() => btn.classList.remove('added'), 500);
             }
         }
         
-        // Enter key support for search
+        // Add city to favorites
+        function addToFavorites(cityName, timezone, flag, country) {
+            const favoriteCity = {
+                name: cityName,
+                timezone: timezone,
+                flag: flag,
+                country: country,
+                id: `favorite-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+            };
+            
+            // Check if city is already in favorites
+            const exists = window.timelyAppState.favoriteClocks.find(
+                fav => fav.name === cityName && fav.timezone === timezone
+            );
+            
+            if (exists) {
+                showNotification(`⭐ ${cityName} is already in your favorites!`, 'info');
+                return false;
+            }
+            
+            // Add to favorites
+            window.timelyAppState.favoriteClocks.push(favoriteCity);
+            
+            // Save to localStorage
+            localStorage.setItem('favoriteClocks', JSON.stringify(window.timelyAppState.favoriteClocks));
+            
+            // Update display
+            renderFavoriteClocks();
+            showNotification(`⭐ Added ${cityName} to favorites!`, 'success');
+            
+            // Close the location picker modal for better UX
+            const modal = document.getElementById('locationPickerOverlay');
+            if (modal && modal.classList.contains('active')) {
+                setTimeout(() => {
+                    // Clear search input and hide results for clean state
+                    const searchInput = document.getElementById('citySearchInput');
+                    const searchResults = document.getElementById('searchResults');
+                    
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.placeholder = '🔍 Search cities worldwide (e.g., New York, London, Tokyo)...';
+                    }
+                    if (searchResults) {
+                        searchResults.style.display = 'none';
+                    }
+                    
+                    // Add a subtle closing animation class
+                    modal.style.opacity = '0.7';
+                    setTimeout(() => {
+                        modal.style.opacity = ''; // Reset opacity
+                        toggleLocationPicker();
+                    }, 200);
+                    
+                }, 600); // Reduced delay slightly for better responsiveness
+            }
+            
+            return true;
+        }
+        
+        // Remove city from favorites
+        function removeFromFavorites(cityId) {
+            const cityIndex = window.timelyAppState.favoriteClocks.findIndex(fav => fav.id === cityId);
+            
+            if (cityIndex > -1) {
+                const cityName = window.timelyAppState.favoriteClocks[cityIndex].name;
+                window.timelyAppState.favoriteClocks.splice(cityIndex, 1);
+                
+                // Clear interval for this clock
+                if (window.timelyAppState.favoriteClockIntervals[cityId]) {
+                    clearInterval(window.timelyAppState.favoriteClockIntervals[cityId]);
+                    delete window.timelyAppState.favoriteClockIntervals[cityId];
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('favoriteClocks', JSON.stringify(window.timelyAppState.favoriteClocks));
+                
+                // Update display
+                renderFavoriteClocks();
+                showNotification(`🗑️ Removed ${cityName} from favorites`, 'success');
+            }
+        }
+        
+        // Render favorite clocks
+        function renderFavoriteClocks() {
+            const favoriteSection = document.getElementById('favoriteClockSection');
+            const favoriteGrid = document.getElementById('favoriteClockGrid');
+            
+            if (window.timelyAppState.favoriteClocks.length === 0) {
+                favoriteSection.style.display = 'none';
+                return;
+            }
+            
+            favoriteSection.style.display = 'block';
+            
+            favoriteGrid.innerHTML = window.timelyAppState.favoriteClocks.map(fav => `
+                <div class="favorite-clock-card" id="${fav.id}">
+                    <div class="favorite-clock-header">
+                        <div class="favorite-city-info">
+                            <h3 class="favorite-city-name">${fav.name}</h3>
+                            <p class="favorite-city-country">
+                                <span class="favorite-city-flag">${fav.flag}</span>
+                                ${fav.country}
+                            </p>
+                        </div>
+                        <button class="remove-favorite-btn" 
+                                onclick="removeFromFavorites('${fav.id}')"
+                                title="Remove from favorites">
+                            ×
+                        </button>
+                    </div>
+                    <div class="favorite-clock-time" id="time-${fav.id}">--:--:--</div>
+                    <div class="favorite-clock-date" id="date-${fav.id}">Loading...</div>
+                    <div class="favorite-timezone-info">${fav.timezone}</div>
+                </div>
+            `).join('');
+            
+            // Start updating times for favorite clocks
+            startFavoriteClockUpdates();
+        }
+        
+        // Update times for all favorite clocks
+        function updateFavoriteClockTimes() {
+            window.timelyAppState.favoriteClocks.forEach(fav => {
+                try {
+                    const now = new Date();
+                    const timeElement = document.getElementById(`time-${fav.id}`);
+                    const dateElement = document.getElementById(`date-${fav.id}`);
+                    
+                    if (timeElement && dateElement) {
+                        const timeInTimezone = new Intl.DateTimeFormat('en-US', {
+                            timeZone: fav.timezone,
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: false
+                        }).format(now);
+                        
+                        const dateInTimezone = new Intl.DateTimeFormat('en-US', {
+                            timeZone: fav.timezone,
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(now);
+                        
+                        timeElement.textContent = timeInTimezone;
+                        dateElement.textContent = dateInTimezone;
+                    }
+                } catch (error) {
+                    console.error(`Error updating time for ${fav.name}:`, error);
+                }
+            });
+        }
+        
+        // Start favorite clock updates
+        function startFavoriteClockUpdates() {
+            // Clear existing intervals
+            Object.values(window.timelyAppState.favoriteClockIntervals).forEach(clearInterval);
+            window.timelyAppState.favoriteClockIntervals = {};
+            
+            // Update immediately
+            updateFavoriteClockTimes();
+            
+            // Set up interval for updates every second
+            const mainInterval = setInterval(updateFavoriteClockTimes, 1000);
+            window.timelyAppState.favoriteClockIntervals['main'] = mainInterval;
+        }
+
+        // Function to add favorite buttons to all city cards
+        function addFavoriteButtonsToAllCards() {
+            const allCityCards = document.querySelectorAll('.city-card');
+            
+            allCityCards.forEach(card => {
+                const footer = card.querySelector('.city-card-footer');
+                const cityName = card.querySelector('.city-name')?.textContent;
+                const cityCountry = card.querySelector('.city-country')?.textContent;
+                const cityFlag = card.querySelector('.city-flag')?.textContent;
+                
+                // Skip if button already exists or if we can't find required info
+                if (!footer || !cityName || !cityCountry || footer.querySelector('.quick-favorite-btn')) {
+                    return;
+                }
+                
+                // Extract timezone and country from onclick attribute
+                const onclickAttr = card.getAttribute('onclick');
+                if (!onclickAttr) return;
+                
+                // Parse the onclick to extract timezone and flag
+                const matches = onclickAttr.match(/selectLocation\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
+                if (!matches) return;
+                
+                const [, name, timezone, flag] = matches;
+                
+                // Create favorite button
+                const favoriteBtn = document.createElement('button');
+                favoriteBtn.className = 'quick-favorite-btn';
+                favoriteBtn.innerHTML = '⭐';
+                favoriteBtn.title = 'Add to favorites';
+                favoriteBtn.onclick = (event) => {
+                    event.stopPropagation();
+                    const success = addToFavorites(name, timezone, flag, cityCountry);
+                    
+                    // Add visual feedback
+                    if (success) {
+                        favoriteBtn.classList.add('added');
+                        setTimeout(() => favoriteBtn.classList.remove('added'), 500);
+                    }
+                };
+                
+                // Add button to footer
+                footer.appendChild(favoriteBtn);
+            });
+        }
+
+        // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the app
+            setTimeout(initializeApp, 100);
+            
+            // Start city card time updates
+            setTimeout(startCityCardUpdates, 200);
+            
+            // Initialize favorite clocks
+            setTimeout(renderFavoriteClocks, 300);
+            
+            // Add favorite buttons to all city cards
+            setTimeout(addFavoriteButtonsToAllCards, 400);
+            
+            // Close modal when clicking outside
+            document.addEventListener('click', (e) => {
+                const modal = document.getElementById('locationPickerOverlay');
+                if (modal && modal.classList.contains('active') && e.target === modal) {
+                    toggleLocationPicker();
+                }
+            });
+            
+            // Enter key support for search
             const searchInput = document.getElementById('citySearchInput');
             if (searchInput) {
                 searchInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
-                        addCityFromSearch();
+                        const query = e.target.value.trim();
+                        const city = globalCitiesDatabase.find(c => 
+                            c.name.toLowerCase() === query.toLowerCase() ||
+                            c.name.toLowerCase().includes(query.toLowerCase())
+                        );
+                        if (city) {
+                            selectLocation(city.name, city.timezone, city.flag, city.country);
+                        }
                     }
                 });
             }
         });
     </script>
-
-    <!-- Application Scripts -->
-    <script src="./enhanced-timely.js"></script>
 </body>
 </html>

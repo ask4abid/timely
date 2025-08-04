@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exact time for any location worldwide">
+    <title>TIMELY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/simple-styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Application Configuration -->
+    <script src="config/app-config.js"></script>
+</head>
+<body>
+    <!-- Clean Modern Header -->
+    <header class="modern-header">
+        <div class="header-container">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <img src="src/assets/timely-logo.svg" alt="Timely" class="site-logo" 
+                     onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <h1 class="site-title" style="display: none;" 
+                    onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <span class="title-text">TIMELY</span>
+                </h1>
+            </div>
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <!-- Floating Search Button -->
+                <!-- Theme Toggle -->
+                <button class="theme-toggle-btn" id="themeToggle" onclick="window.timelyApp.toggleTheme()" title="Toggle Dark Mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <!-- Menu Toggle -->
+                <button class="menu-toggle-btn" id="hamburgerMenu" onclick="window.timelyApp.toggleMenu()" title="Open Menu">
+                    <div class="hamburger-icon">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="menu-content">
+                <div class="auth-section">
+                    <button class="auth-btn signin-btn" onclick="window.timelyApp.showSignIn()">
+                        <span class="auth-icon">🔐</span>
+                        Sign In
+                    </button>
+                    <button class="auth-btn signup-btn" onclick="window.timelyApp.showSignUp()">
+                        <span class="auth-icon">📝</span>
+                        Sign Up
+                    </button>
+                </div>
+                <hr class="menu-divider">
+                <div class="menu-items">
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openWorldMap()">
+                        <span class="menu-icon">🌍</span>
+                        World Map
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openMeetingPlanner()">
+                        <span class="menu-icon">📅</span>
+                        Meeting Planner
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openConverter()">
+                        <span class="menu-icon">🔄</span>
+                        Time Converter
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openTimezones()">
+                        <span class="menu-icon">🕐</span>
+                        Time Zones
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openAlarms()">
+                        <span class="menu-icon">⏰</span>
+                        Alarms
+                    </a>
+                    <a href="#" class="menu-item" onclick="window.timelyApp.openSettings()">
+                        <span class="menu-icon">⚙️</span>
+                        Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Global Search Overlay -->
+    <div class="global-search-overlay" id="globalSearchOverlay">
+        <div class="global-search-container">
+            <div class="search-header">
+                <h3>🔍 Search Cities Worldwide</h3>
+                <button class="close-search" onclick="window.timelyApp.toggleGlobalSearch()">×</button>
+            </div>
+            <div class="search-input-wrapper">
+                <input type="text" 
+                       id="globalSearchInput" 
+                       placeholder="Search cities, countries, or time zones..." 
+                       class="global-search-input" 
+                       autocomplete="off"
+                       autofocus>
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="search-suggestions" id="globalSearchSuggestions"></div>
+            <div class="search-shortcuts">
+                <span class="shortcut-hint">💡 Try: "New York", "Tokyo", "UTC+5", or "GMT"</span>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Primary Time Display - Large and Prominent with Switch Capability -->
+        <div class="hero-time-section">
+            <div class="location-header">
+                <h1 class="location-title" id="locationTitle">Time in Your Location now</h1>
+                <div class="location-subtitle" id="locationSubtitle">Loading location...</div>
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="toggleLocationPicker()">
+                    <span class="switch-icon">
+                        <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="switchClockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="switchHandsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4299e1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Clock outer ring -->
+                            <circle cx="22" cy="22" r="18" 
+                                    fill="url(#switchClockGradient)" 
+                                    stroke="#667eea" 
+                                    stroke-width="1.5"/>
+                            <!-- Clock hour markers -->
+                            <g stroke="#718096" stroke-width="1" opacity="0.6">
+                                <line x1="22" y1="6" x2="22" y2="9"/>
+                                <line x1="38" y1="22" x2="35" y2="22"/>
+                                <line x1="22" y1="38" x2="22" y2="35"/>
+                                <line x1="6" y1="22" x2="9" y2="22"/>
+                            </g>
+                            <!-- Clock hands -->
+                            <g stroke="url(#switchHandsGradient)" stroke-width="1.5" stroke-linecap="round">
+                                <line x1="22" y1="22" x2="17" y2="16"/>
+                                <line x1="22" y1="22" x2="28" y2="14"/>
+                            </g>
+                            <!-- Center dot -->
+                            <circle cx="22" cy="22" r="1.5" fill="#667eea"/>
+                        </svg>
+                    </span>
+                    Add Location
+                </button>
+            </div>
+            <div class="giant-clock-display" id="giantClockDisplay">
+                <div class="clock-location-info" id="clockLocationInfo">
+                    <span class="location-flag" id="locationFlag">🌍</span>
+                    <span class="location-name" id="locationName">Local Time</span>
+                    <span class="location-country" id="locationCountry">Your Location</span>
+                </div>
+                <div class="main-time" id="primaryTime">00:00:00</div>
+                <div class="main-date" id="primaryDate">Loading...</div>
+                <div class="sun-times" id="sunTimes">
+                    <span class="sun-icon">☀️</span>
+                    <span class="sun-info" id="sunInfo">↑ 06:30 ↓ 18:45 (12h 15m)</span>
+                </div>
+            </div>
+        </div>
+        <!-- Location Picker Modal with Search -->
+        <div class="location-picker-overlay" id="locationPickerOverlay">
+            <div class="location-picker-modal">
+                <div class="modal-header">
+                    <div class="header-content">
+                        <h3>🌍 Add Location</h3>
+                        <p class="modal-subtitle" style="color: #ffffff; font-weight: 500;">Search and add cities to your dashboard</p>
+                    </div>
+                    <button class="close-modal" onclick="toggleLocationPicker()">×</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Dynamic Search Section -->
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <input type="text" 
+                                   id="citySearchInput" 
+                                   placeholder="🔍 Search cities worldwide (e.g., New York, London, Tokyo)..." 
+                                   class="city-search-input" 
+                                   autocomplete="off"
+                                   oninput="searchCities(this.value)"
+                                   autofocus>
+                            <div class="search-icon">🔍</div>
+                        </div>
+                        <!-- Search Results with Add to Favorites -->
+                        <div class="search-results" id="searchResults" style="display: none;">
+                            <div class="results-header">
+                                <h5>Search Results</h5>
+                                <span class="results-count" id="resultsCount">0 cities found</span>
+                            </div>
+                            <div class="search-results-list" id="searchResultsList">
+                                <!-- Will be populated with search results -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Quick Access Actions -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn detect-btn" onclick="detectMyLocation()">
+                            <span class="action-icon">📍</span>
+                            <span class="action-text">Detect My Location</span>
+                        </button>
+                        <button class="quick-action-btn recent-btn" onclick="showRecentLocations()">
+                            <span class="action-icon">🕒</span>
+                            <span class="action-text">Recent Searches</span>
+                        </button>
+                    </div>
+                    <!-- Popular Cities Grid -->
+                    <div class="popular-section">
+                        <h4 class="section-title">Select Global Locations</h4>
+                        <div class="popular-cities-grid" id="popularCitiesGrid">
+                            <!-- Major Cities by Continent -->
+                            <!-- North America -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌎 North America</h5>
+                                <div class="cities-row">
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('New York', 'America/New_York', '🇺🇸')">New York</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('New York', 'America/New_York', '🇺🇸')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('Los Angeles', 'America/Los_Angeles', '🇺🇸')">Los Angeles</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('Los Angeles', 'America/Los_Angeles', '🇺🇸')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('Chicago', 'America/Chicago', '🇺🇸')">Chicago</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('Chicago', 'America/Chicago', '🇺🇸')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('Toronto', 'America/Toronto', '🇨🇦')">Toronto</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('Toronto', 'America/Toronto', '🇨🇦')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('Vancouver', 'America/Vancouver', '🇨🇦')">Vancouver</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('Vancouver', 'America/Vancouver', '🇨🇦')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                    <div class="city-item">
+                                        <button class="city-btn" onclick="addToFavorites('Mexico City', 'America/Mexico_City', '🇲🇽')">Mexico City</button>
+                                        <button class="add-favorite-btn" onclick="addToFavorites('Mexico City', 'America/Mexico_City', '🇲🇽')" title="Add to Favorites">⭐</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Europe -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌍 Europe</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('London', 'Europe/London', '🇬🇧')">London</button>
+                                    <button class="city-btn" onclick="addToFavorites('Paris', 'Europe/Paris', '🇫🇷')">Paris</button>
+                                    <button class="city-btn" onclick="addToFavorites('Berlin', 'Europe/Berlin', '🇩🇪')">Berlin</button>
+                                    <button class="city-btn" onclick="addToFavorites('Rome', 'Europe/Rome', '🇮🇹')">Rome</button>
+                                    <button class="city-btn" onclick="addToFavorites('Madrid', 'Europe/Madrid', '🇪🇸')">Madrid</button>
+                                    <button class="city-btn" onclick="addToFavorites('Amsterdam', 'Europe/Amsterdam', '🇳🇱')">Amsterdam</button>
+                                    <button class="city-btn" onclick="addToFavorites('Stockholm', 'Europe/Stockholm', '🇸🇪')">Stockholm</button>
+                                    <button class="city-btn" onclick="addToFavorites('Moscow', 'Europe/Moscow', '🇷🇺')">Moscow</button>
+                                </div>
+                            </div>
+                            <!-- Asia -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌏 Asia</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('Tokyo', 'Asia/Tokyo', '🇯🇵')">Tokyo</button>
+                                    <button class="city-btn" onclick="addToFavorites('Shanghai', 'Asia/Shanghai', '🇨🇳')">Shanghai</button>
+                                    <button class="city-btn" onclick="addToFavorites('Beijing', 'Asia/Shanghai', '🇨🇳')">Beijing</button>
+                                    <button class="city-btn" onclick="addToFavorites('Seoul', 'Asia/Seoul', '🇰🇷')">Seoul</button>
+                                    <button class="city-btn" onclick="addToFavorites('Singapore', 'Asia/Singapore', '🇸🇬')">Singapore</button>
+                                    <button class="city-btn" onclick="addToFavorites('Hong Kong', 'Asia/Hong_Kong', '🇭🇰')">Hong Kong</button>
+                                    <button class="city-btn" onclick="addToFavorites('Mumbai', 'Asia/Kolkata', '🇮🇳')">Mumbai</button>
+                                    <button class="city-btn" onclick="addToFavorites('Delhi', 'Asia/Kolkata', '🇮🇳')">Delhi</button>
+                                    <button class="city-btn" onclick="addToFavorites('Bangkok', 'Asia/Bangkok', '🇹🇭')">Bangkok</button>
+                                    <button class="city-btn" onclick="addToFavorites('Dubai', 'Asia/Dubai', '🇦🇪')">Dubai</button>
+                                </div>
+                            </div>
+                            <!-- Oceania -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌏 Oceania</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('Sydney', 'Australia/Sydney', '🇦🇺')">Sydney</button>
+                                    <button class="city-btn" onclick="addToFavorites('Melbourne', 'Australia/Melbourne', '🇦🇺')">Melbourne</button>
+                                    <button class="city-btn" onclick="addToFavorites('Auckland', 'Pacific/Auckland', '🇳🇿')">Auckland</button>
+                                    <button class="city-btn" onclick="addToFavorites('Perth', 'Australia/Perth', '🇦🇺')">Perth</button>
+                                </div>
+                            </div>
+                            <!-- South America -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌎 South America</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('São Paulo', 'America/Sao_Paulo', '🇧🇷')">São Paulo</button>
+                                    <button class="city-btn" onclick="addToFavorites('Rio de Janeiro', 'America/Sao_Paulo', '🇧🇷')">Rio de Janeiro</button>
+                                    <button class="city-btn" onclick="addToFavorites('Buenos Aires', 'America/Argentina/Buenos_Aires', '🇦🇷')">Buenos Aires</button>
+                                    <button class="city-btn" onclick="addToFavorites('Lima', 'America/Lima', '🇵🇪')">Lima</button>
+                                    <button class="city-btn" onclick="addToFavorites('Santiago', 'America/Santiago', '🇨🇱')">Santiago</button>
+                                </div>
+                            </div>
+                            <!-- Africa -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌍 Africa</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('Cairo', 'Africa/Cairo', '🇪🇬')">Cairo</button>
+                                    <button class="city-btn" onclick="addToFavorites('Lagos', 'Africa/Lagos', '🇳🇬')">Lagos</button>
+                                    <button class="city-btn" onclick="addToFavorites('Cape Town', 'Africa/Johannesburg', '🇿🇦')">Cape Town</button>
+                                    <button class="city-btn" onclick="addToFavorites('Nairobi', 'Africa/Nairobi', '🇰🇪')">Nairobi</button>
+                                    <button class="city-btn" onclick="addToFavorites('Casablanca', 'Africa/Casablanca', '🇲🇦')">Casablanca</button>
+                                </div>
+                            </div>
+                            <!-- Middle East -->
+                            <div class="continent-section">
+                                <h5 class="continent-title">🌍 Middle East</h5>
+                                <div class="cities-row">
+                                    <button class="city-btn" onclick="addToFavorites('Istanbul', 'Europe/Istanbul', '🇹🇷')">Istanbul</button>
+                                    <button class="city-btn" onclick="addToFavorites('Tel Aviv', 'Asia/Jerusalem', '🇮🇱')">Tel Aviv</button>
+                                    <button class="city-btn" onclick="addToFavorites('Riyadh', 'Asia/Riyadh', '🇸🇦')">Riyadh</button>
+                                    <button class="city-btn" onclick="addToFavorites('Tehran', 'Asia/Tehran', '🇮🇷')">Tehran</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Search Results -->
+                    <div class="search-results-section" id="searchResultsSection" style="display: none;">
+                        <h4 class="section-title">Search Results</h4>
+                        <div class="search-results-list" id="searchResultsList">
+                            <!-- Will be populated with search results -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Favorite Clocks Dashboard -->
+        <div class="favorite-clocks-section" id="favoriteClocksDashboard" style="display: none;">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="section-header">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">⭐ Your Favorite Locations</h2>
+                    <p class="text-gray-600 text-sm mb-6">Track time across your selected cities</p>
+                </div>
+                <!-- Favorite Clocks Grid -->
+                <div class="favorite-clocks-grid" id="favoriteClocksList">
+                    <!-- Will be populated with favorite clocks -->
+                </div>
+                <!-- Empty State -->
+                <div class="empty-favorites-state" id="emptyFavoritesState">
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🌍</div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">No favorite locations yet</h3>
+                        <p class="text-gray-600 mb-4">Add cities to track multiple time zones at once</p>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" 
+                                onclick="toggleLocationPicker()">
+                            Add Your First Location
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Enhanced Sign In Modal -->
+        <div class="auth-modal-overlay" id="signInModal">
+            <div class="auth-modal">
+                <div class="modal-header">
+                    <h3>Welcome Back</h3>
+                    <p class="modal-subtitle">Sign in to your Timely account</p>
+                    <button class="close-modal" onclick="window.timelyApp.hideSignIn()">×</button>
+                </div>
+                <form class="auth-form" id="signInForm">
+                    <div class="form-group">
+                        <label for="signInEmail">Email Address</label>
+                        <input type="email" id="signInEmail" placeholder="Enter your email address" required>
+                        <div class="form-error">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signInPassword">Password</label>
+                        <input type="password" id="signInPassword" placeholder="Enter your password" required>
+                        <div class="form-error">Password is required</div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me for 30 days
+                        </label>
+                        <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Sign In</span>
+                    </button>
+                    <div class="auth-divider"></div>
+                    <button type="button" class="google-auth-btn" onclick="signInWithGoogle()">
+                        <div class="google-icon"></div>
+                        Continue with Google
+                    </button>
+                    <p class="auth-switch">
+                        New to Timely? 
+                        <a href="#" onclick="window.timelyApp.switchToSignUp()">Create an account</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <!-- Enhanced Sign Up Modal -->
+        <div class="auth-modal-overlay" id="signUpModal">
+            <div class="auth-modal">
+                <div class="modal-header">
+                    <h3>Create Account</h3>
+                    <p class="modal-subtitle">Join thousands of users worldwide</p>
+                    <button class="close-modal" onclick="window.timelyApp.hideSignUp()">×</button>
+                </div>
+                <form class="auth-form" id="signUpForm">
+                    <div class="form-group">
+                        <label for="signUpName">Full Name</label>
+                        <input type="text" id="signUpName" placeholder="Enter your full name" required>
+                        <div class="form-error">Full name is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpEmail">Email Address</label>
+                        <input type="email" id="signUpEmail" placeholder="Enter your email address" required>
+                        <div class="form-error">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signUpPassword">Password</label>
+                        <input type="password" id="signUpPassword" placeholder="Create a strong password (min 8 characters)" required>
+                        <div class="form-error">Password must be at least 8 characters long</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        <div class="form-error">Passwords do not match</div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required>
+                            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Create Account</span>
+                    </button>
+                    <div class="auth-divider"></div>
+                    <button type="button" class="google-auth-btn" onclick="signUpWithGoogle()">
+                        <div class="google-icon"></div>
+                        Continue with Google
+                    </button>
+                    <p class="auth-switch">
+                        Already have an account? 
+                        <a href="#" onclick="window.timelyApp.switchToSignIn()">Sign in instead</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-content">
+                <span class="footer-brand">⏰ Timely - Open Source World Clock</span>
+                <div class="footer-tech">
+                    <span class="tech-item">📡 Real-time browser APIs</span>
+                    <span class="tech-item">🌍 IANA Time Zone Database</span>
+                    <span class="tech-item">⚡ No external dependencies</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Loading Script -->
+    <script>
+        // Comprehensive global cities database for search
+        const globalCitiesDatabase = [
+            // North America
+            { name: 'New York', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Chicago', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
+            { name: 'Miami', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
+            { name: 'San Francisco', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
+            { name: 'Toronto', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Vancouver', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Mexico City', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            // Europe
+            { name: 'London', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
+            { name: 'Paris', timezone: 'Europe/Paris', flag: '🇫🇷', country: 'France' },
+            { name: 'Berlin', timezone: 'Europe/Berlin', flag: '🇩🇪', country: 'Germany' },
+            { name: 'Rome', timezone: 'Europe/Rome', flag: '🇮🇹', country: 'Italy' },
+            { name: 'Madrid', timezone: 'Europe/Madrid', flag: '🇪🇸', country: 'Spain' },
+            { name: 'Amsterdam', timezone: 'Europe/Amsterdam', flag: '🇳🇱', country: 'Netherlands' },
+            { name: 'Stockholm', timezone: 'Europe/Stockholm', flag: '🇸🇪', country: 'Sweden' },
+            { name: 'Moscow', timezone: 'Europe/Moscow', flag: '🇷🇺', country: 'Russia' },
+            { name: 'Vienna', timezone: 'Europe/Vienna', flag: '🇦🇹', country: 'Austria' },
+            { name: 'Zurich', timezone: 'Europe/Zurich', flag: '🇨🇭', country: 'Switzerland' },
+            // Asia
+            { name: 'Tokyo', timezone: 'Asia/Tokyo', flag: '🇯🇵', country: 'Japan' },
+            { name: 'Shanghai', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Beijing', timezone: 'Asia/Shanghai', flag: '🇨🇳', country: 'China' },
+            { name: 'Seoul', timezone: 'Asia/Seoul', flag: '🇰🇷', country: 'South Korea' },
+            { name: 'Singapore', timezone: 'Asia/Singapore', flag: '🇸🇬', country: 'Singapore' },
+            { name: 'Hong Kong', timezone: 'Asia/Hong_Kong', flag: '🇭🇰', country: 'Hong Kong' },
+            { name: 'Mumbai', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Delhi', timezone: 'Asia/Kolkata', flag: '🇮🇳', country: 'India' },
+            { name: 'Bangkok', timezone: 'Asia/Bangkok', flag: '🇹🇭', country: 'Thailand' },
+            { name: 'Dubai', timezone: 'Asia/Dubai', flag: '🇦🇪', country: 'UAE' },
+            // Oceania
+            { name: 'Sydney', timezone: 'Australia/Sydney', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Melbourne', timezone: 'Australia/Melbourne', flag: '🇦🇺', country: 'Australia' },
+            { name: 'Auckland', timezone: 'Pacific/Auckland', flag: '🇳🇿', country: 'New Zealand' },
+            { name: 'Perth', timezone: 'Australia/Perth', flag: '🇦🇺', country: 'Australia' },
+            // South America
+            { name: 'São Paulo', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Rio de Janeiro', timezone: 'America/Sao_Paulo', flag: '🇧🇷', country: 'Brazil' },
+            { name: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', flag: '🇦🇷', country: 'Argentina' },
+            { name: 'Lima', timezone: 'America/Lima', flag: '🇵🇪', country: 'Peru' },
+            { name: 'Santiago', timezone: 'America/Santiago', flag: '🇨🇱', country: 'Chile' },
+            // Africa
+            { name: 'Cairo', timezone: 'Africa/Cairo', flag: '🇪🇬', country: 'Egypt' },
+            { name: 'Lagos', timezone: 'Africa/Lagos', flag: '🇳🇬', country: 'Nigeria' },
+            { name: 'Cape Town', timezone: 'Africa/Johannesburg', flag: '🇿🇦', country: 'South Africa' },
+            { name: 'Nairobi', timezone: 'Africa/Nairobi', flag: '🇰🇪', country: 'Kenya' },
+            { name: 'Casablanca', timezone: 'Africa/Casablanca', flag: '🇲🇦', country: 'Morocco' },
+            // Middle East
+            { name: 'Istanbul', timezone: 'Europe/Istanbul', flag: '🇹🇷', country: 'Turkey' },
+            { name: 'Tel Aviv', timezone: 'Asia/Jerusalem', flag: '🇮🇱', country: 'Israel' },
+            { name: 'Riyadh', timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
+            { name: 'Tehran', timezone: 'Asia/Tehran', flag: '🇮🇷', country: 'Iran' }
+        ];
+        // Search functionality
+        function searchCities(query) {
+            const searchResults = document.getElementById('searchResults');
+            const searchResultsList = document.getElementById('searchResultsList');
+            const resultsCount = document.getElementById('resultsCount');
+            if (!query || query.trim().length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            const filteredCities = globalCitiesDatabase.filter(city => 
+                city.name.toLowerCase().includes(query.toLowerCase()) ||
+                city.country.toLowerCase().includes(query.toLowerCase())
+            );
+            if (filteredCities.length > 0) {
+                searchResults.style.display = 'block';
+                resultsCount.textContent = `${filteredCities.length} cities found`;
+                searchResultsList.innerHTML = filteredCities.map(city => `
+                    <div class="search-result-item">
+                        <div class="city-info">
+                            <span class="city-flag">${city.flag}</span>
+                            <div class="city-details">
+                                <span class="city-name">${city.name}</span>
+                                <span class="city-country">${city.country}</span>
+                            </div>
+                        </div>
+                        <button class="add-to-favorites-btn" 
+                                onclick="addToFavorites('${city.name}', '${city.timezone}', '${city.flag}')"
+                                title="Add ${city.name} to Favorites">
+                            ⭐ Add
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                searchResults.style.display = 'block';
+                resultsCount.textContent = 'No cities found';
+                searchResultsList.innerHTML = '<div class="no-results">No cities match your search. Try a different term.</div>';
+            }
+        }
+        // Location Detection Functionality
+        async function detectMyLocation() {
+            const detectBtn = document.querySelector('.detect-btn');
+            const originalText = detectBtn.innerHTML;
+            
+            // Prevent initialization from overriding our detection
+            window.timelyAppState.isProcessingSelection = true;
+            
+            // Show loading state
+            detectBtn.innerHTML = '<span class="action-icon">⏳</span><span class="action-text">Detecting...</span>';
+            detectBtn.disabled = true;
+            try {
+                // Check if geolocation is supported
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocation is not supported by this browser');
+                }
+                // Get user's position
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(
+                        resolve,
+                        reject,
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 600000 // 10 minutes
+                        }
+                    );
+                });
+                const { latitude, longitude } = position.coords;
+                // Get location details using reverse geocoding
+                const locationData = await reverseGeocode(latitude, longitude);
+                if (locationData) {
+                    console.log('Location detected successfully:', locationData);
+                    
+                    // Save detected location to localStorage for persistence
+                    try {
+                        localStorage.setItem('selectedLocation', JSON.stringify(locationData));
+                        console.log('Detected location saved to localStorage:', locationData);
+                    } catch (storageError) {
+                        console.log('localStorage not available:', storageError);
+                    }
+                    
+                    // Override enhanced-timely.js if it exists
+                    if (window.timelyApp && typeof window.timelyApp.setPrimaryLocation === 'function') {
+                        console.log('Overriding enhanced-timely.js with detected location');
+                        window.timelyApp.currentPrimaryCity = locationData.city;
+                        window.timelyApp.currentPrimaryTimezone = locationData.timezone;
+                        // Stop enhanced-timely updates
+                        if (window.timelyApp.updateInterval) {
+                            clearInterval(window.timelyApp.updateInterval);
+                        }
+                    }
+                    
+                    // Close the location picker modal first
+                    const modal = document.getElementById('locationPickerOverlay');
+                    if (modal) {
+                        modal.classList.remove('active');
+                        enableBodyScroll();
+                        // Immediate check after location detection
+                        setTimeout(checkScrollStateImmediate, 50);
+                    }
+                    
+                    // Update the main display with detected location (immediate)
+                    updateLocationDisplayForDetection(locationData);
+                    
+                    // Stop any existing clock updates first
+                    stopAllClockUpdates();
+                    
+                    // Small delay to ensure DOM updates are complete, then start clock
+                    setTimeout(() => {
+                        console.log('Starting clock updates for detected location');
+                        startLocationClockUpdates(locationData);
+                    }, 200);
+                    
+                    // Show success message
+                    showNotification(`📍 Location detected: ${locationData.city} - Clock auto-updating`, 'success');
+                } else {
+                    throw new Error('Could not determine your city');
+                }
+            } catch (error) {
+                console.error('Location detection error:', error);
+                let errorMessage = 'Location detection failed. ';
+                switch(error.code) {
+                    case 1:
+                        errorMessage += 'Permission denied. Please allow location access.';
+                        break;
+                    case 2:
+                        errorMessage += 'Position unavailable. Please check your connection.';
+                        break;
+                    case 3:
+                        errorMessage += 'Request timeout. Please try again.';
+                        break;
+                    default:
+                        errorMessage += 'Please select manually or try again.';
+                }
+                showNotification(errorMessage, 'error');
+            } finally {
+                // Reset button state
+                detectBtn.innerHTML = originalText;
+                detectBtn.disabled = false;
+                
+                // Reset processing flag after a short delay to ensure location is fully set
+                setTimeout(() => {
+                    window.timelyAppState.isProcessingSelection = false;
+                }, 500);
+            }
+        }
+        // Reverse geocoding function
+        async function reverseGeocode(lat, lon) {
+            try {
+                // Using a free geocoding service
+                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+                if (!response.ok) {
+                    throw new Error('Geocoding service unavailable');
+                }
+                const data = await response.json();
+                // Extract city information
+                const city = data.city || data.locality || data.principalSubdivision;
+                const country = data.countryName;
+                const countryCode = data.countryCode;
+                if (!city) {
+                    throw new Error('City not found');
+                }
+                // Try to find matching timezone
+                const timezone = getTimezoneFromCoordinates(lat, lon) || Intl.DateTimeFormat().resolvedOptions().timeZone;
+                // Get country flag
+                const flag = getCountryFlag(countryCode);
+                return {
+                    city: city,
+                    country: country,
+                    timezone: timezone,
+                    flag: flag,
+                    coordinates: { lat, lon }
+                };
+            } catch (error) {
+                console.error('Reverse geocoding failed:', error);
+                // Fallback to browser timezone
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const parts = timezone.split('/');
+                const city = parts[parts.length - 1].replace(/_/g, ' ');
+                return {
+                    city: city,
+                    country: 'Your Location',
+                    timezone: timezone,
+                    flag: '🌍',
+                    coordinates: { lat, lon }
+                };
+            }
+        }
+        // Get timezone from coordinates (simplified mapping)
+        function getTimezoneFromCoordinates(lat, lon) {
+            // This is a simplified version - in production, you'd use a proper timezone service
+            try {
+                return Intl.DateTimeFormat().resolvedOptions().timeZone;
+            } catch (error) {
+                return 'UTC';
+            }
+        }
+        // Get country flag emoji
+        function getCountryFlag(countryCode) {
+            if (!countryCode || countryCode.length !== 2) return '🌍';
+            const flagMap = {
+                'US': '🇺🇸', 'CA': '🇨🇦', 'GB': '🇬🇧', 'FR': '🇫🇷', 'DE': '🇩🇪',
+                'IT': '🇮🇹', 'ES': '🇪🇸', 'NL': '🇳🇱', 'SE': '🇸🇪', 'RU': '🇷🇺',
+                'JP': '🇯🇵', 'CN': '🇨🇳', 'KR': '🇰🇷', 'SG': '🇸🇬', 'HK': '🇭🇰',
+                'IN': '🇮🇳', 'TH': '🇹🇭', 'AE': '🇦🇪', 'AU': '🇦🇺', 'NZ': '🇳🇿',
+                'BR': '🇧🇷', 'AR': '🇦🇷', 'PE': '🇵🇪', 'CL': '🇨🇱', 'EG': '🇪🇬',
+                'NG': '🇳🇬', 'ZA': '🇿🇦', 'KE': '🇰🇪', 'MA': '🇲🇦', 'TR': '🇹🇷',
+                'IL': '🇮🇱', 'SA': '🇸🇦', 'IR': '🇮🇷', 'MX': '🇲🇽'
+            };
+            return flagMap[countryCode.toUpperCase()] || '🌍';
+        }
+        // Update main location display
+        function updateLocationDisplay(locationData) {
+            try {
+                const locationTitle = document.getElementById('locationTitle');
+                const locationSubtitle = document.getElementById('locationSubtitle');
+                const locationFlag = document.getElementById('locationFlag');
+                const locationName = document.getElementById('locationName');
+                const locationCountry = document.getElementById('locationCountry');
+                if (locationTitle) locationTitle.textContent = `Time in ${locationData.city} now`;
+                if (locationSubtitle) locationSubtitle.textContent = `${locationData.country} • Selected manually`;
+                if (locationFlag) locationFlag.textContent = locationData.flag;
+                if (locationName) locationName.textContent = locationData.city;
+                if (locationCountry) locationCountry.textContent = locationData.country;
+                // Store current location data for clock updates
+                window.currentLocationData = locationData;
+            } catch (error) {
+                console.error('Error in updateLocationDisplay:', error);
+            }
+        }
+        
+        // Separate function for detected locations
+        function updateLocationDisplayForDetection(locationData) {
+            try {
+                console.log('Updating location display for detected location:', locationData);
+                
+                // Update all location display elements immediately
+                const locationTitle = document.getElementById('locationTitle');
+                const locationSubtitle = document.getElementById('locationSubtitle');
+                const locationFlag = document.getElementById('locationFlag');
+                const locationName = document.getElementById('locationName');
+                const locationCountry = document.getElementById('locationCountry');
+                
+                // Hero section updates
+                if (locationTitle) {
+                    locationTitle.textContent = `Time in ${locationData.city} now`;
+                    console.log('Updated location title:', locationTitle.textContent);
+                }
+                if (locationSubtitle) {
+                    locationSubtitle.textContent = `${locationData.country} • Detected automatically`;
+                    console.log('Updated location subtitle:', locationSubtitle.textContent);
+                }
+                
+                // Giant clock display updates
+                if (locationFlag) {
+                    locationFlag.textContent = locationData.flag;
+                    console.log('Updated location flag:', locationFlag.textContent);
+                }
+                if (locationName) {
+                    locationName.textContent = locationData.city;
+                    console.log('Updated location name:', locationName.textContent);
+                }
+                if (locationCountry) {
+                    locationCountry.textContent = locationData.country;
+                    console.log('Updated location country:', locationCountry.textContent);
+                }
+                
+                // Store current location data for clock updates
+                window.currentLocationData = locationData;
+                window.timelyAppState.currentLocationData = locationData;
+                
+                // Force immediate time update
+                const now = new Date();
+                const primaryTime = document.getElementById('primaryTime');
+                const primaryDate = document.getElementById('primaryDate');
+                
+                if (primaryTime) {
+                    const timeString = now.toLocaleTimeString('en-US', {
+                        timeZone: locationData.timezone,
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    primaryTime.textContent = timeString;
+                    console.log('Updated primary time immediately:', timeString);
+                }
+                
+                if (primaryDate) {
+                    const dateString = now.toLocaleDateString('en-US', {
+                        timeZone: locationData.timezone,
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    primaryDate.textContent = dateString;
+                    console.log('Updated primary date immediately:', dateString);
+                }
+                
+                console.log('Location display fully updated for detected location');
+            } catch (error) {
+                console.error('Error in updateLocationDisplayForDetection:', error);
+            }
+        }
+        // Global state management to prevent memory leaks
+        window.timelyAppState = {
+            currentLocationData: null,
+            clockInterval: null,
+            clockAnimationId: null,
+            isClockRunning: false,
+            isProcessingSelection: false,
+            isInitialized: false,
+            lastTimeString: '',
+            lastDateString: '',
+            lastSunString: '',
+            // Scroll state management
+            originalBodyOverflow: null,
+            isModalOpen: false
+        };
+        // Centralized scroll management to prevent body scroll issues
+        function disableBodyScroll() {
+            if (!window.timelyAppState.isModalOpen) {
+                // Store original overflow value
+                window.timelyAppState.originalBodyOverflow = document.body.style.overflow || 'auto';
+                document.body.style.overflow = 'hidden';
+                window.timelyAppState.isModalOpen = true;
+                console.log('Body scroll disabled');
+            }
+        }
+        function enableBodyScroll() {
+            if (window.timelyAppState.isModalOpen) {
+                // Restore original overflow value
+                document.body.style.overflow = window.timelyAppState.originalBodyOverflow || 'auto';
+                window.timelyAppState.isModalOpen = false;
+                console.log('Body scroll enabled');
+            }
+        }
+        // Force enable body scroll (emergency cleanup)
+        function forceEnableBodyScroll() {
+            document.body.style.overflow = 'auto';
+            document.body.style.overflowY = 'auto';
+            document.body.style.position = '';
+            document.body.style.height = '';
+            window.timelyAppState.isModalOpen = false;
+            console.log('Body scroll force enabled');
+        }
+        // Comprehensive cleanup function
+        function stopAllClockUpdates() {
+            // Clear interval timer
+            if (window.timelyAppState.clockInterval) {
+                clearInterval(window.timelyAppState.clockInterval);
+                window.timelyAppState.clockInterval = null;
+            }
+            // Cancel animation frame
+            if (window.timelyAppState.clockAnimationId) {
+                cancelAnimationFrame(window.timelyAppState.clockAnimationId);
+                window.timelyAppState.clockAnimationId = null;
+            }
+            // Clear legacy references
+            if (window.locationClockInterval) {
+                clearInterval(window.locationClockInterval);
+                window.locationClockInterval = null;
+            }
+            if (window.clockAnimationId) {
+                cancelAnimationFrame(window.clockAnimationId);
+                window.clockAnimationId = null;
+            }
+            // Mark as not running
+            window.timelyAppState.isClockRunning = false;
+            // Reset cached values
+            window.timelyAppState.lastTimeString = '';
+            window.timelyAppState.lastDateString = '';
+            window.timelyAppState.lastSunString = '';
+        }
+        // Start real-time clock updates for detected location
+        function startLocationClockUpdates(locationData) {
+            try {
+                console.log('Starting location clock updates for:', locationData);
+                
+                // Always clean up any existing timers first
+                stopAllClockUpdates();
+                
+                // Store the current location for reference
+                window.timelyAppState.currentLocationData = locationData;
+                window.currentLocationData = locationData; // Keep for backward compatibility
+                
+                // Cache DOM elements once
+                const primaryTime = document.getElementById('primaryTime');
+                const primaryDate = document.getElementById('primaryDate');
+                const sunInfo = document.getElementById('sunInfo');
+                
+                console.log('DOM elements found:', {
+                    primaryTime: !!primaryTime,
+                    primaryDate: !!primaryDate,
+                    sunInfo: !!sunInfo
+                });
+                
+                // Simple, reliable update function using only setInterval
+                function updateClock() {
+                    try {
+                        // Allow updates even if page is not visible for location detection
+                        const now = new Date();
+                        
+                        // Format time string efficiently
+                        if (primaryTime) {
+                            const timeString = now.toLocaleTimeString('en-US', {
+                                timeZone: locationData.timezone,
+                                hour12: false,
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit'
+                            });
+                            // Always update on first run, then only if changed
+                            if (!window.timelyAppState.lastTimeString || timeString !== window.timelyAppState.lastTimeString) {
+                                primaryTime.textContent = timeString;
+                                window.timelyAppState.lastTimeString = timeString;
+                                console.log('Clock time updated to:', timeString);
+                            }
+                        }
+                        
+                        // Update date more frequently initially
+                        if (primaryDate) {
+                            const dateString = now.toLocaleDateString('en-US', {
+                                timeZone: locationData.timezone,
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            if (!window.timelyAppState.lastDateString || dateString !== window.timelyAppState.lastDateString) {
+                                primaryDate.textContent = dateString;
+                                window.timelyAppState.lastDateString = dateString;
+                                console.log('Clock date updated to:', dateString);
+                            }
+                        }
+                        
+                        // Update sun times only occasionally and only if coordinates exist
+                        if (sunInfo && locationData.coordinates && now.getSeconds() === 0 && now.getMinutes() % 5 === 0) {
+                            try {
+                                const sunTimes = calculateSunTimes(locationData.coordinates.lat, locationData.coordinates.lon, now);
+                                const sunString = `↑ ${sunTimes.sunrise} ↓ ${sunTimes.sunset} (${sunTimes.dayLength})`;
+                                if (sunString !== window.timelyAppState.lastSunString) {
+                                    sunInfo.innerHTML = sunString;
+                                    window.timelyAppState.lastSunString = sunString;
+                                    console.log('Sun times updated to:', sunString);
+                                }
+                            } catch (sunError) {
+                                console.log('Sun calculation skipped:', sunError.message);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error updating clock:', error);
+                        // Stop updates on error to prevent continuous failures
+                        stopAllClockUpdates();
+                    }
+                }
+                
+                // Mark as running first
+                window.timelyAppState.isClockRunning = true;
+                
+                // Update immediately to show the new time right away
+                console.log('Calling immediate clock update');
+                updateClock();
+                
+                // Use simple setInterval for reliability
+                window.timelyAppState.clockInterval = setInterval(updateClock, 1000);
+                console.log('Clock interval started with ID:', window.timelyAppState.clockInterval);
+                
+            } catch (error) {
+                console.error('Error in startLocationClockUpdates:', error);
+                stopAllClockUpdates();
+            }
+        }
+        // Calculate sunrise and sunset times (simplified)
+        function calculateSunTimes(lat, lon, date) {
+            try {
+                // This is a simplified calculation - in production you'd use a proper solar calculation library
+                const now = new Date(date);
+                const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+                // Approximate sunrise/sunset based on latitude and day of year
+                const latRad = lat * Math.PI / 180;
+                const declination = 23.45 * Math.PI / 180 * Math.sin(2 * Math.PI * (284 + dayOfYear) / 365);
+                const hourAngle = Math.acos(-Math.tan(latRad) * Math.tan(declination));
+                const solarNoon = 12 - (lon / 15);
+                const sunriseHour = solarNoon - (hourAngle * 12 / Math.PI);
+                const sunsetHour = solarNoon + (hourAngle * 12 / Math.PI);
+                const sunrise = formatHour(sunriseHour);
+                const sunset = formatHour(sunsetHour);
+                const dayLengthHours = sunsetHour - sunriseHour;
+                const dayLength = `${Math.floor(dayLengthHours)}h ${Math.floor((dayLengthHours % 1) * 60)}m`;
+                return { sunrise, sunset, dayLength };
+            } catch (error) {
+                console.error('Error calculating sun times:', error);
+                return {
+                    sunrise: '06:30',
+                    sunset: '18:45',
+                    dayLength: '12h 15m'
+                };
+            }
+        }
+        // Format hour as HH:MM
+        function formatHour(hour) {
+            const h = Math.floor(hour);
+            const m = Math.floor((hour % 1) * 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 16px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            // Remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+        // Toggle location picker modal
+        function toggleLocationPicker() {
+            const modal = document.getElementById('locationPickerOverlay');
+            if (!modal) {
+                console.error('Location picker modal not found');
+                return;
+            }
+            const isVisible = modal.classList.contains('active');
+            if (isVisible) {
+                // Hide modal
+                modal.classList.remove('active');
+                enableBodyScroll();
+                // Immediate check after closing
+                setTimeout(checkScrollStateImmediate, 100);
+            } else {
+                // Show modal
+                modal.classList.add('active');
+                disableBodyScroll();
+                // Reset search state
+                const searchInput = document.getElementById('citySearchInput');
+                const searchResults = document.getElementById('searchResults');
+                if (searchInput) searchInput.value = '';
+                if (searchResults) searchResults.style.display = 'none';
+            }
+        }
+        // Add location to favorites and update giant clock display
+        function addToFavorites(cityName, timezone, flag) {
+            try {
+                // Prevent multiple simultaneous calls
+                if (window.timelyAppState.isProcessingSelection) {
+                    return;
+                }
+                window.timelyAppState.isProcessingSelection = true;
+                
+                console.log('Adding to favorites and updating giant clock:', cityName, timezone, flag);
+                
+                // First, stop any existing clock updates to prevent conflicts
+                stopAllClockUpdates();
+                
+                // Create location object
+                const locationData = {
+                    city: cityName,
+                    timezone: timezone,
+                    flag: flag,
+                    country: getCountryFromTimezone(timezone) || 'Selected Location'
+                };
+                
+                // Update the giant clock display immediately with manual selection
+                updateLocationDisplay(locationData);
+                
+                // Save selected location to localStorage for persistence
+                try {
+                    localStorage.setItem('selectedLocation', JSON.stringify(locationData));
+                    console.log('Location saved to localStorage:', locationData);
+                } catch (storageError) {
+                    console.log('localStorage not available:', storageError);
+                }
+                
+                // Override enhanced-timely.js if it exists
+                if (window.timelyApp && typeof window.timelyApp.setPrimaryLocation === 'function') {
+                    console.log('Overriding enhanced-timely.js with selected location');
+                    window.timelyApp.currentPrimaryCity = cityName;
+                    window.timelyApp.currentPrimaryTimezone = timezone;
+                    // Stop enhanced-timely updates
+                    if (window.timelyApp.updateInterval) {
+                        clearInterval(window.timelyApp.updateInterval);
+                    }
+                }
+                
+                // Close the location picker modal immediately for better UX
+                const modal = document.getElementById('locationPickerOverlay');
+                if (modal) {
+                    modal.classList.remove('active');
+                    enableBodyScroll();
+                    // Immediate check after closing modal
+                    setTimeout(checkScrollStateImmediate, 50);
+                }
+                
+                // Store current location for immediate use
+                window.timelyAppState.currentLocationData = locationData;
+                window.currentLocationData = locationData; // Keep for backward compatibility
+                
+                // Start real-time clock updates immediately
+                startLocationClockUpdates(locationData);
+                
+                // Show success notification
+                showNotification(`${flag} ${cityName} time selected and updated!`, 'success');
+                
+                // Reset processing flag
+                setTimeout(() => {
+                    window.timelyAppState.isProcessingSelection = false;
+                }, 200);
+                
+            } catch (error) {
+                console.error('Error in addToFavorites:', error);
+                window.timelyAppState.isProcessingSelection = false;
+            }
+        }
+        
+        // Helper function to get country from timezone
+        function getCountryFromTimezone(timezone) {
+            const timezoneToCountry = {
+                'America/New_York': 'United States',
+                'America/Los_Angeles': 'United States', 
+                'America/Chicago': 'United States',
+                'America/Toronto': 'Canada',
+                'America/Vancouver': 'Canada',
+                'America/Mexico_City': 'Mexico',
+                'Europe/London': 'United Kingdom',
+                'Europe/Paris': 'France',
+                'Europe/Berlin': 'Germany',
+                'Europe/Rome': 'Italy',
+                'Europe/Madrid': 'Spain',
+                'Europe/Amsterdam': 'Netherlands',
+                'Europe/Stockholm': 'Sweden',
+                'Europe/Moscow': 'Russia',
+                'Asia/Tokyo': 'Japan',
+                'Asia/Shanghai': 'China',
+                'Asia/Seoul': 'South Korea',
+                'Asia/Singapore': 'Singapore',
+                'Asia/Hong_Kong': 'Hong Kong',
+                'Asia/Kolkata': 'India',
+                'Asia/Bangkok': 'Thailand',
+                'Asia/Dubai': 'UAE',
+                'Australia/Sydney': 'Australia',
+                'Australia/Melbourne': 'Australia',
+                'Pacific/Auckland': 'New Zealand',
+                'Australia/Perth': 'Australia'
+            };
+            return timezoneToCountry[timezone] || 'Selected Location';
+        }
+                if (modal) {
+                    modal.classList.remove('active');
+        }
+        
+        // Attach functions to window for global access
+        if (typeof window !== 'undefined') {
+            window.searchCities = searchCities;
+            window.detectMyLocation = detectMyLocation;
+            window.updateLocationDisplay = updateLocationDisplay;
+            window.updateLocationDisplayForDetection = updateLocationDisplayForDetection;
+            window.startLocationClockUpdates = startLocationClockUpdates;
+            window.stopAllClockUpdates = stopAllClockUpdates;
+            window.addToFavorites = addToFavorites;
+            window.toggleLocationPicker = toggleLocationPicker;
+            window.enableBodyScroll = enableBodyScroll;
+            window.disableBodyScroll = disableBodyScroll;
+            window.forceEnableBodyScroll = forceEnableBodyScroll;
+            window.checkScrollStateImmediate = checkScrollStateImmediate;
+            window.getCountryFromTimezone = getCountryFromTimezone;
+        }
+        // Page Visibility API to optimize performance
+        let isPageVisible = true;
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            isPageVisible = !document.hidden;
+            if (isPageVisible && window.timelyAppState.currentLocationData) {
+                // Resume clock updates when page becomes visible
+                if (!window.timelyAppState.isClockRunning) {
+                    startLocationClockUpdates(window.timelyAppState.currentLocationData);
+                }
+            } else {
+                // Pause updates when page is hidden to save resources
+                window.timelyAppState.isClockRunning = false;
+            }
+        });
+        // Clean up resources when page is about to unload
+        window.addEventListener('beforeunload', function() {
+            stopAllClockUpdates();
+            forceEnableBodyScroll();
+        });
+        // Clean up resources when page loses focus
+        window.addEventListener('blur', function() {
+            window.timelyAppState.isClockRunning = false;
+        });
+        // Resume when page gains focus and ensure scroll is enabled
+        window.addEventListener('focus', function() {
+            // Always ensure body scroll is enabled when page gains focus
+            if (!window.timelyAppState.isModalOpen) {
+                enableBodyScroll();
+            }
+            if (window.timelyAppState.currentLocationData && isPageVisible) {
+                startLocationClockUpdates(window.timelyAppState.currentLocationData);
+            }
+        });
+        // Add escape key handler and click-outside-to-close for modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('locationPickerOverlay');
+                if (modal && modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                    enableBodyScroll();
+                    // Immediate check after escape key
+                    setTimeout(checkScrollStateImmediate, 50);
+                }
+            }
+        });
+        // Click outside modal to close
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('locationPickerOverlay');
+            const modalContent = document.querySelector('.location-picker-modal');
+            if (modal && modal.classList.contains('active')) {
+                // If click is on the overlay but not on the modal content
+                if (event.target === modal && !modalContent.contains(event.target)) {
+                    modal.classList.remove('active');
+                    enableBodyScroll();
+                    // Immediate check after click outside
+                    setTimeout(checkScrollStateImmediate, 50);
+                }
+            }
+        });
+        // Initialize default clock on page load
+        function initializeDefaultClock() {
+            // Prevent multiple initializations
+            if (window.timelyAppState.isInitialized) {
+                console.log('Clock already initialized, skipping...');
+                return;
+            }
+            
+            // Don't initialize if a location detection or selection is in progress
+            if (window.timelyAppState.isProcessingSelection || window.timelyAppState.isClockRunning) {
+                console.log('Location selection in progress, skipping default initialization');
+                return;
+            }
+            
+            window.timelyAppState.isInitialized = true;
+            
+            console.log('Initializing default clock...');
+            
+            // First, try to load saved location from localStorage
+            let savedLocation = null;
+            try {
+                const savedLocationData = localStorage.getItem('selectedLocation');
+                if (savedLocationData) {
+                    savedLocation = JSON.parse(savedLocationData);
+                    console.log('Found saved location:', savedLocation);
+                }
+            } catch (error) {
+                console.log('Could not load saved location:', error);
+            }
+            
+            // Use saved location if available, otherwise use local timezone
+            if (savedLocation && savedLocation.city && savedLocation.timezone) {
+                console.log('Loading saved location:', savedLocation.city);
+                
+                // Update display with saved location
+                updateLocationDisplay(savedLocation);
+                
+                // Start clock updates with saved location
+                window.timelyAppState.currentLocationData = savedLocation;
+                window.currentLocationData = savedLocation;
+                startLocationClockUpdates(savedLocation);
+                
+                // Show notification that saved location was loaded
+                setTimeout(() => {
+                    showNotification(`🕐 Restored ${savedLocation.flag} ${savedLocation.city} time`, 'success');
+                }, 1000);
+                
+            } else if (!window.timelyAppState.currentLocationData) {
+                console.log('No saved location, using local timezone');
+                
+                // Start with local timezone if no location is detected yet
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const parts = timezone.split('/');
+                const city = parts[parts.length - 1].replace(/_/g, ' ');
+                const defaultLocation = {
+                    city: city,
+                    country: 'Your Location',
+                    timezone: timezone,
+                    flag: '🌍'
+                };
+                
+                // Update display and start clock
+                updateLocationDisplay(defaultLocation);
+                window.timelyAppState.currentLocationData = defaultLocation;
+                startLocationClockUpdates(defaultLocation);
+            }
+        }
+        // Periodic cleanup to prevent memory leaks (every 5 minutes)
+        setInterval(function() {
+            // Force garbage collection by clearing unused references
+            if (!window.timelyAppState.isClockRunning && window.timelyAppState.clockInterval) {
+                stopAllClockUpdates();
+            }
+            // Ensure body scroll is enabled if no modal is open
+            const modal = document.getElementById('locationPickerOverlay');
+            if (!modal || !modal.classList.contains('active')) {
+                if (window.timelyAppState.isModalOpen) {
+                    enableBodyScroll();
+                }
+            }
+        }, 300000); // 5 minutes
+        // More frequent scroll check (every 2 seconds for immediate response)
+        setInterval(function() {
+            const modal = document.getElementById('locationPickerOverlay');
+            const isModalActive = modal && modal.classList.contains('active');
+            // If modal is not active but body scroll is disabled, fix it immediately
+            if (!isModalActive && window.timelyAppState.isModalOpen) {
+                console.log('Detected scroll state mismatch, fixing immediately...');
+                enableBodyScroll();
+            }
+            // If modal is active but body scroll is not disabled, fix it
+            if (isModalActive && !window.timelyAppState.isModalOpen) {
+                console.log('Detected modal open without scroll disabled, fixing...');
+                disableBodyScroll();
+            }
+        }, 2000); // Check every 2 seconds instead of 30
+        // Additional immediate check after any user interaction
+        function checkScrollStateImmediate() {
+            const modal = document.getElementById('locationPickerOverlay');
+            const isModalActive = modal && modal.classList.contains('active');
+            if (!isModalActive && document.body.style.overflow === 'hidden') {
+                console.log('Immediate scroll fix triggered');
+                forceEnableBodyScroll();
+            }
+        }
+        // Simple search functionality (enhanced with persistence)
+        function addCityFromSearch() {
+            const input = document.getElementById('citySearchInput');
+            const cityName = input.value.trim();
+            if (cityName) {
+                // Find the city in the global database
+                const city = globalCitiesDatabase.find(c => 
+                    c.name.toLowerCase() === cityName.toLowerCase() ||
+                    c.name.toLowerCase().includes(cityName.toLowerCase())
+                );
+                
+                if (city) {
+                    // Use the enhanced addToFavorites function for immediate update and persistence
+                    addToFavorites(city.name, city.timezone, city.flag);
+                    input.value = '';
+                } else {
+                    // Fallback for cities not in database
+                    console.log(`City "${cityName}" not found in database, using fallback`);
+                    if (window.timelyApp) {
+                        window.timelyApp.addCityToGrid(cityName);
+                        input.value = '';
+                    }
+                }
+            }
+        }
+        // Enter key support for search
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure body scroll is enabled on page load
+            forceEnableBodyScroll();
+            // Set up MutationObserver to watch for modal changes
+            const modal = document.getElementById('locationPickerOverlay');
+            if (modal) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            // Modal class changed, check scroll state immediately
+                            setTimeout(checkScrollStateImmediate, 10);
+                        }
+                    });
+                });
+                observer.observe(modal, { 
+                    attributes: true, 
+                    attributeFilter: ['class'] 
+                });
+            }
+            // Add visibility change listener for immediate response
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    // Page became visible, check scroll state immediately
+                    setTimeout(checkScrollStateImmediate, 10);
+                }
+            });
+            // Add window focus listener for additional responsiveness
+            window.addEventListener('focus', () => {
+                setTimeout(checkScrollStateImmediate, 10);
+            });
+            // Add global click listener for immediate scroll check
+            document.addEventListener('click', () => {
+                setTimeout(checkScrollStateImmediate, 25);
+            });
+            const searchInput = document.getElementById('citySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        addCityFromSearch();
+                    }
+                });
+            }
+            // Initialize default clock with smarter timing and priority over enhanced-timely.js
+            // Wait longer to ensure enhanced-timely.js has finished its initialization
+            setTimeout(() => {
+                // Only initialize if no location detection or selection has happened recently
+                if (!window.timelyAppState.isClockRunning && !window.timelyAppState.isProcessingSelection) {
+                    console.log('Running delayed default clock initialization (post enhanced-timely.js)');
+                    initializeDefaultClock();
+                } else {
+                    console.log('Skipping default clock initialization - location already active');
+                }
+            }, 2000); // Increased delay to run after enhanced-timely.js
+        });
+    </script>
+    <!-- Application Scripts -->
+    <script src="./src/js/utc-system.js"></script>
+    <script src="./src/js/optimized-auth.js"></script>
+    <script src="./src/js/auth.js"></script>
+    <script src="./enhanced-timely.js"></script>
+    <!-- Initialize the app -->
+    <script>
+        // Initialize the Enhanced Timely App
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing Enhanced Timely App...');
+            window.timelyApp = new SimpleTimelyApp();
+            window.timelyApp.init().then(() => {
+                console.log('✅ Enhanced Timely App initialized successfully!');
+            }).catch(error => {
+                console.error('❌ Failed to initialize app:', error);
+            });
+        });
+    </script>
+</body>
+</html>
