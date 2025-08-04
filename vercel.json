@@ -4,6 +4,19 @@
   "public": true,
   "cleanUrls": true,
   "trailingSlash": false,
+  "buildCommand": "echo 'No build required for static site'",
+  "outputDirectory": ".",
+  "functions": {},
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/src/(.*)",
+      "dest": "/src/$1"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
