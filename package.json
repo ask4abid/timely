@@ -9,7 +9,6 @@
     "dev": "npx live-server --port=3000 --open=index.html",
     "serve": "npx serve . -p 3000 -s",
     "preview": "npx http-server . -p 8080 -o",
-    "build": "echo 'Static site - no build needed'",
     "test": "npx jest"
   },
   "keywords": ["world clock", "timezone", "time zones", "real-time", "javascript", "modular"],
