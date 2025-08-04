@@ -90,16 +90,20 @@
             padding: 16px 0;
             margin-top: 40px;
             font-size: 12px;
-            color: #888888;
+            color: #888;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-weight: 400;
             line-height: 1.4;
-            opacity: 0.8;
+            opacity: 1;
             transition: opacity 0.3s ease;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(136, 136, 136, 0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
             width: 100%;
             position: relative;
             z-index: 10;
+            border-radius: 8px 8px 0 0;
         }
         
         .app-footer:hover {
@@ -114,6 +118,23 @@
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
+        }
+        
+        /* Dark mode support for footer */
+        @media (prefers-color-scheme: dark) {
+            .app-footer {
+                background: rgba(30, 30, 30, 0.95);
+                border-top: 1px solid rgba(136, 136, 136, 0.2);
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            }
+        }
+        
+        /* Mobile optimization for footer */
+        @media (max-width: 768px) {
+            .app-footer {
+                font-size: 11px;
+                padding: 12px 0;
+            }
         }
         
         /* Mobile-Optimized Hero Section */
@@ -196,6 +217,74 @@
             max-width: 100%;
         }
         
+        /* CSS Variables for theming */
+        :root {
+            --modal-bg: #ffffff;
+            --modal-text: #1f2937;
+            --modal-border: #e5e7eb;
+            --modal-shadow: rgba(0, 0, 0, 0.1);
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --secondary-text: #6b7280;
+            --surface-bg: #f9fafb;
+            --selected-bg: #eff6ff;
+            --selected-border: #3b82f6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --modal-bg: #1f2937;
+                --modal-text: #f9fafb;
+                --modal-border: #374151;
+                --modal-shadow: rgba(0, 0, 0, 0.3);
+                --secondary-text: #9ca3af;
+                --surface-bg: #111827;
+                --selected-bg: #1e3a8a;
+                --selected-border: #60a5fa;
+            }
+        }
+
+        /* CSS Variables for Dark Mode Support */
+        :root {
+            --modal-bg: #ffffff;
+            --modal-text: #1f2937;
+            --modal-text-secondary: #6b7280;
+            --modal-border: #e5e7eb;
+            --modal-shadow: rgba(0, 0, 0, 0.1);
+            --search-bg: #f9fafb;
+            --search-border: #d1d5db;
+            --search-focus: #3b82f6;
+            --button-primary: #3b82f6;
+            --button-primary-hover: #2563eb;
+            --button-secondary: #f3f4f6;
+            --button-secondary-hover: #e5e7eb;
+            --selected-bg: #dbeafe;
+            --selected-border: #3b82f6;
+            --tap-highlight: rgba(59, 130, 246, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --modal-bg: #1f2937;
+                --modal-text: #f9fafb;
+                --modal-text-secondary: #9ca3af;
+                --modal-border: #374151;
+                --modal-shadow: rgba(0, 0, 0, 0.25);
+                --search-bg: #374151;
+                --search-border: #4b5563;
+                --search-focus: #60a5fa;
+                --button-primary: #3b82f6;
+                --button-primary-hover: #2563eb;
+                --button-secondary: #374151;
+                --button-secondary-hover: #4b5563;
+                --selected-bg: #1e3a8a;
+                --selected-border: #60a5fa;
+                --tap-highlight: rgba(96, 165, 250, 0.1);
+            }
+        }
+
         /* Mobile-First Location Picker Modal */
         .location-picker-overlay {
             position: fixed;
@@ -203,71 +292,129 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
             z-index: 9999;
             display: flex;
             align-items: flex-end;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .location-picker-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .location-picker-modal {
             width: 100%;
-            max-width: 100%;
-            height: 85vh;
-            max-height: 85vh;
-            background: #ffffff;
-            border-radius: 24px 24px 0 0;
+            height: 92vh;
+            max-height: 92vh;
+            background: var(--modal-bg);
+            border-radius: 20px 20px 0 0;
             overflow: hidden;
             transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 -4px 20px var(--modal-shadow);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
-        
+
         .location-picker-overlay.active .location-picker-modal {
             transform: translateY(0);
         }
-        
-        /* Modal Header - Fixed at top */
+
+        /* Modal Header with Back Button */
         .modal-header {
-            position: sticky;
-            top: 0;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 20px 24px 16px;
-            z-index: 100;
-            flex-shrink: 0;
-        }
-        
-        .modal-header-content {
+            background: var(--modal-bg);
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid var(--modal-border);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 16px;
+            min-height: 56px;
+            position: relative;
         }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #111827;
-            margin: 0;
-        }
-        
-        .modal-close-btn {
+
+        .modal-back-btn {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: #f3f4f6;
+            border-radius: 12px;
+            background: var(--button-secondary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--modal-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal-back-btn:hover {
+            background: var(--button-secondary-hover);
+            transform: scale(1.05);
+        }
+
+        .modal-back-btn:active {
+            transform: scale(0.95);
+            background: var(--tap-highlight);
+        }
+
+        .modal-header-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--modal-text);
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px var(--modal-shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 56px;
+        }
+
+        .modal-back-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--surface-bg);
+            border: 1px solid var(--modal-border);
+            color: var(--modal-text);
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal-back-btn:hover,
+        .modal-back-btn:focus {
+            background: var(--modal-border);
+            transform: scale(0.98);
+        }
+
+        .modal-back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .modal-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--modal-text);
+            margin: 0;
+            flex: 1;
+        }
             border: none;
             display: flex;
             align-items: center;
@@ -290,33 +437,269 @@
             background: #d1d5db;
         }
         
-        /* Search Section - Sticky below header */
+        /* Compact Search Section */
         .search-section {
-            position: sticky;
-            top: 0;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 16px 24px;
-            z-index: 99;
-            flex-shrink: 0;
+            padding: 16px 20px;
+            background: var(--modal-bg);
+            border-bottom: 1px solid var(--modal-border);
         }
-        
+
         .search-input-container {
             position: relative;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-        
+
         .search-input {
             width: 100%;
-            height: 56px;
-            border: 2px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 0 56px 0 20px;
+            height: 48px;
+            border: 1px solid var(--search-border);
+            border-radius: 12px;
+            padding: 0 48px 0 44px;
             font-size: 16px;
-            color: #111827;
-            background: #f9fafb;
+            color: var(--modal-text);
+            background: var(--search-bg);
             transition: all 0.2s ease;
             outline: none;
+            -webkit-appearance: none;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            border-color: var(--search-focus);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--modal-text-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--modal-text-secondary);
+            pointer-events: none;
+        }
+
+        .search-clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--modal-text-secondary);
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .search-clear-btn:hover {
+            background: var(--modal-text);
+        }
+
+        /* Current Location Button */
+        .current-location-btn {
+            width: 100%;
+            height: 56px;
+            background: var(--button-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .current-location-btn:hover {
+            background: var(--button-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .current-location-btn:active {
+            transform: scale(0.98);
+        }
+
+        .current-location-btn .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Body - Scrollable Content */
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* Selected Location Display */
+        .selected-location {
+            background: var(--selected-bg);
+            border: 1px solid var(--selected-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 20px 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .selected-location-flag {
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .selected-location-info {
+            flex: 1;
+        }
+
+        .selected-location-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--modal-text);
+            margin: 0 0 2px 0;
+        }
+
+        .selected-location-country {
+            font-size: 14px;
+            color: var(--modal-text-secondary);
+            margin: 0;
+        }
+
+        .selected-location-check {
+            font-size: 20px;
+            color: var(--selected-border);
+        }
+
+        /* Location Cards */
+        .location-card {
+            min-height: 56px;
+            background: var(--modal-bg);
+            border: 1px solid var(--modal-border);
+            border-radius: 12px;
+            margin: 8px 20px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .location-card:hover {
+            background: var(--button-secondary);
+            border-color: var(--search-border);
+            transform: scale(0.98);
+        }
+
+        .location-card:active {
+            transform: scale(0.96);
+            background: var(--tap-highlight);
+        }
+
+        .location-flag {
+            font-size: 20px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .location-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .location-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--modal-text);
+            margin: 0 0 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .location-country {
+            font-size: 13px;
+            color: var(--modal-text-secondary);
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .location-time {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--modal-text-secondary);
+            flex-shrink: 0;
+        }
+
+        /* Section Headers */
+        .section-header {
+            padding: 20px 20px 8px;
+            background: var(--modal-bg);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--modal-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        /* Accessibility and Focus States */
+        .location-card:focus,
+        .modal-back-btn:focus,
+        .current-location-btn:focus {
+            outline: 2px solid var(--search-focus);
+            outline-offset: 2px;
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            .location-picker-modal,
+            .location-card,
+            .modal-back-btn,
+            .current-location-btn,
+            .search-input {
+                transition: none;
+            }
+            
+            .current-location-btn .loading-spinner {
+                animation: none;
+            }
         }
         
         .search-input:focus {
@@ -398,6 +781,11 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             padding: 0;
+        }
+        
+        /* Popular Locations Container */
+        .popular-locations {
+            padding-top: 8px; /* Extra spacing from sticky search section */
         }
         
         /* Search Results */
@@ -556,10 +944,12 @@
             
             .modal-header {
                 border-radius: 24px 24px 0 0;
+                padding: 16px 20px 12px;
             }
             
             .search-section {
                 padding: 20px 32px;
+                top: 65px; /* Adjusted for mobile header height */
             }
             
             .location-section {
@@ -918,6 +1308,11 @@
             
             .modal-header {
                 padding: clamp(12px, 4vw, 20px);
+            }
+            
+            .search-section {
+                top: 60px; /* Adjusted for small mobile header */
+                padding: clamp(12px, 4vw, 16px);
             }
             
             .modal-heading {
@@ -1972,34 +2367,46 @@
         <!-- Location Picker Modal -->
         <div class="location-picker-overlay" id="locationPickerOverlay">
             <div class="location-picker-modal">
-                <!-- Modal Header -->
+                <!-- Modal Header with Back Button -->
                 <div class="modal-header">
-                    <div class="modal-header-content">
-                        <h2 class="modal-title">🌍 Choose Location</h2>
-                        <button class="modal-close-btn" onclick="toggleLocationPicker()" aria-label="Close modal">
-                            ×
-                        </button>
-                    </div>
+                    <button class="modal-back-btn" onclick="toggleLocationPicker()" aria-label="Back">
+                        <span>←</span>
+                    </button>
+                    <h2 class="modal-header-title">Select Location</h2>
                 </div>
 
                 <!-- Search Section -->
                 <div class="search-section">
                     <div class="search-input-container">
+                        <div class="search-icon">🔍</div>
                         <input 
                             type="text" 
                             id="citySearchInput" 
                             class="search-input"
-                            placeholder="Search cities worldwide..."
+                            placeholder="Search for a city"
                             autocomplete="off"
-                            oninput="searchCities(this.value)"
+                            oninput="handleSearchInput(this.value)"
                             aria-label="Search for cities">
-                        <div class="search-icon">🔍</div>
+                        <button class="search-clear-btn" onclick="clearSearch()" aria-label="Clear search">
+                            ×
+                        </button>
                     </div>
                     
-                    <button class="detect-location-btn" onclick="detectMyLocation()" id="detectLocationBtn">
-                        <span class="icon">📍</span>
-                        <span class="text">Detect My Location</span>
+                    <button class="current-location-btn" onclick="useCurrentLocation()" id="currentLocationBtn">
+                        <span class="gps-icon">📍</span>
+                        <span class="btn-text">Use Current Location</span>
+                        <div class="loading-spinner"></div>
                     </button>
+                </div>
+
+                <!-- Selected Location Display -->
+                <div class="selected-location" id="selectedLocationDisplay" style="display: none;">
+                    <span class="selected-location-flag" id="selectedFlag">🌍</span>
+                    <div class="selected-location-info">
+                        <div class="selected-location-name" id="selectedName">Selected City</div>
+                        <div class="selected-location-country" id="selectedCountry">Country</div>
+                    </div>
+                    <span class="selected-location-check">✓</span>
                 </div>
 
                 <!-- Modal Body -->
@@ -4148,6 +4555,298 @@
                 });
             });
         }
+
+        // Mobile-First Location Picker Functions
+        
+        // Handle search input with debouncing and clear button
+        function handleSearchInput(value) {
+            const clearBtn = document.querySelector('.search-clear-btn');
+            const searchInput = document.getElementById('citySearchInput');
+            
+            if (value.length > 0) {
+                clearBtn.style.display = 'flex';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+            
+            // Debounce search to improve performance
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(() => {
+                if (value.length > 0) {
+                    performSearch(value);
+                } else {
+                    showPopularLocations();
+                }
+            }, 300);
+        }
+
+        // Clear search input
+        function clearSearch() {
+            const searchInput = document.getElementById('citySearchInput');
+            const clearBtn = document.querySelector('.search-clear-btn');
+            
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            searchInput.focus();
+            showPopularLocations();
+        }
+
+        // Use current location with loading state
+        async function useCurrentLocation() {
+            const btn = document.getElementById('currentLocationBtn');
+            const spinner = btn.querySelector('.loading-spinner');
+            const btnText = btn.querySelector('.btn-text');
+            const gpsIcon = btn.querySelector('.gps-icon');
+            
+            // Show loading state
+            btn.disabled = true;
+            spinner.style.display = 'block';
+            btnText.textContent = 'Getting location...';
+            gpsIcon.style.display = 'none';
+            
+            try {
+                if (!navigator.geolocation) {
+                    throw new Error('Geolocation not supported');
+                }
+
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 300000
+                    });
+                });
+
+                const { latitude, longitude } = position.coords;
+                
+                // Get location from coordinates (simplified)
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const parts = timezone.split('/');
+                const city = parts[parts.length - 1].replace(/_/g, ' ');
+                const flag = getTimezoneFlag(timezone);
+                
+                selectLocation(city, timezone, flag, 'Your Current Location');
+                
+            } catch (error) {
+                console.error('Location detection failed:', error);
+                
+                // Show error state
+                btnText.textContent = 'Location unavailable';
+                setTimeout(() => {
+                    btnText.textContent = 'Use Current Location';
+                    gpsIcon.style.display = 'inline';
+                }, 2000);
+                
+                showNotification('Unable to get your location. Please select manually.', 'error');
+            } finally {
+                // Reset button state
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                if (btnText.textContent === 'Getting location...') {
+                    btnText.textContent = 'Use Current Location';
+                    gpsIcon.style.display = 'inline';
+                }
+            }
+        }
+
+        // Show popular locations in mobile-friendly format
+        function showPopularLocations() {
+            const modalBody = document.querySelector('.modal-body');
+            const selectedDisplay = document.getElementById('selectedLocationDisplay');
+            
+            // Show current selection if any
+            const currentLocation = window.timelyAppState?.currentLocationData;
+            if (currentLocation) {
+                selectedDisplay.style.display = 'flex';
+                document.getElementById('selectedFlag').textContent = currentLocation.flag || '🌍';
+                document.getElementById('selectedName').textContent = currentLocation.city || currentLocation.name || 'Current Location';
+                document.getElementById('selectedCountry').textContent = currentLocation.country || 'Selected Location';
+            } else {
+                selectedDisplay.style.display = 'none';
+            }
+            
+            modalBody.innerHTML = `
+                <div class="section-header">
+                    <h3 class="section-title">Popular Cities</h3>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('New York', 'America/New_York', '🇺🇸', 'United States')">
+                    <span class="location-flag">🇺🇸</span>
+                    <div class="location-info">
+                        <div class="location-name">New York</div>
+                        <div class="location-country">United States</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-newyork">--:--</div>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('London', 'Europe/London', '🇬🇧', 'United Kingdom')">
+                    <span class="location-flag">🇬🇧</span>
+                    <div class="location-info">
+                        <div class="location-name">London</div>
+                        <div class="location-country">United Kingdom</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-london">--:--</div>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('Tokyo', 'Asia/Tokyo', '🇯🇵', 'Japan')">
+                    <span class="location-flag">🇯🇵</span>
+                    <div class="location-info">
+                        <div class="location-name">Tokyo</div>
+                        <div class="location-country">Japan</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-tokyo">--:--</div>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('Sydney', 'Australia/Sydney', '🇦🇺', 'Australia')">
+                    <span class="location-flag">🇦🇺</span>
+                    <div class="location-info">
+                        <div class="location-name">Sydney</div>
+                        <div class="location-country">Australia</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-sydney">--:--</div>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('Dubai', 'Asia/Dubai', '🇦🇪', 'UAE')">
+                    <span class="location-flag">🇦🇪</span>
+                    <div class="location-info">
+                        <div class="location-name">Dubai</div>
+                        <div class="location-country">UAE</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-dubai">--:--</div>
+                </div>
+                
+                <div class="location-card" onclick="selectMobileLocation('Los Angeles', 'America/Los_Angeles', '🇺🇸', 'United States')">
+                    <span class="location-flag">🇺🇸</span>
+                    <div class="location-info">
+                        <div class="location-name">Los Angeles</div>
+                        <div class="location-country">United States</div>
+                    </div>
+                    <div class="location-time" id="mobile-time-losangeles">--:--</div>
+                </div>
+            `;
+            
+            // Update times for popular cities
+            updateMobileCityTimes();
+        }
+
+        // Select location with mobile-friendly feedback
+        function selectMobileLocation(cityName, timezone, flag, country) {
+            // Add tap feedback
+            const clickedCard = event.currentTarget;
+            clickedCard.style.transform = 'scale(0.96)';
+            
+            setTimeout(() => {
+                clickedCard.style.transform = '';
+                selectLocation(cityName, timezone, flag, country);
+            }, 150);
+        }
+
+        // Update times for mobile city cards
+        function updateMobileCityTimes() {
+            const timeElements = document.querySelectorAll('[id^="mobile-time-"]');
+            timeElements.forEach(element => {
+                const cityId = element.id.replace('mobile-time-', '');
+                const timezone = getCityTimezone(cityId);
+                if (timezone) {
+                    try {
+                        const time = new Date().toLocaleTimeString('en-US', {
+                            timeZone: timezone,
+                            hour12: false,
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        element.textContent = time;
+                    } catch (error) {
+                        element.textContent = '--:--';
+                    }
+                }
+            });
+        }
+
+        // Perform search with mobile-friendly results
+        function performSearch(query) {
+            const results = globalCitiesDatabase.filter(city => 
+                city.name.toLowerCase().includes(query.toLowerCase()) ||
+                city.country.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 10); // Limit results for performance
+
+            const modalBody = document.querySelector('.modal-body');
+            
+            if (results.length === 0) {
+                modalBody.innerHTML = `
+                    <div style="padding: 40px 20px; text-align: center; color: var(--modal-text-secondary);">
+                        <div style="font-size: 24px; margin-bottom: 12px;">🔍</div>
+                        <div style="font-size: 16px; font-weight: 500; margin-bottom: 4px;">No cities found</div>
+                        <div style="font-size: 14px;">Try a different search term</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const resultsHTML = results.map(city => `
+                <div class="location-card" onclick="selectMobileLocation('${city.name}', '${city.timezone}', '${city.flag}', '${city.country}')">
+                    <span class="location-flag">${city.flag}</span>
+                    <div class="location-info">
+                        <div class="location-name">${city.name}</div>
+                        <div class="location-country">${city.country}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            modalBody.innerHTML = `
+                <div class="section-header">
+                    <h3 class="section-title">Search Results (${results.length})</h3>
+                </div>
+                ${resultsHTML}
+            `;
+        }
+
+        // Initialize mobile location picker when modal opens
+        function toggleLocationPicker() {
+            const overlay = document.getElementById('locationPickerOverlay');
+            const isActive = overlay.classList.contains('active');
+            
+            if (isActive) {
+                overlay.classList.remove('active');
+            } else {
+                overlay.classList.add('active');
+                showPopularLocations();
+                
+                // Focus search input for better UX
+                setTimeout(() => {
+                    const searchInput = document.getElementById('citySearchInput');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                }, 300);
+            }
+        }
+
+        // Initialize mobile features when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up keyboard event listeners
+            const searchInput = document.getElementById('citySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        toggleLocationPicker();
+                    }
+                });
+            }
+            
+            // Set up backdrop click to close
+            const overlay = document.getElementById('locationPickerOverlay');
+            if (overlay) {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        toggleLocationPicker();
+                    }
+                });
+            }
+            
+            // Update mobile city times every minute
+            setInterval(updateMobileCityTimes, 60000);
+        });
     </script>
 </body>
 </html>
