@@ -964,13 +964,13 @@ body.dark-mode .digital-date {
 .location-name {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: #000000;
     margin: 0 8px;
 }
 
 .location-country {
     font-size: 1.2rem;
-    color: #7f8c8d;
+    color: #000000;
     font-weight: 400;
     padding: 4px 12px;
     background: rgba(255, 255, 255, 0.7);
@@ -1334,12 +1334,14 @@ body.dark-mode .digital-date {
     font-size: 16px;
     line-height: 1.2;
     margin-bottom: 2px;
+    color: #000000;
 }
 
 .location-country {
     font-size: 14px;
     opacity: 0.7;
     line-height: 1.2;
+    color: #000000;
 }
 
 .location-time {
