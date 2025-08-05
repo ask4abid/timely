@@ -137,6 +137,354 @@
             }
         }
         
+        /* Time Zone Converter Styles */
+        .timezone-converter-section {
+            margin: 40px 0;
+            padding: 0 20px;
+        }
+        
+        .converter-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .converter-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .timezone-card {
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .timezone-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .timezone-header {
+            margin-bottom: 16px;
+        }
+        
+        .timezone-selector {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .timezone-selector:hover {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timezone-flag {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .timezone-name {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .selector-arrow {
+            color: #64748b;
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+        
+        .timezone-selector:hover .selector-arrow {
+            transform: translateY(2px);
+        }
+        
+        .time-input-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .time-input, .date-input {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e293b;
+            transition: all 0.2s ease;
+        }
+        
+        .time-input:focus, .date-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .time-input {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .timezone-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .timezone-abbr {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .converter-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .swap-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+        
+        .swap-btn:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+        }
+        
+        .converter-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        
+        .format-toggle {
+            display: flex;
+            background: rgba(226, 232, 240, 0.3);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 2px;
+        }
+        
+        .format-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .format-btn.active {
+            background: white;
+            color: #1e293b;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .copy-link-btn {
+            padding: 10px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            color: #6366f1;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-link-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .quick-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .suggestions-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-right: 8px;
+        }
+        
+        .suggestion-btn {
+            padding: 8px 16px;
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 20px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #6366f1;
+            transform: translateY(-1px);
+        }
+        
+        /* Dark mode support for converter */
+        @media (prefers-color-scheme: dark) {
+            .converter-container {
+                background: rgba(30, 30, 30, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .timezone-card {
+                background: rgba(40, 40, 40, 0.8);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            .timezone-card:hover {
+                border-color: rgba(99, 102, 241, 0.4);
+            }
+            
+            .timezone-selector {
+                color: #f1f5f9;
+            }
+            
+            .timezone-selector:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .time-input, .date-input {
+                background: rgba(60, 60, 60, 0.9);
+                border-color: rgba(255, 255, 255, 0.2);
+                color: #f1f5f9;
+            }
+            
+            .time-input:focus, .date-input:focus {
+                background: rgba(60, 60, 60, 1);
+                border-color: #6366f1;
+            }
+            
+            .format-toggle {
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .format-btn.active {
+                background: rgba(255, 255, 255, 0.2);
+                color: #f1f5f9;
+            }
+            
+            .suggestion-btn {
+                background: rgba(60, 60, 60, 0.8);
+                border-color: rgba(255, 255, 255, 0.2);
+                color: #cbd5e1;
+            }
+        }
+        
+        /* Mobile responsive design for converter */
+        @media (max-width: 768px) {
+            .timezone-converter-section {
+                padding: 0 16px;
+                margin: 20px 0;
+            }
+            
+            .converter-container {
+                padding: 20px;
+                border-radius: 16px;
+            }
+            
+            .converter-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .converter-arrow {
+                order: -1;
+                margin: 8px 0;
+            }
+            
+            .swap-btn {
+                transform: rotate(90deg);
+            }
+            
+            .swap-btn:hover {
+                transform: rotate(270deg) scale(1.1);
+            }
+            
+            .timezone-card {
+                padding: 16px;
+            }
+            
+            .time-input-container {
+                flex-direction: column;
+            }
+            
+            .converter-controls {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+            
+            .quick-suggestions {
+                justify-content: center;
+            }
+            
+            .suggestions-label {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 8px;
+            }
+        }
+        
         /* Mobile-Optimized Hero Section */
         .hero-time-section {
             padding: clamp(10px, 3vw, 20px);
@@ -2361,6 +2709,97 @@
             </div>
             <div class="favorite-clocks-grid" id="favoriteClockGrid">
                 <!-- Favorite clocks will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Time Zone Converter Section -->
+        <div class="timezone-converter-section" id="timezoneConverterSection">
+            <div class="section-header">
+                <h2 class="section-title">🌍 Time Zone Converter</h2>
+                <p class="section-subtitle">Convert time between different time zones</p>
+            </div>
+            
+            <div class="converter-container">
+                <div class="converter-row">
+                    <!-- Time Zone 1 -->
+                    <div class="timezone-card">
+                        <div class="timezone-header">
+                            <button class="timezone-selector" onclick="openTimezoneSelector(1)" id="timezone1Selector">
+                                <span class="timezone-flag" id="timezone1Flag">🌍</span>
+                                <span class="timezone-name" id="timezone1Name">Local Time</span>
+                                <span class="selector-arrow">▼</span>
+                            </button>
+                        </div>
+                        <div class="time-input-container">
+                            <input type="time" 
+                                   id="time1Input" 
+                                   class="time-input"
+                                   value="12:00"
+                                   onchange="convertTime(1)">
+                            <input type="date" 
+                                   id="date1Input" 
+                                   class="date-input"
+                                   onchange="convertTime(1)">
+                        </div>
+                        <div class="timezone-info">
+                            <span class="timezone-abbr" id="timezone1Abbr">LOCAL</span>
+                            <span class="timezone-offset" id="timezone1Offset">UTC+0</span>
+                        </div>
+                    </div>
+
+                    <!-- Converter Arrow -->
+                    <div class="converter-arrow">
+                        <button class="swap-btn" onclick="swapTimezones()" title="Swap time zones">
+                            ⇄
+                        </button>
+                    </div>
+
+                    <!-- Time Zone 2 -->
+                    <div class="timezone-card">
+                        <div class="timezone-header">
+                            <button class="timezone-selector" onclick="openTimezoneSelector(2)" id="timezone2Selector">
+                                <span class="timezone-flag" id="timezone2Flag">🇺🇸</span>
+                                <span class="timezone-name" id="timezone2Name">New York</span>
+                                <span class="selector-arrow">▼</span>
+                            </button>
+                        </div>
+                        <div class="time-input-container">
+                            <input type="time" 
+                                   id="time2Input" 
+                                   class="time-input"
+                                   value="12:00"
+                                   onchange="convertTime(2)">
+                            <input type="date" 
+                                   id="date2Input" 
+                                   class="date-input"
+                                   onchange="convertTime(2)">
+                        </div>
+                        <div class="timezone-info">
+                            <span class="timezone-abbr" id="timezone2Abbr">EST</span>
+                            <span class="timezone-offset" id="timezone2Offset">UTC-5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Format Toggle -->
+                <div class="converter-controls">
+                    <div class="format-toggle">
+                        <button class="format-btn active" id="format12Btn" onclick="toggleTimeFormat('12')">12H</button>
+                        <button class="format-btn" id="format24Btn" onclick="toggleTimeFormat('24')">24H</button>
+                    </div>
+                    <button class="copy-link-btn" onclick="copyConverterLink()" title="Copy shareable link">
+                        🔗 Copy Link
+                    </button>
+                </div>
+
+                <!-- Quick Suggestions -->
+                <div class="quick-suggestions">
+                    <span class="suggestions-label">Quick Convert:</span>
+                    <button class="suggestion-btn" onclick="setCommonConversion('london-newyork')">London ↔ New York</button>
+                    <button class="suggestion-btn" onclick="setCommonConversion('tokyo-london')">Tokyo ↔ London</button>
+                    <button class="suggestion-btn" onclick="setCommonConversion('sydney-losangeles')">Sydney ↔ Los Angeles</button>
+                    <button class="suggestion-btn" onclick="setCommonConversion('dubai-toronto')">Dubai ↔ Toronto</button>
+                </div>
             </div>
         </div>
 
@@ -4846,7 +5285,271 @@
             
             // Update mobile city times every minute
             setInterval(updateMobileCityTimes, 60000);
+            
+            // Initialize time zone converter
+            initializeTimeZoneConverter();
         });
+
+        // Time Zone Converter Functionality
+        let converterState = {
+            timezone1: { 
+                name: 'Local Time', 
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, 
+                flag: '🌍' 
+            },
+            timezone2: { 
+                name: 'New York', 
+                timezone: 'America/New_York', 
+                flag: '🇺🇸' 
+            },
+            format24: false,
+            activeSelector: null
+        };
+
+        function initializeTimeZoneConverter() {
+            // Set current date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date1Input').value = today;
+            document.getElementById('date2Input').value = today;
+            
+            // Set current time
+            const now = new Date();
+            const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
+            document.getElementById('time1Input').value = currentTime;
+            
+            // Update converter display
+            updateConverterDisplay();
+            convertTime(1);
+        }
+
+        function updateConverterDisplay() {
+            // Update timezone 1
+            document.getElementById('timezone1Flag').textContent = converterState.timezone1.flag;
+            document.getElementById('timezone1Name').textContent = converterState.timezone1.name;
+            
+            // Update timezone 2
+            document.getElementById('timezone2Flag').textContent = converterState.timezone2.flag;
+            document.getElementById('timezone2Name').textContent = converterState.timezone2.name;
+            
+            // Update timezone info
+            updateTimezoneInfo(1);
+            updateTimezoneInfo(2);
+        }
+
+        function updateTimezoneInfo(tzNumber) {
+            const timezone = converterState[`timezone${tzNumber}`].timezone;
+            const now = new Date();
+            
+            try {
+                // Get timezone abbreviation and offset
+                const formatter = new Intl.DateTimeFormat('en', {
+                    timeZone: timezone,
+                    timeZoneName: 'short'
+                });
+                
+                const parts = formatter.formatToParts(now);
+                const timeZoneName = parts.find(part => part.type === 'timeZoneName')?.value || 'UTC';
+                
+                // Calculate UTC offset
+                const utcDate = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+                const tzDate = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+                const offset = (tzDate.getTime() - utcDate.getTime()) / (1000 * 60 * 60);
+                const offsetStr = offset >= 0 ? `UTC+${offset}` : `UTC${offset}`;
+                
+                document.getElementById(`timezone${tzNumber}Abbr`).textContent = timeZoneName;
+                document.getElementById(`timezone${tzNumber}Offset`).textContent = offsetStr;
+                
+            } catch (error) {
+                document.getElementById(`timezone${tzNumber}Abbr`).textContent = 'UTC';
+                document.getElementById(`timezone${tzNumber}Offset`).textContent = 'UTC+0';
+            }
+        }
+
+        function convertTime(fromTz) {
+            const toTz = fromTz === 1 ? 2 : 1;
+            
+            const timeInput = document.getElementById(`time${fromTz}Input`);
+            const dateInput = document.getElementById(`date${fromTz}Input`);
+            
+            if (!timeInput.value || !dateInput.value) return;
+            
+            try {
+                // Create date from input
+                const inputDateTime = new Date(`${dateInput.value}T${timeInput.value}`);
+                
+                // Convert to target timezone
+                const sourceTimezone = converterState[`timezone${fromTz}`].timezone;
+                const targetTimezone = converterState[`timezone${toTz}`].timezone;
+                
+                // Create a date assuming the input time is in the source timezone
+                const sourceDateStr = inputDateTime.toLocaleString('sv-SE', { timeZone: sourceTimezone });
+                const sourceDate = new Date(sourceDateStr);
+                
+                // Get the actual UTC time by calculating the offset
+                const utcTime = sourceDate.getTime() - (sourceDate.getTimezoneOffset() * 60000);
+                const adjustedDate = new Date(utcTime);
+                
+                // Convert to target timezone
+                const targetTime = new Date(adjustedDate.toLocaleString('en-US', { timeZone: targetTimezone }));
+                
+                // Format for inputs
+                const targetTimeStr = targetTime.toTimeString().split(' ')[0].slice(0, 5);
+                const targetDateStr = targetTime.toISOString().split('T')[0];
+                
+                // Update target inputs
+                document.getElementById(`time${toTz}Input`).value = targetTimeStr;
+                document.getElementById(`date${toTz}Input`).value = targetDateStr;
+                
+            } catch (error) {
+                console.error('Time conversion error:', error);
+            }
+        }
+
+        function openTimezoneSelector(tzNumber) {
+            converterState.activeSelector = tzNumber;
+            
+            // Create a simplified timezone selector (reuse existing modal)
+            const modal = document.getElementById('locationPickerOverlay');
+            modal.classList.add('active');
+            
+            // Update modal title
+            const modalTitle = document.querySelector('.modal-header-title');
+            if (modalTitle) {
+                modalTitle.textContent = `Select Time Zone ${tzNumber}`;
+            }
+            
+            // Show popular locations for quick selection
+            showPopularLocations();
+        }
+
+        function selectTimezoneForConverter(name, timezone, flag, country) {
+            if (converterState.activeSelector) {
+                const tzNumber = converterState.activeSelector;
+                
+                converterState[`timezone${tzNumber}`] = {
+                    name: name,
+                    timezone: timezone,
+                    flag: flag
+                };
+                
+                updateConverterDisplay();
+                convertTime(tzNumber === 1 ? 2 : 1); // Convert from the other timezone
+                
+                // Close modal
+                document.getElementById('locationPickerOverlay').classList.remove('active');
+                
+                // Reset modal title
+                const modalTitle = document.querySelector('.modal-header-title');
+                if (modalTitle) {
+                    modalTitle.textContent = 'Select Location';
+                }
+                
+                converterState.activeSelector = null;
+            }
+        }
+
+        function swapTimezones() {
+            const temp = { ...converterState.timezone1 };
+            converterState.timezone1 = { ...converterState.timezone2 };
+            converterState.timezone2 = temp;
+            
+            // Swap the time inputs
+            const time1 = document.getElementById('time1Input').value;
+            const time2 = document.getElementById('time2Input').value;
+            const date1 = document.getElementById('date1Input').value;
+            const date2 = document.getElementById('date2Input').value;
+            
+            document.getElementById('time1Input').value = time2;
+            document.getElementById('time2Input').value = time1;
+            document.getElementById('date1Input').value = date2;
+            document.getElementById('date2Input').value = date1;
+            
+            updateConverterDisplay();
+        }
+
+        function toggleTimeFormat(format) {
+            converterState.format24 = format === '24';
+            
+            // Update button states
+            document.getElementById('format12Btn').classList.toggle('active', !converterState.format24);
+            document.getElementById('format24Btn').classList.toggle('active', converterState.format24);
+            
+            // Convert existing times to new format
+            // Note: HTML time inputs always use 24h format, so this is mainly for display
+        }
+
+        function copyConverterLink() {
+            const time1 = document.getElementById('time1Input').value;
+            const date1 = document.getElementById('date1Input').value;
+            const tz1 = encodeURIComponent(converterState.timezone1.timezone);
+            const tz2 = encodeURIComponent(converterState.timezone2.timezone);
+            
+            const url = `${window.location.origin}${window.location.pathname}?time=${time1}&date=${date1}&tz1=${tz1}&tz2=${tz2}&format=${converterState.format24 ? '24' : '12'}`;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                // Show feedback
+                const btn = document.querySelector('.copy-link-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.background = 'rgba(34, 197, 94, 0.2)';
+                btn.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+                btn.style.color = '#16a34a';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            });
+        }
+
+        function setCommonConversion(type) {
+            const conversions = {
+                'london-newyork': [
+                    { name: 'London', timezone: 'Europe/London', flag: '🇬🇧' },
+                    { name: 'New York', timezone: 'America/New_York', flag: '🇺🇸' }
+                ],
+                'tokyo-london': [
+                    { name: 'Tokyo', timezone: 'Asia/Tokyo', flag: '🇯🇵' },
+                    { name: 'London', timezone: 'Europe/London', flag: '🇬🇧' }
+                ],
+                'sydney-losangeles': [
+                    { name: 'Sydney', timezone: 'Australia/Sydney', flag: '🇦🇺' },
+                    { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '🇺🇸' }
+                ],
+                'dubai-toronto': [
+                    { name: 'Dubai', timezone: 'Asia/Dubai', flag: '🇦🇪' },
+                    { name: 'Toronto', timezone: 'America/Toronto', flag: '🇨🇦' }
+                ]
+            };
+            
+            const conversion = conversions[type];
+            if (conversion) {
+                converterState.timezone1 = conversion[0];
+                converterState.timezone2 = conversion[1];
+                updateConverterDisplay();
+                convertTime(1);
+            }
+        }
+
+        // Override selectLocation to work with converter when active
+        const originalSelectLocation = selectLocation;
+        function selectLocation(cityName, timezone, flag, country) {
+            if (converterState.activeSelector) {
+                selectTimezoneForConverter(cityName, timezone, flag, country);
+            } else {
+                originalSelectLocation(cityName, timezone, flag, country);
+            }
+        }
     </script>
 </body>
 </html>
