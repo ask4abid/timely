@@ -2088,6 +2088,40 @@ body.dark-mode .digital-date {
     color: #2c3e50;
 }
 
+.modal-back-btn {
+    background: #f8f9fa;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #6c757d;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px; /* Touch-friendly */
+}
+
+.modal-back-btn:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.modal-back-btn:active {
+    background: #dee2e6;
+    transform: scale(0.95);
+}
+
+.modal-header-title {
+    margin: 0;
+    font-size: 20px;
+    color: #2c3e50;
+    flex: 1;
+    text-align: center;
+}
+
 .close-btn {
     background: #f8f9fa;
     border: none;
@@ -8904,4 +8938,106 @@ body.dark-mode .btn-secondary-text {
 .location-card {
     min-height: 72px; /* Consistent height for better scroll calculation */
     margin-bottom: 8px;
+}
+
+/* City Card Actions - New button layout */
+.city-card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.make-primary-btn {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    min-height: 32px;
+    flex: 1;
+}
+
+.make-primary-btn:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
+}
+
+.make-primary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.4);
+}
+
+.quick-favorite-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+}
+
+.quick-favorite-btn:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+}
+
+/* City card footer adjustments */
+.city-card-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Prevent clicks on city card body from selecting */
+.city-card {
+    cursor: default;
+    pointer-events: auto;
+}
+
+.city-card-header, .city-card-body {
+    pointer-events: none;
+}
+
+.city-card-actions button {
+    pointer-events: auto;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .city-card-actions {
+        gap: 6px;
+    }
+    
+    .make-primary-btn {
+        padding: 8px 10px;
+        font-size: 10px;
+        min-height: 36px;
+    }
+    
+    .quick-favorite-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
 }
