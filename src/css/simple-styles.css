@@ -2067,9 +2067,9 @@ body.dark-mode .digital-date {
 .modal-content {
     background: white;
     border-radius: 16px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 80vh;
+    max-width: 700px; /* Increased from 500px for better search visibility */
+    width: 95%; /* Responsive width */
+    max-height: 85vh; /* Increased from 80vh for more content space */
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
@@ -2106,7 +2106,8 @@ body.dark-mode .digital-date {
 }
 
 .modal-body {
-    padding: 24px;
+    padding: 16px 24px 24px; /* Reduced top padding, increased bottom */
+    min-height: 300px; /* Minimum height for better visibility */
 }
 
 .detail-item {
@@ -8706,4 +8707,156 @@ body.dark-mode .btn-secondary-text {
     .modal-content.closing {
         animation: modalSlideDown 0.3s ease-in;
     }
+}
+
+/* Add to Favorites Button in Search Results */
+.add-to-favorites-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    min-height: 44px; /* Touch-friendly */
+    min-width: 44px;
+}
+
+.add-to-favorites-btn:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.add-to-favorites-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+}
+
+/* Search Result Card with Favorites Button */
+.search-result-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.search-result-card:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.search-result-card .location-info {
+    flex: 1;
+    cursor: pointer;
+}
+
+.search-result-card .location-flag {
+    font-size: 24px;
+    min-width: 32px;
+}
+
+.search-result-card .location-name {
+    font-weight: 600;
+    color: #1a202c;
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.search-result-card .location-country {
+    color: #718096;
+    font-size: 14px;
+}
+
+/* Mobile optimizations for search results */
+@media (max-width: 768px) {
+    .search-result-card {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .add-to-favorites-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .search-result-card .location-name {
+        font-size: 15px;
+    }
+    
+    .search-result-card .location-country {
+        font-size: 13px;
+    }
+    
+    .modal-content {
+        max-width: 95vw;
+        width: 95vw;
+        max-height: 90vh;
+        margin: 0 auto;
+    }
+    
+    .modal-body {
+        padding: 12px 16px 20px;
+        min-height: 400px; /* Increased for mobile */
+    }
+}
+
+/* Enhanced Search Input Styling */
+.search-input {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Results Container */
+.search-results-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.search-results-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.search-results-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
 }
