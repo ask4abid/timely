@@ -4918,43 +4918,7 @@
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                 // New content is available
                                 console.log('TIMELY: New content available');
-                                
-                                // Show update notification
-                                const updateNotification = document.createElement('div');
-                                updateNotification.innerHTML = `
-                                    <div style="
-                                        position: fixed;
-                                        top: 20px;
-                                        left: 50%;
-                                        transform: translateX(-50%);
-                                        background: linear-gradient(135deg, #667eea, #764ba2);
-                                        color: white;
-                                        padding: 12px 20px;
-                                        border-radius: 25px;
-                                        font-size: 14px;
-                                        font-weight: 600;
-                                        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-                                        z-index: 10000;
-                                        cursor: pointer;
-                                        animation: slideInFromTop 0.5s ease;
-                                    ">
-                                        🔄 App Updated! Tap to reload
-                                    </div>
-                                `;
-                                
-                                updateNotification.onclick = () => {
-                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                    window.location.reload();
-                                };
-                                
-                                document.body.appendChild(updateNotification);
-                                
-                                // Auto-hide after 10 seconds
-                                setTimeout(() => {
-                                    if (updateNotification.parentNode) {
-                                        updateNotification.remove();
-                                    }
-                                }, 10000);
+                                showUpdateNotification(newWorker);
                             }
                         });
                     });
@@ -4963,37 +4927,334 @@
                 }
             });
 
-            // Listen for messages from service worker
+            // Enhanced message handling from service worker
             navigator.serviceWorker.addEventListener('message', (event) => {
-                const { type, timestamp } = event.data;
+                const { type, timestamp, version } = event.data;
                 
                 switch (type) {
                     case 'NETWORK_AVAILABLE':
                         console.log('TIMELY: Network available, syncing time');
-                        // Refresh time displays
+                        if (typeof updateAllTimes === 'function') {
+                            updateAllTimes();
+                        }
+                        showNotification('🌐 Back online! Times updated.', 'success', 3000);
+                        break;
+                    case 'PERIODIC_UPDATE':
+                        console.log('TIMELY: Periodic update triggered');
                         if (typeof updateAllTimes === 'function') {
                             updateAllTimes();
                         }
                         break;
-                    case 'PERIODIC_UPDATE':
-                        console.log('TIMELY: Periodic update triggered');
-                        // Refresh time displays
-                        if (typeof updateAllTimes === 'function') {
-                            updateAllTimes();
-                        }
+                    case 'SW_UPDATED':
+                        console.log('TIMELY: Service Worker updated to version', version);
                         break;
                 }
             });
         }
 
-        // Register for background sync (if supported)
+        // Enhanced PWA Installation
+        window.deferredPrompt = null;
+        let installPromptShown = false;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('TIMELY: PWA install prompt available');
+            e.preventDefault();
+            window.deferredPrompt = e;
+            
+            // Show custom install button after a delay (better UX)
+            if (!installPromptShown && !localStorage.getItem('pwa-install-dismissed')) {
+                setTimeout(showPWAInstallPrompt, 5000);
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('TIMELY: PWA was installed');
+            window.deferredPrompt = null;
+            hidePWAInstallPrompt();
+            showNotification('🎉 TIMELY installed successfully!', 'success');
+            
+            // Track installation
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'pwa_install', {
+                    event_category: 'engagement',
+                    event_label: 'PWA Installation'
+                });
+            }
+        });
+
+        function showPWAInstallPrompt() {
+            if (!window.deferredPrompt || installPromptShown) return;
+            
+            installPromptShown = true;
+            const installContainer = document.createElement('div');
+            installContainer.className = 'install-pwa-container';
+            installContainer.innerHTML = `
+                <div class="install-pwa-btn" onclick="installPWA()">
+                    <span>📱</span>
+                    <span>Install App</span>
+                </div>
+            `;
+            
+            document.body.appendChild(installContainer);
+            
+            // Add dismiss button after 10 seconds
+            setTimeout(() => {
+                const dismissBtn = document.createElement('button');
+                dismissBtn.innerHTML = '✕';
+                dismissBtn.style.cssText = `
+                    position: absolute;
+                    top: -8px;
+                    right: -8px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0,0,0,0.6);
+                    color: white;
+                    font-size: 12px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+                dismissBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    hidePWAInstallPrompt();
+                    localStorage.setItem('pwa-install-dismissed', 'true');
+                };
+                installContainer.appendChild(dismissBtn);
+            }, 10000);
+        }
+
+        function hidePWAInstallPrompt() {
+            const installContainer = document.querySelector('.install-pwa-container');
+            if (installContainer) {
+                installContainer.remove();
+            }
+        }
+
+        async function installPWA() {
+            if (!window.deferredPrompt) {
+                showNotification('Installation not available', 'error');
+                return;
+            }
+
+            const result = await window.deferredPrompt.prompt();
+            console.log('TIMELY: PWA install prompt result:', result.outcome);
+            
+            if (result.outcome === 'accepted') {
+                console.log('TIMELY: User accepted PWA install');
+            } else {
+                console.log('TIMELY: User dismissed PWA install');
+            }
+            
+            window.deferredPrompt = null;
+            hidePWAInstallPrompt();
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'info', duration = 5000) {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'linear-gradient(135deg, #10b981, #059669)',
+                error: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                info: 'linear-gradient(135deg, #3b82f6, #2563eb)'
+            };
+            
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${colors[type] || colors.info};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 25px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    z-index: 10000;
+                    animation: slideInFromTop 0.5s ease;
+                    max-width: 90%;
+                    text-align: center;
+                ">
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOutToTop 0.5s ease';
+                    setTimeout(() => notification.remove(), 500);
+                }
+            }, duration);
+        }
+
+        function showUpdateNotification(newWorker) {
+            const updateNotification = document.createElement('div');
+            updateNotification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 25px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                    z-index: 10000;
+                    cursor: pointer;
+                    animation: slideInFromTop 0.5s ease;
+                ">
+                    🔄 App Updated! Tap to reload
+                </div>
+            `;
+            
+            updateNotification.onclick = () => {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            };
+            
+            document.body.appendChild(updateNotification);
+            
+            // Auto-hide after 15 seconds
+            setTimeout(() => {
+                if (updateNotification.parentNode) {
+                    updateNotification.remove();
+                }
+            }, 15000);
+        }
+
+        // Enhanced background sync registration
         if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
             window.addEventListener('online', () => {
                 navigator.serviceWorker.ready.then((registration) => {
-                    return registration.sync.register('time-sync');
+                    registration.sync.register('time-sync');
+                    registration.sync.register('cache-cleanup');
                 });
             });
         }
+
+        // Mobile performance optimizations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Optimize viewport height for mobile browsers
+            function setVH() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+            
+            setVH();
+            window.addEventListener('resize', setVH);
+            window.addEventListener('orientationchange', setVH);
+            
+            // Prevent double-tap zoom on mobile
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (event) => {
+                const now = new Date().getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // Add touch feedback to interactive elements
+            const interactiveElements = document.querySelectorAll('button, .clickable, .city-card, .location-card');
+            interactiveElements.forEach(element => {
+                element.addEventListener('touchstart', () => {
+                    element.style.opacity = '0.7';
+                });
+                
+                element.addEventListener('touchend', () => {
+                    setTimeout(() => {
+                        element.style.opacity = '';
+                    }, 150);
+                });
+            });
+            
+            // Enhanced scroll performance
+            if (CSS.supports('overscroll-behavior', 'none')) {
+                document.body.style.overscrollBehavior = 'none';
+            }
+            
+            // Load performance monitoring
+            if ('PerformanceObserver' in window) {
+                const observer = new PerformanceObserver((list) => {
+                    for (const entry of list.getEntries()) {
+                        if (entry.entryType === 'measure') {
+                            console.log(`TIMELY Performance: ${entry.name} took ${entry.duration.toFixed(2)}ms`);
+                        }
+                    }
+                });
+                observer.observe({ entryTypes: ['measure'] });
+            }
+        });
+
+        // Haptic feedback for supported devices
+        function triggerHapticFeedback(type = 'medium') {
+            if ('vibrate' in navigator) {
+                const patterns = {
+                    light: [10],
+                    medium: [50],
+                    heavy: [100],
+                    success: [50, 50, 50],
+                    error: [100, 50, 100]
+                };
+                navigator.vibrate(patterns[type] || patterns.medium);
+            }
+        }
+
+        // Enhanced gesture support
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', (e) => {
+            const modal = document.querySelector('.modal-content');
+            if (modal && modal.contains(e.target)) {
+                const touchY = e.touches[0].clientY;
+                const deltaY = touchY - touchStartY;
+                
+                // Pull-to-close gesture
+                if (deltaY > 0 && modal.scrollTop === 0) {
+                    const pullDistance = Math.min(deltaY / 3, 100);
+                    modal.style.transform = `translateY(${pullDistance}px)`;
+                    modal.style.opacity = Math.max(0.5, 1 - (pullDistance / 200));
+                }
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            const modal = document.querySelector('.modal-content');
+            if (modal) {
+                const touchY = e.changedTouches[0].clientY;
+                const deltaY = touchY - touchStartY;
+                const touchDuration = Date.now() - touchStartTime;
+                
+                // Reset modal position
+                modal.style.transform = '';
+                modal.style.opacity = '';
+                
+                // Close modal if pulled down significantly
+                if (deltaY > 100 && touchDuration < 1000) {
+                    const overlay = document.getElementById('locationPickerOverlay');
+                    if (overlay && overlay.classList.contains('active')) {
+                        toggleLocationPicker();
+                        triggerHapticFeedback('light');
+                    }
+                }
+            }
+        }, { passive: true });
 
         // Mobile-First Location Picker Functions
         

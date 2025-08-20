@@ -8293,3 +8293,417 @@ body.dark-mode .btn-secondary-text {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ========================================
+   ENHANCED MOBILE OPTIMIZATIONS & PWA
+   ======================================== */
+
+/* Mobile-First Touch Optimizations */
+@media (max-width: 768px) {
+    /* Touch-friendly tap targets */
+    button, .button, .btn, [role="button"], .clickable {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(103, 126, 234, 0.1);
+    }
+    
+    /* Prevent zoom on input focus */
+    input[type="text"], 
+    input[type="search"], 
+    textarea, 
+    select {
+        font-size: 16px; /* Prevents zoom on iOS */
+        border-radius: 8px;
+        padding: 12px 16px;
+    }
+    
+    /* Mobile-optimized modal */
+    .modal-content {
+        border-radius: 16px 16px 0 0;
+        max-height: 85vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Swipe indicator for modals */
+    .modal-content::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: #cbd5e1;
+        border-radius: 2px;
+        margin: 12px auto 8px;
+    }
+    
+    /* Mobile navigation improvements */
+    .header-container {
+        padding: 0 16px;
+        height: 56px;
+    }
+    
+    .logo-section h1 {
+        font-size: clamp(18px, 4vw, 24px);
+    }
+    
+    /* City cards mobile grid */
+    .city-cards-container {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    /* Enhanced touch feedback */
+    .city-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Mobile-optimized clock display */
+    .main-clock {
+        font-size: clamp(3rem, 12vw, 8rem);
+        line-height: 1.1;
+    }
+    
+    .location-display {
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        margin-top: 8px;
+    }
+}
+
+/* Small Mobile Devices (320px - 480px) */
+@media (max-width: 480px) {
+    /* Ultra-compact layout */
+    .city-cards-container {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+    
+    .city-card {
+        padding: 16px;
+        min-height: auto;
+    }
+    
+    .city-card .time {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+    }
+    
+    .city-card .city {
+        font-size: clamp(0.9rem, 4vw, 1.1rem);
+    }
+    
+    /* Simplified modal for small screens */
+    .modal-content {
+        padding: 16px;
+        margin: 8px;
+        max-height: 90vh;
+    }
+    
+    .search-input {
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+    
+    /* Compact button layout */
+    .button-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .button-group button {
+        width: 100%;
+    }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-content {
+        padding-top: 8px;
+    }
+    
+    .header-container {
+        height: 48px;
+        padding: 0 12px;
+    }
+    
+    .modal-content {
+        max-height: 80vh;
+        max-width: 90vw;
+        margin: auto;
+    }
+    
+    .city-cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+/* Large Mobile/Tablet (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .city-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .popular-cities-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .search-results {
+        height: 300px;
+    }
+}
+
+/* iOS Specific Optimizations */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific styles */
+    body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Fix iOS keyboard viewport issues */
+    .modal-content {
+        position: fixed;
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+    
+    /* iOS safe area support */
+    .main-content {
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+    
+    .header-container {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
+/* High DPI/Retina Display Optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Crisp text rendering on high-DPI screens */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Sharper borders */
+    .city-card, .modal-content, .search-input {
+        border-width: 0.5px;
+    }
+}
+
+/* Accessibility Enhancements for Mobile */
+@media (max-width: 768px) {
+    /* Larger focus indicators on mobile */
+    button:focus, 
+    input:focus, 
+    .focusable:focus {
+        outline: 3px solid #667eea;
+        outline-offset: 2px;
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        .city-card {
+            border: 2px solid #000;
+        }
+        
+        button {
+            border: 2px solid #000;
+        }
+    }
+    
+    /* Reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* PWA Installation Button Styles */
+.install-pwa-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.install-pwa-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.install-pwa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.install-pwa-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .install-pwa-container {
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .install-pwa-btn {
+        padding: 14px 18px;
+        border-radius: 50px;
+        min-height: 48px;
+    }
+}
+
+/* Haptic Feedback Enhancement */
+.haptic-feedback {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Loading States for Mobile */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Mobile Gesture Support */
+.swipeable {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.pull-to-close {
+    cursor: grab;
+}
+
+.pull-to-close:active {
+    cursor: grabbing;
+}
+
+/* Android Specific */
+@media screen and (max-width: 768px) {
+    /* Android Chrome specific optimizations */
+    body {
+        overscroll-behavior: none;
+    }
+    
+    /* Hide address bar on scroll */
+    .main-content {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Keyboard Navigation Enhancement */
+@media (max-width: 768px) {
+    .keyboard-navigation button:focus,
+    .keyboard-navigation input:focus,
+    .keyboard-navigation [tabindex]:focus {
+        outline: 3px solid #667eea;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+}
+
+/* Enhanced Animations for Mobile */
+@keyframes slideInFromTop {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutToTop {
+    from {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+}
+
+@keyframes pulseNotification {
+    0%, 100% {
+        transform: translate(-50%, 0) scale(1);
+    }
+    50% {
+        transform: translate(-50%, 0) scale(1.05);
+    }
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+/* Enhanced Mobile Interaction States */
+@media (max-width: 768px) {
+    .install-pwa-btn {
+        animation: pulseNotification 2s infinite;
+    }
+    
+    .install-pwa-btn:hover {
+        animation: none;
+    }
+    
+    .modal-content {
+        animation: modalSlideUp 0.3s ease-out;
+    }
+    
+    .modal-content.closing {
+        animation: modalSlideDown 0.3s ease-in;
+    }
+}

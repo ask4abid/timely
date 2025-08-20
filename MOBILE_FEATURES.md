@@ -4,50 +4,71 @@
 
 ### 📱 Progressive Web App (PWA)
 - **Installable**: Add to home screen on iOS and Android
-- **Offline Capable**: Works without internet connection
+- **Offline Capable**: Works without internet connection with enhanced caching strategies
 - **App-like Experience**: Fullscreen mode, no browser UI
 - **Background Sync**: Automatic time updates when back online
+- **Push Notifications**: Support for timezone update notifications (future feature)
+- **Enhanced Caching**: Multiple cache strategies for optimal performance
+- **Cache Management**: Automatic cleanup and size monitoring
+- **Offline Fallback**: Beautiful offline page when network is unavailable
 
 ### 🎨 Mobile-First Design
 - **Responsive Layout**: Optimized for all screen sizes (320px+)
 - **Touch-Friendly**: Large touch targets (44px minimum)
-- **Gesture Support**: Swipe to open/close location picker
+- **Gesture Support**: Swipe to open/close location picker with pull-to-close
 - **Safe Area Support**: iPhone X+ notch and gesture areas
 - **Dynamic Viewport**: Handles mobile keyboard and orientation changes
+- **Enhanced Touch Feedback**: Active states and haptic feedback
+- **Accessibility**: High contrast mode and reduced motion support
 
 ### 📐 Screen Size Optimizations
 
 #### Small Mobile (320px - 480px)
 - Single column layout for city cards
 - Condensed font sizes using clamp()
-- Optimized modal height (70vh)
+- Optimized modal height (90vh)
 - Simplified navigation
+- Ultra-compact city card design
+- Full-width button layouts
 
 #### Medium Mobile (481px - 768px)
 - Two column city grid
 - Balanced typography
 - Enhanced touch targets
+- Three-column popular cities grid
 
-#### Tablet Portrait (769px - 1024px)
+#### Large Mobile/Tablet (769px - 1024px)
 - Multi-column responsive grid
 - Desktop-like spacing
+- Enhanced modal layouts
+
+#### Landscape Optimization
+- Compact header (48px height)
+- Responsive city grid
+- Optimized modal dimensions
 
 ### 🤏 Touch & Gesture Enhancements
 - **Haptic Feedback**: Vibration on supported devices
-- **Pull-to-Close**: Drag modal down to close
+- **Pull-to-Close**: Drag modal down to close with visual indicator
 - **Swipe Navigation**: Left/right swipes for modal control
-- **Tap Optimization**: Prevents double-tap zoom
-- **Active States**: Visual feedback for touches
+- **Tap Optimization**: Prevents double-tap zoom, 44px minimum touch targets
+- **Active States**: Visual feedback for touches with scale animations
+- **Touch Callout Disabled**: Clean touch experience
+- **Gesture Recognition**: Enhanced swipe and pull gestures
 
 ### 🍎 iOS Specific Features
-- **Status Bar Integration**: Proper theming
-- **Keyboard Handling**: Auto-scroll to focused inputs
+- **Status Bar Integration**: Proper theming and safe area support
+- **Keyboard Handling**: Auto-scroll to focused inputs, prevents zoom
 - **Body Scroll Lock**: Prevents background scrolling
 - **Touch Callout Disabled**: Clean touch experience
-- **Safe Area Insets**: Respects device bezels
+- **Safe Area Insets**: Respects device bezels and notches
+- **Webkit Optimizations**: Font smoothing and touch handling
+- **Viewport Management**: Handles keyboard appearance gracefully
 
 ### 🤖 Android Specific Features
-- **Viewport Optimization**: Proper scaling
+- **Viewport Optimization**: Proper scaling and overscroll behavior
+- **Chrome Optimizations**: Address bar hiding on scroll
+- **Performance Enhancements**: Optimized rendering and animations
 - **Overscroll Behavior**: Contained scrolling
 - **Material Design**: Android-friendly interactions
 - **Installation Prompts**: Native app-like installation
