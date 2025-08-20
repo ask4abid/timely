@@ -4430,10 +4430,15 @@
         
         // Add city to favorites
         function addToFavorites(cityName, timezone, flag, country) {
+            // Always resolve the correct flag for the timezone if missing or generic
+            let resolvedFlag = flag;
+            if (!flag || flag === '🌍') {
+                resolvedFlag = getTimezoneFlag(timezone);
+            }
             const favoriteCity = {
                 name: cityName,
                 timezone: timezone,
-                flag: flag,
+                flag: resolvedFlag,
                 country: country,
                 id: `favorite-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
             };
