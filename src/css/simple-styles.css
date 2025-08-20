@@ -8815,6 +8815,14 @@ body.dark-mode .btn-secondary-text {
         padding: 12px 16px 20px;
         min-height: 400px; /* Increased for mobile */
     }
+    
+    .popular-cities-container {
+        max-height: 300px; /* Increased height on mobile for better visibility */
+    }
+    
+    .location-card {
+        min-height: 80px; /* Slightly larger on mobile for touch-friendliness */
+    }
 }
 
 /* Enhanced Search Input Styling */
@@ -8859,4 +8867,41 @@ body.dark-mode .btn-secondary-text {
 
 .search-results-container::-webkit-scrollbar-thumb:hover {
     background: #a0aec0;
+}
+
+/* Popular Cities Container - Scrollable after 3 cities */
+.popular-cities-container {
+    max-height: 240px; /* Approximately 3 city cards (80px each) */
+    overflow-y: auto;
+    padding-right: 4px;
+    border-radius: 8px;
+}
+
+.popular-cities-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.popular-cities-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.popular-cities-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.popular-cities-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* Smooth scrolling for popular cities */
+.popular-cities-container {
+    scroll-behavior: smooth;
+}
+
+/* Location card height consistency for better scrolling calculation */
+.location-card {
+    min-height: 72px; /* Consistent height for better scroll calculation */
+    margin-bottom: 8px;
 }
