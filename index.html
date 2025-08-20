@@ -2366,7 +2366,7 @@
         <!-- Primary Time Display - Large and Prominent with Switch Capability -->
         <div class="hero-time-section">
             <div class="location-header">
-                <button class="switch-location-btn" id="switchLocationBtn" onclick="openLocationModal()">
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="toggleLocationPicker()">
                     <span class="switch-icon" style="margin-right: 8px;">
                         <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
                             <defs>
@@ -2423,7 +2423,7 @@
             <div class="section-header">
                 <h2 class="section-title">⭐ My Favorite Clocks</h2>
                 <p class="section-subtitle">Keep track of multiple time zones at once</p>
-                <button class="manage-favorites-btn" onclick="openLocationModal()">
+                <button class="manage-favorites-btn" onclick="toggleLocationPicker()">
                     <span class="btn-icon">➕</span>
                     Add More Cities
                 </button>
@@ -2499,7 +2499,7 @@
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇺🇸</span>
                                     <div class="location-info">
                                         <div class="location-name">New York</div>
                                         <div class="location-country">United States</div>
@@ -2508,7 +2508,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇺🇸</span>
                                     <div class="location-info">
                                         <div class="location-name">Los Angeles</div>
                                         <div class="location-country">United States</div>
@@ -2517,7 +2517,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇺🇸</span>
                                     <div class="location-info">
                                         <div class="location-name">Chicago</div>
                                         <div class="location-country">United States</div>
@@ -2526,7 +2526,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇨🇦</span>
                                     <div class="location-info">
                                         <div class="location-name">Toronto</div>
                                         <div class="location-country">Canada</div>
@@ -2535,7 +2535,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇨🇦</span>
                                     <div class="location-info">
                                         <div class="location-name">Vancouver</div>
                                         <div class="location-country">Canada</div>
@@ -2552,7 +2552,7 @@
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇬🇧</span>
                                     <div class="location-info">
                                         <div class="location-name">London</div>
                                         <div class="location-country">United Kingdom</div>
@@ -2561,7 +2561,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇫🇷</span>
                                     <div class="location-info">
                                         <div class="location-name">Paris</div>
                                         <div class="location-country">France</div>
@@ -2570,7 +2570,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇩🇪</span>
                                     <div class="location-info">
                                         <div class="location-name">Berlin</div>
                                         <div class="location-country">Germany</div>
@@ -2579,7 +2579,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇮🇹</span>
                                     <div class="location-info">
                                         <div class="location-name">Rome</div>
                                         <div class="location-country">Italy</div>
@@ -2596,7 +2596,7 @@
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇯🇵</span>
                                     <div class="location-info">
                                         <div class="location-name">Tokyo</div>
                                         <div class="location-country">Japan</div>
@@ -2605,7 +2605,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇨🇳</span>
                                     <div class="location-info">
                                         <div class="location-name">Shanghai</div>
                                         <div class="location-country">China</div>
@@ -2614,7 +2614,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇦🇪</span>
                                     <div class="location-info">
                                         <div class="location-name">Dubai</div>
                                         <div class="location-country">UAE</div>
@@ -2623,7 +2623,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇸🇬</span>
                                     <div class="location-info">
                                         <div class="location-name">Singapore</div>
                                         <div class="location-country">Singapore</div>
@@ -2640,7 +2640,7 @@
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇦🇺</span>
                                     <div class="location-info">
                                         <div class="location-name">Sydney</div>
                                         <div class="location-country">Australia</div>
@@ -2649,7 +2649,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">🇳🇿</span>
                                     <div class="location-info">
                                         <div class="location-name">Auckland</div>
                                         <div class="location-country">New Zealand</div>
@@ -2688,7 +2688,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('New York', 'America/New_York', '🌍', 'United States')"
+                                                        onclick="selectLocation('New York', 'America/New_York', '🇺🇸', 'United States')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2714,7 +2714,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Los Angeles', 'America/Los_Angeles', '🌍', 'United States')"
+                                                        onclick="selectLocation('Los Angeles', 'America/Los_Angeles', '🇺🇸', 'United States')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2740,7 +2740,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Toronto', 'America/Toronto', '🌍', 'Canada')"
+                                                        onclick="selectLocation('Toronto', 'America/Toronto', '🇨🇦', 'Canada')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2772,7 +2772,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('London', 'Europe/London', '🌍', 'United Kingdom')"
+                                                        onclick="selectLocation('London', 'Europe/London', '🇬🇧', 'United Kingdom')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2798,7 +2798,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Paris', 'Europe/Paris', '🌍', 'France')"
+                                                        onclick="selectLocation('Paris', 'Europe/Paris', '🇫🇷', 'France')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2824,7 +2824,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Berlin', 'Europe/Berlin', '🌍', 'Germany')"
+                                                        onclick="selectLocation('Berlin', 'Europe/Berlin', '🇩🇪', 'Germany')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2850,7 +2850,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Rome', 'Europe/Rome', '🌍', 'Italy')"
+                                                        onclick="selectLocation('Rome', 'Europe/Rome', '🇮🇹', 'Italy')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2882,7 +2882,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Tokyo', 'Asia/Tokyo', '🌍', 'Japan')"
+                                                        onclick="selectLocation('Tokyo', 'Asia/Tokyo', '🇯🇵', 'Japan')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2908,7 +2908,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Shanghai', 'Asia/Shanghai', '🌍', 'China')"
+                                                        onclick="selectLocation('Shanghai', 'Asia/Shanghai', '🇨🇳', 'China')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2934,7 +2934,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Dubai', 'Asia/Dubai', '🌍', 'UAE')"
+                                                        onclick="selectLocation('Dubai', 'Asia/Dubai', '🇦🇪', 'UAE')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2966,7 +2966,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Sydney', 'Australia/Sydney', '🌍', 'Australia')"
+                                                        onclick="selectLocation('Sydney', 'Australia/Sydney', '🇦🇺', 'Australia')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -2992,7 +2992,7 @@
                                                     ⭐
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Auckland', 'Pacific/Auckland', '🌍', 'New Zealand')"
+                                                        onclick="selectLocation('Auckland', 'Pacific/Auckland', '🇳🇿', 'New Zealand')"
                                                         title="Make primary clock">
                                                     🌍
                                                 </button>
@@ -3549,10 +3549,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize mobile optimizer
             window.mobileOptimizer = new MobileOptimizer();
-            
-            // Start the main clock
-            startClock();
-            
+            // Do NOT call startClock() here; main clock is started by startClockUpdates() after location is loaded
             // Set up modal close on backdrop click
             const modal = document.getElementById('locationPickerOverlay');
             if (modal) {
@@ -3569,18 +3566,6 @@
                     toggleLocationPicker();
                 }
             });
-            
-                color: white;
-                border: none;
-                padding: 12px 20px;
-                border-radius: 25px;
-                font-weight: 600;
-                font-size: 14px;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-                cursor: pointer;
-                z-index: 10000;
-                animation: pulse 2s infinite;
-            `;
             
             installButton.addEventListener('click', async () => {
                 if (deferredPrompt) {
@@ -3838,7 +3823,7 @@
                 toggleLocationPicker();
                 
                 // Start/restart the clock
-                startClock();
+                startClockUpdates(window.timelyAppState.currentLocationData);
                 
                 showNotification(`Location changed to ${flag} ${cityName}`, 'success');
             } catch (error) {
@@ -4311,21 +4296,20 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-                color: white;
-                padding: 12px 16px;
-                border-radius: 8px;
-                font-weight: 500;
-                z-index: 10000;
-                max-width: 300px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
-            notification.textContent = message;
-            
+            notification.style.cssText =
+                'position: fixed;\n'
+                + 'top: 20px;\n'
+                + 'right: 20px;\n'
+                + 'background: ' + (type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6') + ';\n'
+                + 'color: white;\n'
+                + 'padding: 12px 20px;\n'
+                + 'border-radius: 25px;\n'
+                + 'font-weight: 600;\n'
+                + 'font-size: 14px;\n'
+                + 'box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);\n'
+                + 'cursor: pointer;\n'
+                + 'z-index: 10000;\n'
+                + 'animation: pulse 2s infinite;';
             document.body.appendChild(notification);
             
             setTimeout(() => {
@@ -4389,6 +4373,7 @@
                 { id: 'time-london', timezone: 'Europe/London' },
                 { id: 'time-paris', timezone: 'Europe/Paris' },
                 { id: 'time-berlin', timezone: 'Europe/Berlin' },
+                { id: 'time-rome', timezone: 'Europe/Rome' },
                 { id: 'time-tokyo', timezone: 'Asia/Tokyo' },
                 { id: 'time-shanghai', timezone: 'Asia/Shanghai' },
                 { id: 'time-dubai', timezone: 'Asia/Dubai' },
@@ -4397,22 +4382,24 @@
             ];
 
             const now = new Date();
-            
+
             cityCards.forEach(card => {
-                const element = document.getElementById(card.id);
-                if (element) {
-                    try {
-                        const timeString = now.toLocaleTimeString('en-US', {
-                            timeZone: card.timezone,
-                            hour12: false,
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                        element.textContent = timeString;
-                    } catch (error) {
-                        element.textContent = '--:--';
-                    }
+                // Update both .location-time and .city-time elements
+                const element1 = document.getElementById(card.id); // for .location-time
+                const element2 = document.querySelector('.city-time#' + card.id); // for city cards
+                let timeString = '--:--';
+                try {
+                    timeString = now.toLocaleTimeString('en-US', {
+                        timeZone: card.timezone,
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } catch (error) {
+                    // fallback already set
                 }
+                if (element1) element1.textContent = timeString;
+                if (element2) element2.textContent = timeString;
             });
         }
 
@@ -5088,47 +5075,74 @@
             const spinner = btn.querySelector('.loading-spinner');
             const btnText = btn.querySelector('.btn-text');
             const gpsIcon = btn.querySelector('.gps-icon');
-            
+
             // Show loading state
             btn.disabled = true;
             spinner.style.display = 'block';
             btnText.textContent = 'Getting location...';
             gpsIcon.style.display = 'none';
-            
+
             try {
                 if (!navigator.geolocation) {
+                    showNotification('Geolocation is not supported by your browser.', 'error');
                     throw new Error('Geolocation not supported');
                 }
 
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 300000
+
+                let position;
+                try {
+                    position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 300000
+                        });
                     });
-                });
+                } catch (error) {
+                    // Permission denied or unavailable: fallback to browser timezone
+                    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    const city = timezone.split('/').pop().replace(/_/g, ' ');
+                    const flag = getTimezoneFlag(timezone);
+                    selectLocation(city, timezone, flag, 'Browser Timezone');
+                    showNotification('Location permission denied. Showing time based on your browser settings.', 'warning');
+                    return;
+                }
 
                 const { latitude, longitude } = position.coords;
-                
-                // Get location from coordinates (simplified)
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const parts = timezone.split('/');
-                const city = parts[parts.length - 1].replace(/_/g, ' ');
+
+                // Use BigDataCloud reverse-geocode-client API (free, no key required)
+                let data;
+                try {
+                    const apiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error('Failed to fetch location info');
+                    data = await response.json();
+                } catch (apiError) {
+                    showNotification('Could not get city/country from coordinates. Using browser timezone.', 'warning');
+                    data = {};
+                }
+
+                const timezone = data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const city = data.city || data.locality || data.principalSubdivision || 'Current Location';
+                const country = data.countryName || 'Current Location';
                 const flag = getTimezoneFlag(timezone);
-                
-                selectLocation(city, timezone, flag, 'Your Current Location');
-                
+
+                selectLocation(city, timezone, flag, country);
+
             } catch (error) {
                 console.error('Location detection failed:', error);
-                
+
                 // Show error state
                 btnText.textContent = 'Location unavailable';
                 setTimeout(() => {
                     btnText.textContent = 'Use Current Location';
                     gpsIcon.style.display = 'inline';
                 }, 2000);
-                
-                showNotification('Unable to get your location. Please select manually.', 'error');
+
+                // Only show generic notification if not already shown
+                if (!error.message || error.message === 'Location detection failed') {
+                    showNotification('Unable to get your location. Please select manually.', 'error');
+                }
             } finally {
                 // Reset button state
                 btn.disabled = false;
