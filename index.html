@@ -2366,7 +2366,7 @@
         <!-- Primary Time Display - Large and Prominent with Switch Capability -->
         <div class="hero-time-section">
             <div class="location-header">
-                <button class="switch-location-btn" id="switchLocationBtn" onclick="toggleLocationPicker()">
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="closeLocationModal()">
                     <span class="switch-icon" style="margin-right: 8px;">
                         <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
                             <defs>
@@ -2413,7 +2413,7 @@
                 <div class="main-date" id="primaryDate">Loading...</div>
                 <div class="sun-times" id="sunTimes">
                     <span class="sun-icon">â˜€ï¸</span>
-                    <span class="sun-info" id="sunInfo">â†‘ 06:30 â†“ 18:45 (12h 15m)</span>
+                    <span class="sun-info" id="sunInfo">←‘ 06:30 ←“ 18:45 (12h 15m)</span>
                 </div>
             </div>
         </div>
@@ -2423,7 +2423,7 @@
             <div class="section-header">
                 <h2 class="section-title">⭐ My Favorite Clocks</h2>
                 <p class="section-subtitle">Keep track of multiple time zones at once</p>
-                <button class="manage-favorites-btn" onclick="toggleLocationPicker()">
+                <button class="manage-favorites-btn" onclick="closeLocationModal()">
                     <span class="btn-icon">âž•</span>
                     Add More Cities
                 </button>
@@ -2438,8 +2438,8 @@
             <div class="location-picker-modal">
                 <!-- Modal Header with Back Button -->
                 <div class="modal-header">
-                    <button class="modal-back-btn" onclick="toggleLocationPicker()" aria-label="Back">
-                        <span>â†</span>
+                    <button class="modal-back-btn" onclick="closeLocationModal()" aria-label="Back">
+                        <span>←</span>
                     </button>
                     <h2 class="modal-header-title">Select Location</h2>
                 </div>
@@ -3904,7 +3904,7 @@
                     // Update sun times (simplified)
                     if (sunInfo && locationData.coordinates) {
                         const sunTimes = calculateSunTimes(locationData.coordinates.lat, locationData.coordinates.lon, now);
-                        sunInfo.textContent = `â†‘ ${sunTimes.sunrise} â†“ ${sunTimes.sunset} (${sunTimes.dayLength})`;
+                        sunInfo.textContent = `←‘ ${sunTimes.sunrise} ←“ ${sunTimes.sunset} (${sunTimes.dayLength})`;
                     }
                 } catch (error) {
                     console.error('Clock update error:', error);
@@ -3973,6 +3973,61 @@
                 updateModalCityTimes();
             }
         }
+
+        // Dedicated back button handler for modal
+        function closeLocationModal() {
+            console.log('Back button clicked'); // Debug log
+            const modal = document.getElementById('locationPickerOverlay');
+            if (modal && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                window.timelyAppState.isModalOpen = false;
+                
+                // Clear search input and results
+                const searchInput = document.getElementById('citySearchInput');
+                const searchResults = document.getElementById('searchResults');
+                if (searchInput) searchInput.value = '';
+                if (searchResults) searchResults.style.display = 'none';
+                
+                console.log('Modal closed successfully'); // Debug log
+            } else {
+                console.log('Modal not found or not active'); // Debug log
+            }
+        }
+
+        // Initialize back button event listener on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const backButton = document.querySelector('.modal-back-btn');
+            if (backButton) {
+                // Add event listener as backup to onclick
+                backButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeLocationModal();
+                });
+                console.log('Back button event listener added');
+            }
+
+            // Add ESC key support to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('locationPickerOverlay');
+                    if (modal && modal.classList.contains('active')) {
+                        closeLocationModal();
+                    }
+                }
+            });
+
+            // Add click outside modal to close
+            const modal = document.getElementById('locationPickerOverlay');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeLocationModal();
+                    }
+                });
+            }
+        });
 
         // Enhanced search cities function
         function searchCities(query) {
@@ -5240,6 +5295,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

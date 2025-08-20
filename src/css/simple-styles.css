@@ -2091,22 +2091,30 @@ body.dark-mode .digital-date {
 .modal-back-btn {
     background: #f8f9fa;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     color: #6c757d;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 44px; /* Touch-friendly */
+    margin-right: 8px;
+    font-weight: bold;
 }
 
 .modal-back-btn:hover {
     background: #e9ecef;
     color: #495057;
+    transform: translateX(-2px);
+}
+
+.modal-back-btn:active {
+    background: #dee2e6;
+    transform: scale(0.95) translateX(-2px);
 }
 
 .modal-back-btn:active {
