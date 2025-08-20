@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
     
     <!-- iOS Specific -->
     <meta name="format-detection" content="telephone=no">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text y='60' x='50' text-anchor='middle' font-size='60' fill='white'>🕐</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text y='60' x='50' text-anchor='middle' font-size='60' fill='white'>??�</text></svg>">
     
     <!-- Android Specific -->
     <link rel="manifest" href="manifest.json">
@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="src/css/simple-styles.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>??�</text></svg>">
     
     <!-- City Cards Custom Styles -->
     <style>
@@ -605,7 +605,7 @@
         /* Location Cards */
         .location-card {
             min-height: 56px;
-                color: #ffcc00; /* Changed to a gold color */
+            background: var(--modal-bg);
             border: 1px solid var(--modal-border);
             border-radius: 12px;
             margin: 8px 20px;
@@ -1491,7 +1491,7 @@
 
         .location-country {
             font-size: clamp(0.9rem, 3vw, 1.1rem); /* Responsive sizing */
-                color: #ffcc00; /* Changed to a gold color */
+            color: #666666; /* Slightly muted for better hierarchy */
             font-weight: 500;
             margin: 0;
             line-height: 1.3;
@@ -1504,7 +1504,7 @@
 
         .live-time-label {
             color: #ef4444;
-                font-weight: 900; /* Increased font weight for emphasis */
+            font-weight: 700;
             font-size: 1.05em;
             text-shadow: 0 1px 2px rgba(239, 68, 68, 0.3);
             animation: live-pulse 2s ease-in-out infinite;
@@ -2366,7 +2366,7 @@
         <!-- Primary Time Display - Large and Prominent with Switch Capability -->
         <div class="hero-time-section">
             <div class="location-header">
-                <button class="switch-location-btn" id="switchLocationBtn" onclick="openLocationModal()">
+                <button class="switch-location-btn" id="switchLocationBtn" onclick="closeLocationModal()">
                     <span class="switch-icon" style="margin-right: 8px;">
                         <svg width="16" height="16" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
                             <defs>
@@ -2403,7 +2403,7 @@
                 <div class="clock-location-info" id="clockLocationInfo">
                     <div class="location-header">
                         <div class="location-name-row">
-                            <span class="location-flag" id="locationFlag" data-country-code="WORLD" title="World Flag">🌍</span>
+                            <span class="location-flag" id="locationFlag" data-country-code="WORLD" title="World Flag">??�</span>
                             <span class="location-name" id="locationName">Local Time</span>
                         </div>
                         <div class="location-country" id="locationCountry">Your Location</div>
@@ -2413,7 +2413,7 @@
                 <div class="main-date" id="primaryDate">Loading...</div>
                 <div class="sun-times" id="sunTimes">
                     <span class="sun-icon">☀️</span>
-                    <span class="sun-info" id="sunInfo">🌅 06:30 🌇 18:45 (12h 15m)</span>
+                    <span class="sun-info" id="sunInfo">?� 06:30 ?� 18:45 (12h 15m)</span>
                 </div>
             </div>
         </div>
@@ -2421,9 +2421,9 @@
         <!-- Favorite Clocks Section -->
         <div class="favorite-clocks-section" id="favoriteClockSection" style="display: none;">
             <div class="section-header">
-                <h2 class="section-title">⭐ My Favorite Clocks</h2>
+                <h2 class="section-title">?� My Favorite Clocks</h2>
                 <p class="section-subtitle">Keep track of multiple time zones at once</p>
-                <button class="manage-favorites-btn" onclick="openLocationModal()">
+                <button class="manage-favorites-btn" onclick="closeLocationModal()">
                     <span class="btn-icon">➕</span>
                     Add More Cities
                 </button>
@@ -2439,7 +2439,7 @@
                 <!-- Modal Header with Back Button -->
                 <div class="modal-header">
                     <button class="modal-back-btn" onclick="closeLocationModal()" aria-label="Back">
-                        <span>✓</span>
+                        <span>?�</span>
                     </button>
                     <h2 class="modal-header-title">Select Location</h2>
                 </div>
@@ -2470,7 +2470,7 @@
 
                 <!-- Selected Location Display -->
                 <div class="selected-location" id="selectedLocationDisplay" style="display: none;">
-                    <span class="selected-location-flag" id="selectedFlag">🌍</span>
+                    <span class="selected-location-flag" id="selectedFlag">??�</span>
                     <div class="selected-location-info">
                         <div class="selected-location-name" id="selectedName">Selected City</div>
                         <div class="selected-location-country" id="selectedCountry">Country</div>
@@ -2494,12 +2494,12 @@
                     <div class="popular-locations">
                         <!-- North America -->
                         <div class="section-header">
-                            <h3 class="section-title">🌍 North America</h3>
+                            <h3 class="section-title">??� North America</h3>
                         </div>
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">New York</div>
                                         <div class="location-country">United States</div>
@@ -2508,7 +2508,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Los Angeles</div>
                                         <div class="location-country">United States</div>
@@ -2517,7 +2517,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Chicago</div>
                                         <div class="location-country">United States</div>
@@ -2526,7 +2526,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Toronto</div>
                                         <div class="location-country">Canada</div>
@@ -2535,7 +2535,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Vancouver</div>
                                         <div class="location-country">Canada</div>
@@ -2547,12 +2547,12 @@
 
                         <!-- Europe -->
                         <div class="section-header">
-                            <h3 class="section-title">🌍 Europe</h3>
+                            <h3 class="section-title">??� Europe</h3>
                         </div>
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">London</div>
                                         <div class="location-country">United Kingdom</div>
@@ -2561,7 +2561,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Paris</div>
                                         <div class="location-country">France</div>
@@ -2570,7 +2570,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Berlin</div>
                                         <div class="location-country">Germany</div>
@@ -2579,7 +2579,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Rome</div>
                                         <div class="location-country">Italy</div>
@@ -2591,12 +2591,12 @@
 
                         <!-- Asia -->
                         <div class="section-header">
-                            <h3 class="section-title">🌍 Asia</h3>
+                            <h3 class="section-title">??� Asia</h3>
                         </div>
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Tokyo</div>
                                         <div class="location-country">Japan</div>
@@ -2605,7 +2605,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Shanghai</div>
                                         <div class="location-country">China</div>
@@ -2614,7 +2614,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Dubai</div>
                                         <div class="location-country">UAE</div>
@@ -2623,7 +2623,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Singapore</div>
                                         <div class="location-country">Singapore</div>
@@ -2635,12 +2635,12 @@
 
                         <!-- Oceania -->
                         <div class="section-header">
-                            <h3 class="section-title">🌍 Oceania</h3>
+                            <h3 class="section-title">??� Oceania</h3>
                         </div>
                         <div class="location-section">
                             <div class="location-grid">
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Sydney</div>
                                         <div class="location-country">Australia</div>
@@ -2649,7 +2649,7 @@
                                 </div>
                                 
                                 <div class="location-card" >
-                                    <span class="location-flag">🌍</span>
+                                    <span class="location-flag">????</span>
                                     <div class="location-info">
                                         <div class="location-name">Auckland</div>
                                         <div class="location-country">New Zealand</div>
@@ -2663,16 +2663,16 @@
             </div>
         </div>
                     <div class="popular-section">
-                        <h4 class="section-title">🌍 Popular Cities Worldwide</h4>
+                        <h4 class="section-title">??� Popular Cities Worldwide</h4>
                         <div class="popular-cities-grid" id="popularCitiesGrid">
                             
                             <!-- North America -->
                             <div class="continent-section">
-                                <h5 class="continent-title">🌍 North America</h5>
+                                <h5 class="continent-title">??� North America</h5>
                                 <div class="cities-cards-grid">
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇺🇸</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-newyork">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2683,14 +2683,14 @@
                                             <small class="timezone-info">EST/EDT</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'New York', 'America/New_York', '🌍', 'United States')"
+                                                        onclick="addCityToFavorites(event, 'New York', 'America/New_York', '????', 'United States')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('New York', 'America/New_York', '🌍', 'United States')"
+                                                        onclick="selectLocation('New York', 'America/New_York', '????', 'United States')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2698,7 +2698,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇺🇸</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-losangeles">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2709,14 +2709,14 @@
                                             <small class="timezone-info">PST/PDT</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Los Angeles', 'America/Los_Angeles', '🌍', 'United States')"
+                                                        onclick="addCityToFavorites(event, 'Los Angeles', 'America/Los_Angeles', '????', 'United States')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Los Angeles', 'America/Los_Angeles', '🌍', 'United States')"
+                                                        onclick="selectLocation('Los Angeles', 'America/Los_Angeles', '????', 'United States')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2724,7 +2724,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇨🇦</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-toronto">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2735,14 +2735,14 @@
                                             <small class="timezone-info">EST/EDT</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Toronto', 'America/Toronto', '🌍', 'Canada')"
+                                                        onclick="addCityToFavorites(event, 'Toronto', 'America/Toronto', '????', 'Canada')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Toronto', 'America/Toronto', '🌍', 'Canada')"
+                                                        onclick="selectLocation('Toronto', 'America/Toronto', '????', 'Canada')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2752,11 +2752,11 @@
                             
                             <!-- Europe -->
                             <div class="continent-section">
-                                <h5 class="continent-title">🌍 Europe</h5>
+                                <h5 class="continent-title">??� Europe</h5>
                                 <div class="cities-cards-grid">
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇬🇧</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-london">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2767,14 +2767,14 @@
                                             <small class="timezone-info">GMT/BST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'London', 'Europe/London', '🌍', 'United Kingdom')"
+                                                        onclick="addCityToFavorites(event, 'London', 'Europe/London', '????', 'United Kingdom')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('London', 'Europe/London', '🌍', 'United Kingdom')"
+                                                        onclick="selectLocation('London', 'Europe/London', '????', 'United Kingdom')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2782,7 +2782,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇫🇷</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-paris">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2793,14 +2793,14 @@
                                             <small class="timezone-info">CET/CEST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Paris', 'Europe/Paris', '🌍', 'France')"
+                                                        onclick="addCityToFavorites(event, 'Paris', 'Europe/Paris', '????', 'France')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Paris', 'Europe/Paris', '🌍', 'France')"
+                                                        onclick="selectLocation('Paris', 'Europe/Paris', '????', 'France')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2808,7 +2808,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇩🇪</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-berlin">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2819,40 +2819,14 @@
                                             <small class="timezone-info">CET/CEST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Berlin', 'Europe/Berlin', '🌍', 'Germany')"
+                                                        onclick="addCityToFavorites(event, 'Berlin', 'Europe/Berlin', '????', 'Germany')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?�
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Berlin', 'Europe/Berlin', '🌍', 'Germany')"
+                                                        onclick="selectLocation('Berlin', 'Europe/Berlin', '????', 'Germany')"
                                                         title="Make primary clock">
-                                                    🌍
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="city-card">
-                                        <div class="city-card-header">
-                                            <span class="city-flag">🇮🇹</span>
-                                            <span class="city-time" id="time-rome">--:--</span>
-                                        </div>
-                                        <div class="city-card-body">
-                                            <h6 class="city-name">Rome</h6>
-                                            <p class="city-country">Italy</p>
-                                        </div>
-                                        <div class="city-card-footer">
-                                            <small class="timezone-info">CET/CEST</small>
-                                            <div class="city-card-actions">
-                                                <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Rome', 'Europe/Rome', '🌍', 'Italy')"
-                                                        title="Add to favorites">
-                                                    ⭐
-                                                </button>
-                                                <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Rome', 'Europe/Rome', '🌍', 'Italy')"
-                                                        title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2862,11 +2836,11 @@
                             
                             <!-- Asia -->
                             <div class="continent-section">
-                                <h5 class="continent-title">🌍 Asia</h5>
+                                <h5 class="continent-title">??� Asia</h5>
                                 <div class="cities-cards-grid">
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇯🇵</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-tokyo">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2877,14 +2851,14 @@
                                             <small class="timezone-info">JST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Tokyo', 'Asia/Tokyo', '🌍', 'Japan')"
+                                                        onclick="addCityToFavorites(event, 'Tokyo', 'Asia/Tokyo', '????', 'Japan')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Tokyo', 'Asia/Tokyo', '🌍', 'Japan')"
+                                                        onclick="selectLocation('Tokyo', 'Asia/Tokyo', '????', 'Japan')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2892,7 +2866,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇨🇳</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-shanghai">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2903,14 +2877,14 @@
                                             <small class="timezone-info">CST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Shanghai', 'Asia/Shanghai', '🌍', 'China')"
+                                                        onclick="addCityToFavorites(event, 'Shanghai', 'Asia/Shanghai', '????', 'China')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Shanghai', 'Asia/Shanghai', '🌍', 'China')"
+                                                        onclick="selectLocation('Shanghai', 'Asia/Shanghai', '????', 'China')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2918,7 +2892,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇦🇪</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-dubai">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2929,14 +2903,14 @@
                                             <small class="timezone-info">GST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Dubai', 'Asia/Dubai', '🌍', 'UAE')"
+                                                        onclick="addCityToFavorites(event, 'Dubai', 'Asia/Dubai', '????', 'UAE')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Dubai', 'Asia/Dubai', '🌍', 'UAE')"
+                                                        onclick="selectLocation('Dubai', 'Asia/Dubai', '????', 'UAE')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2946,11 +2920,11 @@
                             
                             <!-- Oceania -->
                             <div class="continent-section">
-                                <h5 class="continent-title">🌍 Oceania</h5>
+                                <h5 class="continent-title">??� Oceania</h5>
                                 <div class="cities-cards-grid">
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇦🇺</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-sydney">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2961,14 +2935,14 @@
                                             <small class="timezone-info">AEDT/AEST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Sydney', 'Australia/Sydney', '🌍', 'Australia')"
+                                                        onclick="addCityToFavorites(event, 'Sydney', 'Australia/Sydney', '????', 'Australia')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Sydney', 'Australia/Sydney', '🌍', 'Australia')"
+                                                        onclick="selectLocation('Sydney', 'Australia/Sydney', '????', 'Australia')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -2976,7 +2950,7 @@
                                     
                                     <div class="city-card">
                                         <div class="city-card-header">
-                                            <span class="city-flag">🇳🇿</span>
+                                            <span class="city-flag">????</span>
                                             <span class="city-time" id="time-auckland">--:--</span>
                                         </div>
                                         <div class="city-card-body">
@@ -2987,14 +2961,14 @@
                                             <small class="timezone-info">NZDT/NZST</small>
                                             <div class="city-card-actions">
                                                 <button class="quick-favorite-btn" 
-                                                        onclick="addCityToFavorites(event, 'Auckland', 'Pacific/Auckland', '🌍', 'New Zealand')"
+                                                        onclick="addCityToFavorites(event, 'Auckland', 'Pacific/Auckland', '????', 'New Zealand')"
                                                         title="Add to favorites">
-                                                    ⭐
+                                                    ?
                                                 </button>
                                                 <button class="make-primary-btn" 
-                                                        onclick="selectLocation('Auckland', 'Pacific/Auckland', '🌍', 'New Zealand')"
+                                                        onclick="selectLocation('Auckland', 'Pacific/Auckland', '????', 'New Zealand')"
                                                         title="Make primary clock">
-                                                    🌍
+                                                    ??
                                                 </button>
                                             </div>
                                         </div>
@@ -3018,158 +2992,158 @@
         // Global cities database for search (Comprehensive Worldwide Coverage)
         const globalCitiesDatabase = [
             // North America - United States (Expanded)
-            { name: 'New York', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'Chicago', timezone: 'America/Chicago', flag: '🌍', country: 'United States' },
-            { name: 'Miami', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'San Francisco', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'Boston', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'Washington DC', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'Atlanta', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'Dallas', timezone: 'America/Chicago', flag: '🌍', country: 'United States' },
-            { name: 'Houston', timezone: 'America/Chicago', flag: '🌍', country: 'United States' },
-            { name: 'Seattle', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'Las Vegas', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'Phoenix', timezone: 'America/Phoenix', flag: '🌍', country: 'United States' },
-            { name: 'Denver', timezone: 'America/Denver', flag: '🌍', country: 'United States' },
+            { name: 'New York', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Chicago', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Miami', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'San Francisco', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Boston', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Washington DC', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Atlanta', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Dallas', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Houston', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Seattle', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Las Vegas', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Phoenix', timezone: 'America/Phoenix', flag: '????', country: 'United States' },
+            { name: 'Denver', timezone: 'America/Denver', flag: '????', country: 'United States' },
             
             // Additional US Cities
-            { name: 'Philadelphia', timezone: 'America/New_York', flag: '🌍', country: 'United States' },
-            { name: 'San Antonio', timezone: 'America/Chicago', flag: '🌍', country: 'United States' },
-            { name: 'San Diego', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'San Jose', timezone: 'America/Los_Angeles', flag: '🌍', country: 'United States' },
-            { name: 'Austin', timezone: 'America/Chicago', flag: '🌍', country: 'United States' },
-            { name: 'New York', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Los Angeles', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Chicago', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Miami', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'San Francisco', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Boston', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Washington DC', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Atlanta', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Dallas', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Houston', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Seattle', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Las Vegas', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Phoenix', timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
-            { name: 'Denver', timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
-            { name: 'Philadelphia', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'San Antonio', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'San Diego', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'San Jose', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Austin', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Austin', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Jacksonville', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Fort Worth', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Columbus', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Charlotte', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Indianapolis', timezone: 'America/Indiana/Indianapolis', flag: '🇺🇸', country: 'United States' },
-            { name: 'Nashville', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Detroit', timezone: 'America/Detroit', flag: '🇺🇸', country: 'United States' },
-            { name: 'Memphis', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Portland', timezone: 'America/Los_Angeles', flag: '🇺🇸', country: 'United States' },
-            { name: 'Oklahoma City', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Louisville', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Baltimore', timezone: 'America/New_York', flag: '🇺🇸', country: 'United States' },
-            { name: 'Milwaukee', timezone: 'America/Chicago', flag: '🇺🇸', country: 'United States' },
-            { name: 'Albuquerque', timezone: 'America/Denver', flag: '🇺🇸', country: 'United States' },
-            { name: 'Tucson', timezone: 'America/Phoenix', flag: '🇺🇸', country: 'United States' },
-            { name: 'Hamilton', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Brampton', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Surrey', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Laval', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Halifax', timezone: 'America/Halifax', flag: '🇨🇦', country: 'Canada' },
-            { name: 'London', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Markham', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Vaughan', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Gatineau', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Saskatoon', timezone: 'America/Regina', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Longueuil', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Burnaby', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Regina', timezone: 'America/Regina', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Richmond', timezone: 'America/Vancouver', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Richmond Hill', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Oakville', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Burlington', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Greater Sudbury', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Sherbrooke', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Oshawa', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
-            { name: 'Saguenay', timezone: 'America/Toronto', flag: '🇨🇦', country: 'Canada' },
+            { name: 'Philadelphia', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'San Antonio', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'San Diego', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'San Jose', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Austin', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Jacksonville', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Fort Worth', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Columbus', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Charlotte', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Indianapolis', timezone: 'America/Indiana/Indianapolis', flag: '????', country: 'United States' },
+            { name: 'Nashville', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Detroit', timezone: 'America/Detroit', flag: '????', country: 'United States' },
+            { name: 'Memphis', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Portland', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Oklahoma City', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Louisville', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Baltimore', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Milwaukee', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Albuquerque', timezone: 'America/Denver', flag: '????', country: 'United States' },
+            { name: 'Tucson', timezone: 'America/Phoenix', flag: '????', country: 'United States' },
+            { name: 'Fresno', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Sacramento', timezone: 'America/Los_Angeles', flag: '????', country: 'United States' },
+            { name: 'Mesa', timezone: 'America/Phoenix', flag: '????', country: 'United States' },
+            { name: 'Kansas City', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Colorado Springs', timezone: 'America/Denver', flag: '????', country: 'United States' },
+            { name: 'Raleigh', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'Tampa', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            { name: 'New Orleans', timezone: 'America/Chicago', flag: '????', country: 'United States' },
+            { name: 'Cincinnati', timezone: 'America/New_York', flag: '????', country: 'United States' },
+            
+            // North America - Canada (Expanded)
+            { name: 'Toronto', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Vancouver', timezone: 'America/Vancouver', flag: '????', country: 'Canada' },
+            { name: 'Montreal', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Calgary', timezone: 'America/Edmonton', flag: '????', country: 'Canada' },
+            { name: 'Ottawa', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Edmonton', timezone: 'America/Edmonton', flag: '????', country: 'Canada' },
+            { name: 'Mississauga', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Winnipeg', timezone: 'America/Winnipeg', flag: '????', country: 'Canada' },
+            { name: 'Quebec City', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Hamilton', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Brampton', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Surrey', timezone: 'America/Vancouver', flag: '????', country: 'Canada' },
+            { name: 'Laval', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Halifax', timezone: 'America/Halifax', flag: '????', country: 'Canada' },
+            { name: 'London', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Markham', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Vaughan', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Gatineau', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Saskatoon', timezone: 'America/Regina', flag: '????', country: 'Canada' },
+            { name: 'Longueuil', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Burnaby', timezone: 'America/Vancouver', flag: '????', country: 'Canada' },
+            { name: 'Regina', timezone: 'America/Regina', flag: '????', country: 'Canada' },
+            { name: 'Richmond', timezone: 'America/Vancouver', flag: '????', country: 'Canada' },
+            { name: 'Richmond Hill', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Oakville', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Burlington', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Greater Sudbury', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Sherbrooke', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Oshawa', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
+            { name: 'Saguenay', timezone: 'America/Toronto', flag: '????', country: 'Canada' },
             
             // North America - Mexico (Expanded)
-            { name: 'Mexico City', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Guadalajara', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Cancun', timezone: 'America/Cancun', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Monterrey', timezone: 'America/Monterrey', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Puebla', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Tijuana', timezone: 'America/Tijuana', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'León', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Juárez', timezone: 'America/Ojinaga', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Torreón', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Querétaro', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'San Luis Potosí', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Mérida', timezone: 'America/Merida', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Mexicali', timezone: 'America/Tijuana', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Aguascalientes', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Acapulco', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Cuernavaca', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Saltillo', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Xalapa', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Tampico', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
-            { name: 'Toluca', timezone: 'America/Mexico_City', flag: '🇲🇽', country: 'Mexico' },
+            { name: 'Mexico City', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Guadalajara', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Cancun', timezone: 'America/Cancun', flag: '????', country: 'Mexico' },
+            { name: 'Monterrey', timezone: 'America/Monterrey', flag: '????', country: 'Mexico' },
+            { name: 'Puebla', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Tijuana', timezone: 'America/Tijuana', flag: '????', country: 'Mexico' },
+            { name: 'León', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Juárez', timezone: 'America/Ojinaga', flag: '????', country: 'Mexico' },
+            { name: 'Torreón', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Querétaro', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'San Luis Potosí', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Mérida', timezone: 'America/Merida', flag: '????', country: 'Mexico' },
+            { name: 'Mexicali', timezone: 'America/Tijuana', flag: '????', country: 'Mexico' },
+            { name: 'Aguascalientes', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Acapulco', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Cuernavaca', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Saltillo', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Xalapa', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Tampico', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
+            { name: 'Toluca', timezone: 'America/Mexico_City', flag: '????', country: 'Mexico' },
             
             // Europe - United Kingdom (Expanded)
-            { name: 'London', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Manchester', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Edinburgh', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Birmingham', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Liverpool', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Leeds', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Glasgow', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Sheffield', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Bradford', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Newcastle', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Leicester', timezone: 'Europe/London', flag: '🇬🇧', country: 'United Kingdom' },
-            { name: 'Nottingham', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Bristol', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Cardiff', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Belfast', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Hull', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Plymouth', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Stoke-on-Trent', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Wolverhampton', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Derby', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Swansea', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Southampton', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Salford', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Aberdeen', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Westminster', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Portsmouth', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'York', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Peterborough', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Dundee', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
-            { name: 'Lancaster', timezone: 'Europe/London', flag: '🌍', country: 'United Kingdom' },
+            { name: 'London', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Manchester', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Edinburgh', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Birmingham', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Liverpool', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Leeds', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Glasgow', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Sheffield', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Bradford', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Newcastle', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Leicester', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Nottingham', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Bristol', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Cardiff', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Belfast', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Hull', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Plymouth', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Stoke-on-Trent', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Wolverhampton', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Derby', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Swansea', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Southampton', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Salford', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Aberdeen', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Westminster', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Portsmouth', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'York', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Peterborough', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Dundee', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
+            { name: 'Lancaster', timezone: 'Europe/London', flag: '????', country: 'United Kingdom' },
             
             // Europe - France
-            { name: 'Paris', timezone: 'Europe/Paris', flag: '🌍', country: 'France' },
-            { name: 'Marseille', timezone: 'Europe/Paris', flag: '🌍', country: 'France' },
-            { name: 'Lyon', timezone: 'Europe/Paris', flag: '🌍', country: 'France' },
-            { name: 'Nice', timezone: 'Europe/Paris', flag: '🌍', country: 'France' },
+            { name: 'Paris', timezone: 'Europe/Paris', flag: '????', country: 'France' },
+            { name: 'Marseille', timezone: 'Europe/Paris', flag: '????', country: 'France' },
+            { name: 'Lyon', timezone: 'Europe/Paris', flag: '????', country: 'France' },
+            { name: 'Nice', timezone: 'Europe/Paris', flag: '????', country: 'France' },
             
             // Europe - Germany
-            { name: 'Berlin', timezone: 'Europe/Berlin', flag: '🌍', country: 'Germany' },
-            { name: 'Munich', timezone: 'Europe/Berlin', flag: '🌍', country: 'Germany' },
-            { name: 'Hamburg', timezone: 'Europe/Berlin', flag: '🌍', country: 'Germany' },
-            { name: 'Frankfurt', timezone: 'Europe/Berlin', flag: '🌍', country: 'Germany' },
+            { name: 'Berlin', timezone: 'Europe/Berlin', flag: '????', country: 'Germany' },
+            { name: 'Munich', timezone: 'Europe/Berlin', flag: '????', country: 'Germany' },
+            { name: 'Hamburg', timezone: 'Europe/Berlin', flag: '????', country: 'Germany' },
+            { name: 'Frankfurt', timezone: 'Europe/Berlin', flag: '????', country: 'Germany' },
             
             // Europe - Other Countries
-            { name: 'Rome', timezone: 'Europe/Rome', flag: '🌍', country: 'Italy' },
-            { name: 'Milan', timezone: 'Europe/Rome', flag: '🌍', country: 'Italy' },
-            { name: 'Madrid', timezone: 'Europe/Madrid', flag: '🌍', country: 'Spain' },
-            { name: 'Barcelona', timezone: 'Europe/Madrid', flag: '🌍', country: 'Spain' },
-            { name: 'Amsterdam', timezone: 'Europe/Amsterdam', flag: '🌍', country: 'Netherlands' },
-            { name: 'Stockholm', timezone: 'Europe/Stockholm', flag: '🌍', country: 'Sweden' },
-            { name: 'Oslo', timezone: 'Europe/Oslo', flag: '🌍', country: 'Norway' },
+            { name: 'Rome', timezone: 'Europe/Rome', flag: '????', country: 'Italy' },
+            { name: 'Milan', timezone: 'Europe/Rome', flag: '????', country: 'Italy' },
+            { name: 'Madrid', timezone: 'Europe/Madrid', flag: '????', country: 'Spain' },
+            { name: 'Barcelona', timezone: 'Europe/Madrid', flag: '????', country: 'Spain' },
+            { name: 'Amsterdam', timezone: 'Europe/Amsterdam', flag: '????', country: 'Netherlands' },
+            { name: 'Stockholm', timezone: 'Europe/Stockholm', flag: '????', country: 'Sweden' },
+            { name: 'Oslo', timezone: 'Europe/Oslo', flag: '????', country: 'Norway' },
             { name: 'Copenhagen', timezone: 'Europe/Copenhagen', flag: '🇩🇰', country: 'Denmark' },
             { name: 'Helsinki', timezone: 'Europe/Helsinki', flag: '🇫🇮', country: 'Finland' },
             { name: 'Vienna', timezone: 'Europe/Vienna', flag: '🇦🇹', country: 'Austria' },
@@ -3180,48 +3154,48 @@
             { name: 'Prague', timezone: 'Europe/Prague', flag: '🇨🇿', country: 'Czech Republic' },
             { name: 'Warsaw', timezone: 'Europe/Warsaw', flag: '🇵🇱', country: 'Poland' },
             { name: 'Budapest', timezone: 'Europe/Budapest', flag: '🇭🇺', country: 'Hungary' },
-            { name: 'Moscow', timezone: 'Europe/Moscow', flag: '🌍', country: 'Russia' },
+            { name: 'Moscow', timezone: 'Europe/Moscow', flag: '????', country: 'Russia' },
             { name: 'Kiev', timezone: 'Europe/Kiev', flag: '🇺🇦', country: 'Ukraine' },
             { name: 'Istanbul', timezone: 'Europe/Istanbul', flag: '🇹🇷', country: 'Turkey' },
             { name: 'Athens', timezone: 'Europe/Athens', flag: '🇬🇷', country: 'Greece' },
             
             // Asia - East Asia
-            { name: 'Tokyo', timezone: 'Asia/Tokyo', flag: '🌍', country: 'Japan' },
-            { name: 'Osaka', timezone: 'Asia/Tokyo', flag: '🌍', country: 'Japan' },
-            { name: 'Kyoto', timezone: 'Asia/Tokyo', flag: '🌍', country: 'Japan' },
-            { name: 'Shanghai', timezone: 'Asia/Shanghai', flag: '🌍', country: 'China' },
-            { name: 'Beijing', timezone: 'Asia/Shanghai', flag: '🌍', country: 'China' },
-            { name: 'Guangzhou', timezone: 'Asia/Shanghai', flag: '🌍', country: 'China' },
-            { name: 'Shenzhen', timezone: 'Asia/Shanghai', flag: '🌍', country: 'China' },
+            { name: 'Tokyo', timezone: 'Asia/Tokyo', flag: '????', country: 'Japan' },
+            { name: 'Osaka', timezone: 'Asia/Tokyo', flag: '????', country: 'Japan' },
+            { name: 'Kyoto', timezone: 'Asia/Tokyo', flag: '????', country: 'Japan' },
+            { name: 'Shanghai', timezone: 'Asia/Shanghai', flag: '????', country: 'China' },
+            { name: 'Beijing', timezone: 'Asia/Shanghai', flag: '????', country: 'China' },
+            { name: 'Guangzhou', timezone: 'Asia/Shanghai', flag: '????', country: 'China' },
+            { name: 'Shenzhen', timezone: 'Asia/Shanghai', flag: '????', country: 'China' },
             { name: 'Hong Kong', timezone: 'Asia/Hong_Kong', flag: '🇭🇰', country: 'Hong Kong' },
-            { name: 'Seoul', timezone: 'Asia/Seoul', flag: '🌍', country: 'South Korea' },
-            { name: 'Busan', timezone: 'Asia/Seoul', flag: '🌍', country: 'South Korea' },
+            { name: 'Seoul', timezone: 'Asia/Seoul', flag: '????', country: 'South Korea' },
+            { name: 'Busan', timezone: 'Asia/Seoul', flag: '????', country: 'South Korea' },
             { name: 'Taipei', timezone: 'Asia/Taipei', flag: '🇹🇼', country: 'Taiwan' },
             
             // Asia - Southeast Asia
-            { name: 'Singapore', timezone: 'Asia/Singapore', flag: '🌍', country: 'Singapore' },
-            { name: 'Bangkok', timezone: 'Asia/Bangkok', flag: '🌍', country: 'Thailand' },
+            { name: 'Singapore', timezone: 'Asia/Singapore', flag: '????', country: 'Singapore' },
+            { name: 'Bangkok', timezone: 'Asia/Bangkok', flag: '????', country: 'Thailand' },
             { name: 'Manila', timezone: 'Asia/Manila', flag: '🇵🇭', country: 'Philippines' },
             { name: 'Jakarta', timezone: 'Asia/Jakarta', flag: '🇮🇩', country: 'Indonesia' },
             { name: 'Kuala Lumpur', timezone: 'Asia/Kuala_Lumpur', flag: '🇲🇾', country: 'Malaysia' },
-            { name: 'Ho Chi Minh City', timezone: 'Asia/Ho_Chi_Minh', flag: '🇻🇳', country: 'Vietnam' },
-            { name: 'Hanoi', timezone: 'Asia/Ho_Chi_Minh', flag: '🌍', country: 'Vietnam' },
+            { name: 'Ho Chi Minh City', timezone: 'Asia/Ho_Chi_Minh', flag: '��', country: 'Vietnam' },
+            { name: 'Hanoi', timezone: 'Asia/Ho_Chi_Minh', flag: '????', country: 'Vietnam' },
             
             // Asia - South Asia
-            { name: 'Mumbai', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Delhi', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Bangalore', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Chennai', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Hyderabad', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Pune', timezone: 'Asia/Kolkata', flag: '🌍', country: 'India' },
-            { name: 'Karachi', timezone: 'Asia/Karachi', flag: '🌍', country: 'Pakistan' },
-            { name: 'Lahore', timezone: 'Asia/Karachi', flag: '🌍', country: 'Pakistan' },
-            { name: 'Dhaka', timezone: 'Asia/Dhaka', flag: '🇧🇩', country: 'Bangladesh' },
+            { name: 'Mumbai', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Delhi', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Bangalore', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Chennai', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Hyderabad', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Pune', timezone: 'Asia/Kolkata', flag: '????', country: 'India' },
+            { name: 'Karachi', timezone: 'Asia/Karachi', flag: '????', country: 'Pakistan' },
+            { name: 'Lahore', timezone: 'Asia/Karachi', flag: '????', country: 'Pakistan' },
+            { name: 'Dhaka', timezone: 'Asia/Dhaka', flag: '��', country: 'Bangladesh' },
             { name: 'Colombo', timezone: 'Asia/Colombo', flag: '🇱🇰', country: 'Sri Lanka' },
             
             // Asia - Middle East
-            { name: 'Dubai', timezone: 'Asia/Dubai', flag: '🌍', country: 'UAE' },
-            { name: 'Abu Dhabi', timezone: 'Asia/Dubai', flag: '🌍', country: 'UAE' },
+            { name: 'Dubai', timezone: 'Asia/Dubai', flag: '????', country: 'UAE' },
+            { name: 'Abu Dhabi', timezone: 'Asia/Dubai', flag: '????', country: 'UAE' },
             { name: 'Doha', timezone: 'Asia/Qatar', flag: '🇶🇦', country: 'Qatar' },
             { name: 'Kuwait City', timezone: 'Asia/Kuwait', flag: '🇰🇼', country: 'Kuwait' },
             { name: 'Riyadh', timezone: 'Asia/Riyadh', flag: '🇸🇦', country: 'Saudi Arabia' },
@@ -3234,8 +3208,8 @@
             // Africa
             { name: 'Cairo', timezone: 'Africa/Cairo', flag: '🇪🇬', country: 'Egypt' },
             { name: 'Lagos', timezone: 'Africa/Lagos', flag: '🇳🇬', country: 'Nigeria' },
-            { name: 'Cape Town', timezone: 'Africa/Johannesburg', flag: '🌍', country: 'South Africa' },
-            { name: 'Johannesburg', timezone: 'Africa/Johannesburg', flag: '🌍', country: 'South Africa' },
+            { name: 'Cape Town', timezone: 'Africa/Johannesburg', flag: '????', country: 'South Africa' },
+            { name: 'Johannesburg', timezone: 'Africa/Johannesburg', flag: '????', country: 'South Africa' },
             { name: 'Nairobi', timezone: 'Africa/Nairobi', flag: '🇰🇪', country: 'Kenya' },
             { name: 'Casablanca', timezone: 'Africa/Casablanca', flag: '🇲🇦', country: 'Morocco' },
             { name: 'Tunis', timezone: 'Africa/Tunis', flag: '🇹🇳', country: 'Tunisia' },
@@ -3244,23 +3218,23 @@
             { name: 'Addis Ababa', timezone: 'Africa/Addis_Ababa', flag: '🇪🇹', country: 'Ethiopia' },
             
             // Oceania
-            { name: 'Sydney', timezone: 'Australia/Sydney', flag: '🌍', country: 'Australia' },
-            { name: 'Melbourne', timezone: 'Australia/Melbourne', flag: '🌍', country: 'Australia' },
-            { name: 'Brisbane', timezone: 'Australia/Brisbane', flag: '🌍', country: 'Australia' },
-            { name: 'Perth', timezone: 'Australia/Perth', flag: '🌍', country: 'Australia' },
-            { name: 'Adelaide', timezone: 'Australia/Adelaide', flag: '🌍', country: 'Australia' },
-            { name: 'Auckland', timezone: 'Pacific/Auckland', flag: '🌍', country: 'New Zealand' },
-            { name: 'Wellington', timezone: 'Pacific/Auckland', flag: '🌍', country: 'New Zealand' },
-            { name: 'Christchurch', timezone: 'Pacific/Auckland', flag: '🇳🇿', country: 'New Zealand' },
+            { name: 'Sydney', timezone: 'Australia/Sydney', flag: '????', country: 'Australia' },
+            { name: 'Melbourne', timezone: 'Australia/Melbourne', flag: '????', country: 'Australia' },
+            { name: 'Brisbane', timezone: 'Australia/Brisbane', flag: '????', country: 'Australia' },
+            { name: 'Perth', timezone: 'Australia/Perth', flag: '????', country: 'Australia' },
+            { name: 'Adelaide', timezone: 'Australia/Adelaide', flag: '????', country: 'Australia' },
+            { name: 'Auckland', timezone: 'Pacific/Auckland', flag: '????', country: 'New Zealand' },
+            { name: 'Wellington', timezone: 'Pacific/Auckland', flag: '????', country: 'New Zealand' },
+            { name: 'Christchurch', timezone: 'Pacific/Auckland', flag: '��', country: 'New Zealand' },
             { name: 'Fiji', timezone: 'Pacific/Fiji', flag: '🇫🇯', country: 'Fiji' },
             
             // South America
-            { name: 'São Paulo', timezone: 'America/Sao_Paulo', flag: '🌍', country: 'Brazil' },
-            { name: 'Rio de Janeiro', timezone: 'America/Sao_Paulo', flag: '🌍', country: 'Brazil' },
-            { name: 'Brasília', timezone: 'America/Sao_Paulo', flag: '🌍', country: 'Brazil' },
-            { name: 'Salvador', timezone: 'America/Sao_Paulo', flag: '🌍', country: 'Brazil' },
-            { name: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', flag: '🌍', country: 'Argentina' },
-            { name: 'Córdoba', timezone: 'America/Argentina/Cordoba', flag: '🌍', country: 'Argentina' },
+            { name: 'São Paulo', timezone: 'America/Sao_Paulo', flag: '????', country: 'Brazil' },
+            { name: 'Rio de Janeiro', timezone: 'America/Sao_Paulo', flag: '????', country: 'Brazil' },
+            { name: 'Brasília', timezone: 'America/Sao_Paulo', flag: '????', country: 'Brazil' },
+            { name: 'Salvador', timezone: 'America/Sao_Paulo', flag: '????', country: 'Brazil' },
+            { name: 'Buenos Aires', timezone: 'America/Argentina/Buenos_Aires', flag: '????', country: 'Argentina' },
+            { name: 'Córdoba', timezone: 'America/Argentina/Cordoba', flag: '????', country: 'Argentina' },
             { name: 'Lima', timezone: 'America/Lima', flag: '🇵🇪', country: 'Peru' },
             { name: 'Santiago', timezone: 'America/Santiago', flag: '🇨🇱', country: 'Chile' },
             { name: 'Bogotá', timezone: 'America/Bogota', flag: '🇨🇴', country: 'Colombia' },
@@ -3570,6 +3544,32 @@
                 }
             });
             
+            // Update modal times every minute
+            setInterval(() => {
+                if (window.timelyAppState.isModalOpen) {
+                    updateModalCityTimes();
+                }
+            }, 60000);
+            
+            // Initial modal times update
+            setTimeout(() => updateModalCityTimes(), 1000);
+        });
+
+        // PWA Installation support
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button/prompt
+            const installButton = document.createElement('button');
+            installButton.textContent = '📱 Install App';
+            installButton.className = 'install-prompt-btn';
+            installButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
                 color: white;
                 border: none;
                 padding: 12px 20px;
@@ -3643,7 +3643,7 @@
                         <button class="add-to-favorites-btn" 
                                 onclick="addToFavorites('${city.name}', '${city.timezone}', '${city.flag}', '${city.country}')"
                                 title="Add ${city.name} to favorites">
-                            ⭐ Add to Favorites
+                            ?� Add to Favorites
                         </button>
                     </div>
                 `).join('');
@@ -3715,94 +3715,95 @@
                 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const parts = timezone.split('/');
                 const city = parts[parts.length - 1].replace(/_/g, ' ');
-                return { city, country: 'Your Location', timezone, flag: '🌍', coordinates: { lat, lon } };
+                return { city, country: 'Your Location', timezone, flag: '??�', coordinates: { lat, lon } };
             }
         }
 
         // Get country flag
         function getCountryFlag(countryCode) {
-            if (!countryCode || countryCode.length !== 2) return '🌍';
+            if (!countryCode || countryCode.length !== 2) return '??�';
             const flagMap = {
                 // North America
-                'US': '🌍', 'CA': '🌍', 'MX': '🌍',
+                'US': '????', 'CA': '????', 'MX': '????',
                 // Europe
-                'GB': '🌍', 'FR': '🌍', 'DE': '🌍', 'IT': '🌍', 'ES': '🌍', 
-                'NL': '🌍', 'SE': '🌍', 'NO': '🌍', 'DK': '🇩🇰', 'FI': '🇫🇮',
-                'AT': '🇦🇹', 'CH': '🇨🇭', 'BE': '🇧🇪', 'IE': '🇮🇪', 'PT': '🇵🇹',
-                'CZ': '🇨🇿', 'PL': '🇵🇱', 'HU': '🇭🇺', 'RU': '🌍', 'UA': '🇺🇦',
+                'GB': '????', 'FR': '????', 'DE': '????', 'IT': '????', 'ES': '????', 
+                'NL': '????', 'SE': '????', 'NO': '????', 'DK': '🇩🇰', 'FI': '��🇮',
+                'AT': '��🇹', 'CH': '🇨🇭', 'BE': '��🇪', 'IE': '�🇪', 'PT': '🇵🇹',
+                'CZ': '🇨🇿', 'PL': '�🇱', 'HU': '��', 'RU': '????', 'UA': '🇺🇦',
                 'TR': '🇹🇷', 'GR': '🇬🇷',
                 // Asia
-                'JP': '🌍', 'CN': '🌍', 'KR': '🌍', 'SG': '🌍', 'HK': '🇭🇰',
-                'TW': '🇹🇼', 'IN': '🌍', 'TH': '🌍', 'PH': '🇵🇭', 'ID': '🇮🇩',
-                'MY': '🇲🇾', 'VN': '🌍', 'PK': '🌍', 'BD': '🇧🇩', 'LK': '🇱🇰',
-                'AE': '🌍', 'QA': '🇶🇦', 'KW': '🇰🇼', 'SA': '🇸🇦', 'IR': '🇮🇷',
+                'JP': '????', 'CN': '????', 'KR': '????', 'SG': '????', 'HK': '🇭🇰',
+                'TW': '🇹🇼', 'IN': '????', 'TH': '????', 'PH': '🇵🇭', 'ID': '🇮🇩',
+                'MY': '🇲🇾', 'VN': '????', 'PK': '????', 'BD': '🇧🇩', 'LK': '🇱🇰',
+                'AE': '????', 'QA': '🇶🇦', 'KW': '🇰🇼', 'SA': '🇸🇦', 'IR': '🇮🇷',
                 'IQ': '🇮🇶', 'IL': '🇮🇱',
                 // Africa
-                'EG': '🇪🇬', 'NG': '🇳🇬', 'ZA': '🌍', 'KE': '🇰🇪', 'MA': '🇲🇦',
-                'TN': '🇹🇳', 'DZ': '🇩🇿', 'GH': '🇬🇭', 'ET': '🇪🇹',
+                'EG': '🇪🇬', 'NG': '🇳🇬', 'ZA': '????', 'KE': '�🇪', 'MA': '🇲�🇦',
+                'TN': '🇹🇳', 'DZ': '🇩�', 'GH': '🇬🇭', 'ET': '�🇪🇹',
                 // Oceania
-                'AU': '🌍', 'NZ': '🌍', 'FJ': '🇫🇯',
+                'AU': '????', 'NZ': '????', 'FJ': '🇫🇯',
                 // South America
-                'BR': '🌍', 'AR': '🌍', 'PE': '🇵🇪', 'CL': '🇨🇱', 'CO': '🇨🇴',
+                'BR': '????', 'AR': '????', 'PE': '🇵🇪', 'CL': '🇨🇱', 'CO': '🇨🇴',
                 'VE': '🇻🇪', 'EC': '🇪🇨', 'BO': '🇧🇴', 'UY': '🇺🇾', 'PY': '🇵🇾',
                 // Central America & Caribbean
                 'CU': '🇨🇺', 'JM': '🇯🇲', 'DO': '🇩🇴', 'CR': '🇨🇷', 'PA': '🇵🇦', 'GT': '🇬🇹'
             };
-            return flagMap[countryCode.toUpperCase()] || '🌍';
+            return flagMap[countryCode.toUpperCase()] || '??�';
         }
 
         // Get flag based on timezone
         function getTimezoneFlag(timezone) {
             const timezoneToFlag = {
                 // North America
-                'America/New_York': '🇺🇸', 'America/Chicago': '🇺🇸', 'America/Denver': '🇺🇸', 'America/Los_Angeles': '🇺🇸',
-                'America/Phoenix': '🇺🇸', 'America/Anchorage': '🇺🇸', 'Pacific/Honolulu': '🇺🇸',
-                'America/Toronto': '🇨🇦', 'America/Vancouver': '🇨🇦', 'America/Edmonton': '🇨🇦', 'America/Halifax': '🇨🇦',
-                'America/Mexico_City': '🇲🇽', 'America/Cancun': '🇲🇽', 'America/Tijuana': '🇲🇽',
-
+                'America/New_York': '????', 'America/Chicago': '????', 'America/Denver': '????', 'America/Los_Angeles': '????',
+                'America/Phoenix': '????', 'America/Anchorage': '????', 'Pacific/Honolulu': '????',
+                'America/Toronto': '????', 'America/Vancouver': '????', 'America/Edmonton': '????', 'America/Halifax': '????',
+                'America/Mexico_City': '????', 'America/Cancun': '????', 'America/Tijuana': '????',
+                
                 // Europe
-                'Europe/London': '🇬🇧', 'Europe/Dublin': '🇮🇪', 'Europe/Paris': '🇫🇷', 'Europe/Berlin': '🇩🇪',
-                'Europe/Rome': '🇮🇹', 'Europe/Madrid': '🇪🇸', 'Europe/Amsterdam': '🇳🇱', 'Europe/Stockholm': '🇸🇪',
-                'Europe/Oslo': '🇳🇴', 'Europe/Copenhagen': '🇩🇰', 'Europe/Helsinki': '🇫🇮', 'Europe/Vienna': '🇦🇹',
+                'Europe/London': '????', 'Europe/Dublin': '🇮🇪', 'Europe/Paris': '????', 'Europe/Berlin': '????',
+                'Europe/Rome': '????', 'Europe/Madrid': '????', 'Europe/Amsterdam': '????', 'Europe/Stockholm': '????',
+                'Europe/Oslo': '????', 'Europe/Copenhagen': '🇩🇰', 'Europe/Helsinki': '🇫🇮', 'Europe/Vienna': '🇦🇹',
                 'Europe/Zurich': '🇨🇭', 'Europe/Brussels': '🇧🇪', 'Europe/Lisbon': '🇵🇹', 'Europe/Prague': '🇨🇿',
-                'Europe/Warsaw': '🇵🇱', 'Europe/Budapest': '🇭🇺', 'Europe/Moscow': '🇷🇺', 'Europe/Kiev': '🇺🇦',
+                'Europe/Warsaw': '🇵🇱', 'Europe/Budapest': '🇭🇺', 'Europe/Moscow': '????', 'Europe/Kiev': '🇺🇦',
                 'Europe/Istanbul': '🇹🇷', 'Europe/Athens': '🇬🇷',
-
+                
                 // Asia
-                'Asia/Tokyo': '🇯🇵', 'Asia/Shanghai': '🇨🇳', 'Asia/Seoul': '🇰🇷', 'Asia/Singapore': '🇸🇬',
-                'Asia/Hong_Kong': '🇭🇰', 'Asia/Taipei': '🇹🇼', 'Asia/Kolkata': '🇮🇳', 'Asia/Bangkok': '🇹🇭',
-                'Asia/Manila': '🇵🇭', 'Asia/Jakarta': '🇮🇩', 'Asia/Kuala_Lumpur': '🇲🇾', 'Asia/Ho_Chi_Minh': '🇻🇳',
-                'Asia/Karachi': '🇵🇰', 'Asia/Dhaka': '🇧🇩', 'Asia/Colombo': '🇱🇰', 'Asia/Dubai': '🇦🇪',
+                'Asia/Tokyo': '????', 'Asia/Shanghai': '????', 'Asia/Seoul': '????', 'Asia/Singapore': '????',
+                'Asia/Hong_Kong': '🇭🇰', 'Asia/Taipei': '🇹🇼', 'Asia/Kolkata': '????', 'Asia/Bangkok': '????',
+                'Asia/Manila': '🇵🇭', 'Asia/Jakarta': '🇮🇩', 'Asia/Kuala_Lumpur': '🇲🇾', 'Asia/Ho_Chi_Minh': '????',
+                'Asia/Karachi': '????', 'Asia/Dhaka': '🇧🇩', 'Asia/Colombo': '🇱🇰', 'Asia/Dubai': '????',
                 'Asia/Qatar': '🇶🇦', 'Asia/Kuwait': '🇰🇼', 'Asia/Riyadh': '🇸🇦', 'Asia/Tehran': '🇮🇷',
                 'Asia/Baghdad': '🇮🇶', 'Asia/Jerusalem': '🇮🇱',
-
+                
                 // Africa
-                'Africa/Cairo': '🇪🇬', 'Africa/Lagos': '🇳🇬', 'Africa/Johannesburg': '🇿🇦', 'Africa/Nairobi': '🇰🇪',
+                'Africa/Cairo': '🇪🇬', 'Africa/Lagos': '🇳🇬', 'Africa/Johannesburg': '????', 'Africa/Nairobi': '🇰🇪',
                 'Africa/Casablanca': '🇲🇦', 'Africa/Tunis': '🇹🇳', 'Africa/Algiers': '🇩🇿', 'Africa/Accra': '🇬🇭',
                 'Africa/Addis_Ababa': '🇪🇹',
-
+                
                 // Oceania
-                'Australia/Sydney': '🇦🇺', 'Australia/Melbourne': '🇦🇺', 'Australia/Brisbane': '🇦🇺',
-                'Australia/Perth': '🇦🇺', 'Australia/Adelaide': '🇦🇺', 'Pacific/Auckland': '🇳🇿',
+                'Australia/Sydney': '????', 'Australia/Melbourne': '????', 'Australia/Brisbane': '????',
+                'Australia/Perth': '????', 'Australia/Adelaide': '????', 'Pacific/Auckland': '????',
                 'Pacific/Fiji': '🇫🇯',
-
+                
                 // South America
-                'America/Sao_Paulo': '🇧🇷', 'America/Argentina/Buenos_Aires': '🇦🇷', 'America/Lima': '🇵🇪',
+                'America/Sao_Paulo': '????', 'America/Argentina/Buenos_Aires': '????', 'America/Lima': '🇵🇪',
                 'America/Santiago': '🇨🇱', 'America/Bogota': '🇨🇴', 'America/Caracas': '🇻🇪',
                 'America/Guayaquil': '🇪🇨', 'America/La_Paz': '🇧🇴', 'America/Montevideo': '🇺🇾',
                 'America/Asuncion': '🇵🇾',
-
+                
                 // Central America & Caribbean
                 'America/Havana': '🇨🇺', 'America/Jamaica': '🇯🇲', 'America/Santo_Domingo': '🇩🇴',
                 'America/Costa_Rica': '🇨🇷', 'America/Panama': '🇵🇦', 'America/Guatemala': '🇬🇹'
             };
-            return timezoneToFlag[timezone] || '🌍';
+            
+            return timezoneToFlag[timezone] || '??�';
         }
 
         // Select location and update display
         function selectLocation(cityName, timezone, flag, country = null) {
             try {
-                console.log('🌍 Selecting location:', cityName, 'Flag:', flag);
+                console.log('??� Selecting location:', cityName, 'Flag:', flag);
                 
                 // Update main clock data
                 window.timelyAppState.currentLocationData = {
@@ -3819,7 +3820,7 @@
                 const locationCountry = document.getElementById('locationCountry');
                 
                 if (locationFlag) {
-                    locationFlag.textContent = flag || '🌍';
+                    locationFlag.textContent = flag || '??�';
                     locationFlag.setAttribute('data-country-code', getFlagCountryCode(flag));
                     locationFlag.title = `${country || cityName} Flag`;
                     console.log('🚩 Flag updated to:', flag, 'Code:', getFlagCountryCode(flag));
@@ -3881,7 +3882,7 @@
             
             if (locationFlag) {
                 // Set the emoji flag
-                locationFlag.textContent = locationData.flag || '🌍';
+                locationFlag.textContent = locationData.flag || '??�';
                 
                 // Add country code as fallback
                 const countryCode = getFlagCountryCode(locationData.flag);
@@ -3904,19 +3905,19 @@
         // Get country code from flag emoji for fallback
         function getFlagCountryCode(flagEmoji) {
             const flagToCode = {
-                '🌍': 'US', '🌍': 'CA', '🌍': 'MX', '🌍': 'GB', '🌍': 'FR', 
-                '🌍': 'DE', '🌍': 'IT', '🌍': 'ES', '🌍': 'NL', '🌍': 'SE',
-                '🌍': 'NO', '🇩🇰': 'DK', '🇫🇮': 'FI', '🇦🇹': 'AT', '🇨🇭': 'CH',
+                '????': 'US', '????': 'CA', '????': 'MX', '????': 'GB', '????': 'FR', 
+                '????': 'DE', '????': 'IT', '????': 'ES', '????': 'NL', '????': 'SE',
+                '????': 'NO', '🇩🇰': 'DK', '🇫🇮': 'FI', '🇦🇹': 'AT', '🇨🇭': 'CH',
                 '🇧🇪': 'BE', '🇮🇪': 'IE', '🇵🇹': 'PT', '🇨🇿': 'CZ', '🇵🇱': 'PL',
-                '🇭🇺': 'HU', '🌍': 'RU', '🇺🇦': 'UA', '🇹🇷': 'TR', '🇬🇷': 'GR',
-                '🌍': 'JP', '🌍': 'CN', '🌍': 'KR', '🌍': 'SG', '🇭🇰': 'HK',
-                '🇹🇼': 'TW', '🌍': 'IN', '🌍': 'TH', '🇵🇭': 'PH', '🇮🇩': 'ID',
-                '🇲🇾': 'MY', '🌍': 'VN', '🌍': 'PK', '🇧🇩': 'BD', '🇱🇰': 'LK',
-                '🌍': 'AE', '🇶🇦': 'QA', '🇰🇼': 'KW', '🇸🇦': 'SA', '🇮🇷': 'IR',
-                '🇮🇶': 'IQ', '🇮🇱': 'IL', '🌍': 'AU', '🌍': 'NZ', '🇫🇯': 'FJ',
-                '🌍': 'BR', '🌍': 'AR', '🇨🇱': 'CL', '🇨🇴': 'CO', '🇵🇪': 'PE',
-                '🇪🇬': 'EG', '🇳🇬': 'NG', '🌍': 'ZA', '🇰🇪': 'KE', '🇲🇦': 'MA',
-                '🌍': 'WORLD'
+                '🇭🇺': 'HU', '????': 'RU', '🇺🇦': 'UA', '🇹🇷': 'TR', '🇬🇷': 'GR',
+                '????': 'JP', '????': 'CN', '????': 'KR', '????': 'SG', '🇭🇰': 'HK',
+                '🇹🇼': 'TW', '????': 'IN', '????': 'TH', '🇵🇭': 'PH', '🇮🇩': 'ID',
+                '🇲🇾': 'MY', '????': 'VN', '????': 'PK', '🇧🇩': 'BD', '🇱🇰': 'LK',
+                '????': 'AE', '🇶🇦': 'QA', '🇰🇼': 'KW', '🇸🇦': 'SA', '🇮🇷': 'IR',
+                '🇮🇶': 'IQ', '🇮🇱': 'IL', '????': 'AU', '????': 'NZ', '🇫🇯': 'FJ',
+                '????': 'BR', '????': 'AR', '🇨🇱': 'CL', '🇨🇴': 'CO', '🇵🇪': 'PE',
+                '🇪🇬': 'EG', '🇳🇬': 'NG', '????': 'ZA', '🇰🇪': 'KE', '🇲🇦': 'MA',
+                '??�': 'WORLD'
             };
             return flagToCode[flagEmoji] || 'XX';
         }
@@ -3963,7 +3964,7 @@
                     // Update sun times (simplified)
                     if (sunInfo && locationData.coordinates) {
                         const sunTimes = calculateSunTimes(locationData.coordinates.lat, locationData.coordinates.lon, now);
-                        sunInfo.textContent = `🌅 ${sunTimes.sunrise} 🌇 ${sunTimes.sunset} (${sunTimes.dayLength})`;
+                        sunInfo.textContent = `?� ${sunTimes.sunrise} ?� ${sunTimes.sunset} (${sunTimes.dayLength})`;
                     }
                 } catch (error) {
                     console.error('Clock update error:', error);
@@ -4168,11 +4169,11 @@
                     // Fallback to detecting timezone from browser
                     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                     const city = timezone.split('/').pop().replace(/_/g, ' ');
-                    selectLocation(city, timezone, '🌍', 'Detected Location');
+                    selectLocation(city, timezone, '??�', 'Detected Location');
                     showNotification('Location detected successfully!', 'success');
                 } else {
                     const data = await response.json();
-                    selectLocation(data.city || 'Local Time', data.timezone, '🌍', data.country_name || 'Detected Location');
+                    selectLocation(data.city || 'Local Time', data.timezone, '??�', data.country_name || 'Detected Location');
                     showNotification('Location detected successfully!', 'success');
                 }
                 
@@ -4183,7 +4184,7 @@
                 try {
                     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                     const city = timezone.split('/').pop().replace(/_/g, ' ');
-                    selectLocation(city, timezone, '🌍', 'Local Time');
+                    selectLocation(city, timezone, '??�', 'Local Time');
                     showNotification('Using browser timezone', 'info');
                 } catch (fallbackError) {
                     showNotification('Location detection failed. Please select manually.', 'error');
@@ -4364,7 +4365,7 @@
                 
                 // Try to get a better flag based on common timezone patterns
                 const flag = getTimezoneFlag(timezone);
-                console.log('🌍 Default timezone:', timezone, 'Flag:', flag);
+                console.log('??� Default timezone:', timezone, 'Flag:', flag);
                 
                 const defaultLocation = {
                     city: city,
@@ -4457,7 +4458,7 @@
             );
             
             if (exists) {
-                showNotification(`⭐ ${cityName} is already in your favorites!`, 'info');
+                showNotification(`?� ${cityName} is already in your favorites!`, 'info');
                 return false;
             }
             
@@ -4469,7 +4470,7 @@
             
             // Update display
             renderFavoriteClocks();
-            showNotification(`⭐ Added ${cityName} to favorites!`, 'success');
+            showNotification(`?� Added ${cityName} to favorites!`, 'success');
             
             // Close the location picker modal for better UX
             const modal = document.getElementById('locationPickerOverlay');
@@ -4637,7 +4638,7 @@
                 // Create favorite button
                 const favoriteBtn = document.createElement('button');
                 favoriteBtn.className = 'quick-favorite-btn';
-                favoriteBtn.innerHTML = '⭐';
+                favoriteBtn.innerHTML = '?�';
                 favoriteBtn.title = 'Add to favorites';
                 favoriteBtn.onclick = (event) => {
                     event.stopPropagation();
@@ -4728,7 +4729,7 @@
                         if (typeof updateAllTimes === 'function') {
                             updateAllTimes();
                         }
-                        showNotification('🌍 Back online! Times updated.', 'success', 3000);
+                        showNotification('??� Back online! Times updated.', 'success', 3000);
                         break;
                     case 'PERIODIC_UPDATE':
                         console.log('TIMELY: Periodic update triggered');
@@ -5149,7 +5150,7 @@
             const currentLocation = window.timelyAppState?.currentLocationData;
             if (currentLocation) {
                 selectedDisplay.style.display = 'flex';
-                document.getElementById('selectedFlag').textContent = currentLocation.flag || '🌍';
+                document.getElementById('selectedFlag').textContent = currentLocation.flag || '??�';
                 document.getElementById('selectedName').textContent = currentLocation.city || currentLocation.name || 'Current Location';
                 document.getElementById('selectedCountry').textContent = currentLocation.country || 'Selected Location';
             } else {
@@ -5162,8 +5163,8 @@
                 </div>
                 
                 <div class="popular-cities-container">
-                    <div class="location-card" onclick="selectMobileLocation('New York', 'America/New_York', '🌍', 'United States')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('New York', 'America/New_York', '????', 'United States')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">New York</div>
                             <div class="location-country">United States</div>
@@ -5171,8 +5172,8 @@
                         <div class="location-time" id="mobile-time-newyork">--:--</div>
                     </div>
                     
-                    <div class="location-card" onclick="selectMobileLocation('London', 'Europe/London', '🌍', 'United Kingdom')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('London', 'Europe/London', '????', 'United Kingdom')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">London</div>
                             <div class="location-country">United Kingdom</div>
@@ -5180,8 +5181,8 @@
                         <div class="location-time" id="mobile-time-london">--:--</div>
                     </div>
                     
-                    <div class="location-card" onclick="selectMobileLocation('Tokyo', 'Asia/Tokyo', '🌍', 'Japan')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('Tokyo', 'Asia/Tokyo', '????', 'Japan')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">Tokyo</div>
                             <div class="location-country">Japan</div>
@@ -5189,8 +5190,8 @@
                         <div class="location-time" id="mobile-time-tokyo">--:--</div>
                     </div>
                     
-                    <div class="location-card" onclick="selectMobileLocation('Sydney', 'Australia/Sydney', '🌍', 'Australia')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('Sydney', 'Australia/Sydney', '????', 'Australia')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">Sydney</div>
                             <div class="location-country">Australia</div>
@@ -5198,8 +5199,8 @@
                         <div class="location-time" id="mobile-time-sydney">--:--</div>
                     </div>
                     
-                    <div class="location-card" onclick="selectMobileLocation('Dubai', 'Asia/Dubai', '🌍', 'UAE')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('Dubai', 'Asia/Dubai', '????', 'UAE')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">Dubai</div>
                             <div class="location-country">UAE</div>
@@ -5207,8 +5208,8 @@
                         <div class="location-time" id="mobile-time-dubai">--:--</div>
                     </div>
                     
-                    <div class="location-card" onclick="selectMobileLocation('Los Angeles', 'America/Los_Angeles', '🌍', 'United States')">
-                        <span class="location-flag">🌍</span>
+                    <div class="location-card" onclick="selectMobileLocation('Los Angeles', 'America/Los_Angeles', '????', 'United States')">
+                        <span class="location-flag">????</span>
                         <div class="location-info">
                             <div class="location-name">Los Angeles</div>
                             <div class="location-country">United States</div>
@@ -5286,7 +5287,7 @@
                     <button class="add-to-favorites-btn" 
                             onclick="event.stopPropagation(); addToFavorites('${city.name}', '${city.timezone}', '${city.flag}', '${city.country}')"
                             title="Add to Favorites">
-                        ⭐ Add to Favorites
+                        ?� Add to Favorites
                     </button>
                 </div>
             `).join('');
@@ -5354,8 +5355,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 
