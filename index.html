@@ -5234,7 +5234,7 @@
                             <div class="location-country">United States</div>
                         </div>
                         <div class="location-time" id="mobile-time-newyork">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('New York', 'America/New_York', '${getFlag('America/New_York')}', 'United States')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('New York', 'America/New_York', '${getFlag('America/New_York')}', 'United States')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
                     </div>
                     <div class="location-card" onclick="selectMobileLocation('London', 'Europe/London', '${getFlag('Europe/London')}', 'United Kingdom')">
                         <span class="location-flag">${getFlag('Europe/London')}</span>
@@ -5243,7 +5243,7 @@
                             <div class="location-country">United Kingdom</div>
                         </div>
                         <div class="location-time" id="mobile-time-london">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('London', 'Europe/London', '${getFlag('Europe/London')}', 'United Kingdom')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('London', 'Europe/London', '${getFlag('Europe/London')}', 'United Kingdom')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
                     </div>
                     <div class="location-card" onclick="selectMobileLocation('Tokyo', 'Asia/Tokyo', '${getFlag('Asia/Tokyo')}', 'Japan')">
                         <span class="location-flag">${getFlag('Asia/Tokyo')}</span>
@@ -5252,7 +5252,7 @@
                             <div class="location-country">Japan</div>
                         </div>
                         <div class="location-time" id="mobile-time-tokyo">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Tokyo', 'Asia/Tokyo', '${getFlag('Asia/Tokyo')}', 'Japan')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Tokyo', 'Asia/Tokyo', '${getFlag('Asia/Tokyo')}', 'Japan')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
                     </div>
                     <div class="location-card" onclick="selectMobileLocation('Sydney', 'Australia/Sydney', '${getFlag('Australia/Sydney')}', 'Australia')">
                         <span class="location-flag">${getFlag('Australia/Sydney')}</span>
@@ -5261,7 +5261,7 @@
                             <div class="location-country">Australia</div>
                         </div>
                         <div class="location-time" id="mobile-time-sydney">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Sydney', 'Australia/Sydney', '${getFlag('Australia/Sydney')}', 'Australia')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Sydney', 'Australia/Sydney', '${getFlag('Australia/Sydney')}', 'Australia')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
                     </div>
                     <div class="location-card" onclick="selectMobileLocation('Dubai', 'Asia/Dubai', '${getFlag('Asia/Dubai')}', 'UAE')">
                         <span class="location-flag">${getFlag('Asia/Dubai')}</span>
@@ -5270,7 +5270,7 @@
                             <div class="location-country">UAE</div>
                         </div>
                         <div class="location-time" id="mobile-time-dubai">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Dubai', 'Asia/Dubai', '${getFlag('Asia/Dubai')}', 'UAE')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Dubai', 'Asia/Dubai', '${getFlag('Asia/Dubai')}', 'UAE')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
                     </div>
                     <div class="location-card" onclick="selectMobileLocation('Los Angeles', 'America/Los_Angeles', '${getFlag('America/Los_Angeles')}', 'United States')">
                         <span class="location-flag">${getFlag('America/Los_Angeles')}</span>
@@ -5279,7 +5279,13 @@
                             <div class="location-country">United States</div>
                         </div>
                         <div class="location-time" id="mobile-time-losangeles">--:--</div>
-                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Los Angeles', 'America/Los_Angeles', '${getFlag('America/Los_Angeles')}', 'United States')" title="Add to Favorites">⭐ Add to Favorites</button>
+                        <button class="add-to-favorites-btn" onclick="event.stopPropagation(); addToFavorites('Los Angeles', 'America/Los_Angeles', '${getFlag('America/Los_Angeles')}', 'United States')" title="Add to Favorites">⭐ <span class="add-fav-text">Add to Favorites</span></button>
+        /* Hide Add to Favorites text on mobile, show only star */
+        @media (max-width: 600px) {
+            .add-fav-text {
+                display: none !important;
+            }
+        }
                     </div>
                 </div>
             `;
