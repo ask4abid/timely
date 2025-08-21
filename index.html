@@ -786,7 +786,45 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             padding: 0;
+            position: relative;
         }
+                /* Sticky search bar for mobile */
+                @media (max-width: 600px) {
+                    .search-input-container {
+                        position: sticky;
+                        top: 0;
+                        background: #fff;
+                        z-index: 10;
+                        padding-top: 8px;
+                        padding-bottom: 8px;
+                    }
+                    .search-input, #citySearchInput {
+                        font-size: 18px !important;
+                        padding: 12px 40px 12px 16px !important;
+                        width: 100%;
+                        border-radius: 8px;
+                    }
+                    .search-clear-btn {
+                        right: 12px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-size: 22px;
+                        width: 36px;
+                        height: 36px;
+                        display: flex !important;
+                    }
+                    .search-results-container {
+                        max-height: 60vh;
+                        overflow-y: auto;
+                        margin-top: 12px;
+                    }
+                    .search-result-card {
+                        padding: 16px;
+                        font-size: 16px;
+                        border-radius: 10px;
+                        margin-bottom: 10px;
+                    }
+                }
         
         /* Popular Locations Container */
         .popular-locations {
