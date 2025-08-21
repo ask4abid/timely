@@ -456,26 +456,29 @@
         .search-input {
             width: 100%;
             height: 48px;
-            border: 1px solid var(--search-border);
-            border-radius: 12px;
+            border: 2px solid #6366f1;
+            border-radius: 14px;
             padding: 0 48px 0 44px;
-            font-size: 16px;
-            color: var(--modal-text);
-            background: var(--search-bg);
+            font-size: 17px;
+            color: #222;
+            background: #fff;
             transition: all 0.2s ease;
             outline: none;
             -webkit-appearance: none;
             appearance: none;
             font-family: inherit;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.08);
         }
 
         .search-input:focus {
-            border-color: var(--search-focus);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #6366f1;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
         }
 
         .search-input::placeholder {
-            color: var(--modal-text-secondary);
+            color: #6366f1;
+            opacity: 1;
         }
 
         .search-icon {
@@ -1142,21 +1145,21 @@
         
         /* Individual City Card */
         .city-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px;
+            background: rgba(255,255,255,0.95);
+            border: 1.5px solid rgba(99,102,241,0.13);
+            border-radius: 20px;
+            padding: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             position: relative;
             overflow: hidden;
         }
         
         .city-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #6366f1;
         }
         
         .city-card:active {
@@ -1181,7 +1184,7 @@
         }
         
         .city-flag {
-            font-size: 24px;
+            font-size: 18px;
             display: inline-block;
         }
         
@@ -1202,17 +1205,17 @@
         }
         
         .city-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
             margin: 0 0 4px 0;
             font-family: 'Rajdhani', sans-serif;
         }
         
         .city-country {
-            font-size: 12px;
-            color: #718096;
-            margin: 0;
+            font-size: 13px;
+            color: #64748b;
+            margin: 2px 0 0 0;
             font-weight: 500;
         }
         
@@ -1237,9 +1240,9 @@
             background: linear-gradient(45deg, #f59e0b, #f97316);
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 10px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
