@@ -1,6 +1,6 @@
 # Timely Flag Explorer
 
-A modern, modular flag explorer application that allows users to discover flags and detailed information from countries around the world.
+A modern,  a simple clock app to help us stay in sync across time zones. You can add favorites and use it on desktop or mobile.
 
 ## 🌟 Features
 
