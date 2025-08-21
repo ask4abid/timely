@@ -3591,11 +3591,13 @@
             // Initialize mobile optimizer
             window.mobileOptimizer = new MobileOptimizer();
             // Do NOT call startClock() here; main clock is started by startClockUpdates() after location is loaded
-            // Set up modal close on backdrop click
+            // Set up modal close on backdrop click (only if click is outside modal content)
             const modal = document.getElementById('locationPickerOverlay');
             if (modal) {
                 modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
+                    const modalContent = modal.querySelector('.location-picker-modal');
+                    // If click is outside modal content, close modal
+                    if (e.target === modal && (!modalContent || !modalContent.contains(e.target))) {
                         toggleLocationPicker();
                     }
                 });
